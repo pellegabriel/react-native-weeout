@@ -41,7 +41,15 @@ const HomeScreen = () => {
             }}
             className='w-20 h-20 object-cover'
           />
-        </View>
+
+        <View className='absolute bottom-20 w-24 h-24 border-l-2 border-r-2 border-t-4 border=[#00bcc9] ronded-full items-center justify-center'>
+         <TouchableOpacity>
+            <View className='absolute bottom-20 w-24 h-24 border-l-2 border-r-2 border-t-4 border=[#00bcc9]'>
+              <Text className='text-gray-50 text-[36px] font-semibold'></Text>
+            </View>   
+          </TouchableOpacity>
+        </View>   
+      </View>
 
       </SafeAreaView>
     );
