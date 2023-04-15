@@ -2,20 +2,20 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-export interface CardData {
+export interface CardData3 {
   title: string;
   icon: string;
 }
 
 export interface CardProps {
-  data: CardData;
+  data: CardData3;
 }
 
-const Card4: React.FC<CardProps> = ({ }) => {
+const Card3: React.FC<CardProps> = ({ }) => {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-      <AntDesign name="smileo" size={24} color="black" />
+      <AntDesign name="smileo" size={29} color="black" />
       </View>
     </View>
   );
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Card4;
+export default Card3;
