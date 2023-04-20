@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import CustomButton from '../../components/button/button';
-import Input from '../../components/inputSearch/inputSearch';
-import ScrollUser from '../../components/scrollCard/scrollUser';
+import { Button } from '../../components/Button'; 
+import { SearchInput } from '../../components/SearchInput';
+import { ProfileEventsList } from '../../components/ProfileEventsList';
 
 interface TabTwoScreenProps {
   name: string;
   email: string;
   phone: string;
   image: string;
-
 }
 
-const data = [
+type TData = {
+  id: string;
+  name: string;
+  date: string;
+  image: string;
+}[]
+
+const data: TData = [
   {
     id: '1',
     name: 'John Doe',
@@ -49,12 +55,13 @@ const TabTwoScreen = ({ name, email, phone,image }: TabTwoScreenProps) => {
         </TouchableOpacity>
         <Text style={styles.title}>Mi Perfil</Text>
       </View>
+
       <View style={styles.body}>
-
         <View style={styles.profile}>
-
-        <Image             source={{ uri: 'https://source.unsplash.com/random/300x301' }}
- style={styles.profileImage} />
+          <Image
+            style={styles.profileImage}
+            source={{ uri: 'https://source.unsplash.com/random/300x301' }}
+          />
 
           <View style={styles.profileInfo}>
             <TouchableOpacity style={styles.editButton}>
@@ -62,19 +69,20 @@ const TabTwoScreen = ({ name, email, phone,image }: TabTwoScreenProps) => {
             </TouchableOpacity>
           </View>
         </View>
+
         <View style={styles.contact}>
           <Text style={styles.contactLabel}>Correo electrónico:</Text>
           <Text style={styles.contactText}>{email}</Text>
           <Text style={styles.contactLabel}>Teléfono:</Text>
           <Text style={styles.contactText}>{phone}</Text>
         </View>
-        <CustomButton/>
-        <Input
-        value={text}
-        onChangeText={handleTextChange}
-        placeholder="Escribe algo..."
-      />
-        <ScrollUser data={data} navigation={undefined} />
+        <Button/>
+        <SearchInput
+          value={text}
+          onChangeText={handleTextChange}
+          placeholder="Escribe algo..."
+        />
+        <ProfileEventsList data={data} />
       </View>
     </View>
   );

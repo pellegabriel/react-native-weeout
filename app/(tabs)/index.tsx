@@ -1,13 +1,12 @@
 import { StyleSheet } from 'react-native';
-import ScrollCard from '../../components/scrollCard/scrollCard';
-// import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
-import { CardData } from '../../components/card/card';
-import ScrollCard2 from '../../components/scrollCard/scrollCard2';
-import ScrollCard3 from '../../components/scrollCard/scrollCategory';
+import { MainSlider } from '../../components/MainSlider';
+import { Text, View } from '../../theme/Themed';
+import { CardData } from '../../components/Card/card';
+import { ListOfEvents } from '../../components/ListOfEvents';
+import { CategoriesSlider } from '../../components/CategoriesSlider';
 import React, { useState } from 'react';
-import Input from '../../components/inputSearch/inputSearch';
-import { CardData3 } from '../../components/card/card3';
+import { SearchInput } from '../../components/SearchInput';
+import { CardData3 } from '../../components/Card/card3';
 
 export default function TabOneScreen() {
   const [text, setText] = useState('');
@@ -15,10 +14,11 @@ export default function TabOneScreen() {
   const handleTextChange = (newText: string) => {
     setText(newText);
   };
+
   const cards3: CardData3[] = [
     {
       title: 'Card 1',
-icon: 'icono'
+      icon: 'icono'
     },
     {
       title: 'Card 2',
@@ -35,7 +35,9 @@ icon: 'icono'
     {
       title: 'Card 5',
       icon: 'icono'
-    },]
+    },
+  ]
+
   const cards: CardData[] = [
     {
       title: 'Card 1',
@@ -69,11 +71,9 @@ icon: 'icono'
     },
   ];
 
-  
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.title}>WeeOut</Text> */}
-      <Input
+      <SearchInput
         value={text}
         onChangeText={handleTextChange}
         placeholder="Escribe algo..."
@@ -83,12 +83,12 @@ icon: 'icono'
      </View>
 
       <View style={styles.containerScroll}>
-      <ScrollCard cards={cards} />
+      <MainSlider cards={cards} />
       </View>
       <View style={styles.containerScroll2}>
-      <ScrollCard3 cards={cards3}/>
+      <CategoriesSlider cards={cards3}/>
       </View>
-      <ScrollCard2 cards={cards}/>
+      <ListOfEvents cards={cards}/>
       
     </View>
   );

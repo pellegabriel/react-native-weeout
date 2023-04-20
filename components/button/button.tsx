@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const CustomButton = () => {
+export const Button = () => {
   return (
     <TouchableOpacity
       style={styles.button}
@@ -25,5 +25,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-export default CustomButton;

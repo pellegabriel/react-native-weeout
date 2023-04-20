@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-interface InputProps {
+interface SearchInputProps {
   value: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
 }
 
-const Input = ({ value, onChangeText, placeholder }: InputProps) => {
+export const SearchInput = ({ value, onChangeText, placeholder }: SearchInputProps) => {
   const [text, setText] = useState(value);
 
   const handleTextChange = (newText: string) => {
@@ -57,4 +57,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Input;

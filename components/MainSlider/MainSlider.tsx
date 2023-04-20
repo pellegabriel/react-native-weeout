@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 import Swiper from 'react-native-swiper';
-import Card, { CardData } from '../card/card';
+import Card, { CardData } from '../Card/card';
 
 interface ScrollCardProps {
   cards: CardData[];
 }
 
-const ScrollCard: React.FC<ScrollCardProps> = ({ cards }) => {
+export const MainSlider: React.FC<ScrollCardProps> = ({ cards }) => {
   return (
     <Swiper style={styles.wrapper}  showsButtons={true}>
       {cards.map((card: CardData, index: number) => (
@@ -43,5 +43,3 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-
-export default ScrollCard;

@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, ScrollView } from 'react-native';
-import Card2, { CardData } from '../card/card2';
+import Card2, { CardData } from '../Card/card2';
 
 interface ScrollCardProps {
   cards: CardData[];
 }
 
-const ScrollCard: React.FC<ScrollCardProps> = ({ cards }) => {
+export const ListOfEvents: React.FC<ScrollCardProps> = ({ cards }) => {
   return (
     <ScrollView style={styles.container}>
       {cards.map((card: CardData, index: number) => (
@@ -26,5 +26,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-export default ScrollCard;
