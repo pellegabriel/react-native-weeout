@@ -1,32 +1,30 @@
 import React from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import CardUser, { CardProps } from './CardUser';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationOptions } from '@react-navigation/stack';
 import { RootStackParamList } from './types';
+import { useNavigation } from 'expo-router';
 
-type Props = {
-  navigation: StackNavigationProp<RootStackParamList, 'CardDetail'>;
-  data: { id: string, name: string, date: string, image: string }[];
-}
+const ScrollUser = (data) => {
+  const navigation = useNavigation()
 
-const ScrollUser = ({ navigation, data }: Props) => {
-  
-  const renderItem = ({ item }: { item: { id: string, name: string, date: string, image: string } }) => (
-<CardUser
-  key={item.id}
-  id={item.id}
-  title={item.name}
-  subtitle={item.date}
-  image={item.image}
-  onPress={() => navigation.navigate('CardDetail', { 
-    data: { 
-      id: item.id,
-      title: item.name,
-      subtitle: item.date,
-      image: item.image 
-    }
-  })}
-/>
+  const renderItem: React.FC<{ item: { id: string, name: string, date: string, image: string } }> = ({ item }) => (
+    <CardUser
+      id={item.id}
+      title={item.name}
+      subtitle={item.date}
+      image={item.image}
+      onPress={() => {
+        navigation.navigate('CardDetail', {
+          params: {
+            id: item.id,
+            title: item.name,
+            subtitle: item.date,
+            image: item.image 
+          }
+        }
+      )}}
+    />
   );
 
   return (
@@ -42,8 +40,11 @@ const ScrollUser = ({ navigation, data }: Props) => {
 };
 
 const styles = StyleSheet.create({
+ 
+
   container: {
-    marginBottom: 20, padding: 20
+    marginBottom: 20, 
+    padding: 20
   },
 });
 
