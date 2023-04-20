@@ -7,6 +7,7 @@ import ScrollCard2 from '../../components/scrollCard/scrollCard2';
 import ScrollCard3 from '../../components/scrollCard/scrollCategory';
 import React, { useState } from 'react';
 import Input from '../../components/inputSearch/inputSearch';
+import { CardData3 } from '../../components/card/card3';
 
 export default function TabOneScreen() {
   const [text, setText] = useState('');
@@ -14,6 +15,27 @@ export default function TabOneScreen() {
   const handleTextChange = (newText: string) => {
     setText(newText);
   };
+  const cards3: CardData3[] = [
+    {
+      title: 'Card 1',
+icon: 'icono'
+    },
+    {
+      title: 'Card 2',
+      icon: 'icono'
+    },
+    {
+      title: 'Card 3',
+      icon: 'icono'
+    },
+    {
+      title: 'Card 4',
+      icon: 'icono'
+    },
+    {
+      title: 'Card 5',
+      icon: 'icono'
+    },]
   const cards: CardData[] = [
     {
       title: 'Card 1',
@@ -64,7 +86,7 @@ export default function TabOneScreen() {
       <ScrollCard cards={cards} />
       </View>
       <View style={styles.containerScroll2}>
-      <ScrollCard3 cards={cards}/>
+      <ScrollCard3 cards={cards3}/>
       </View>
       <ScrollCard2 cards={cards}/>
       

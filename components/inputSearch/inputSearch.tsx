@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface InputProps {
   value: string;
@@ -15,26 +16,44 @@ const Input = ({ value, onChangeText, placeholder }: InputProps) => {
     onChangeText(newText);
   };
 
+  const handleButtonPress = () => {
+    // Hacer algo cuando se presione el botón
+    console.log('Botón presionado');
+  };
+
   return (
-    <TextInput
-      style={styles.input}
-      value={text}
-      onChangeText={handleTextChange}
-      placeholder={placeholder}
-    />
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        value={text}
+        onChangeText={handleTextChange}
+        placeholder={placeholder}
+      />
+      <TouchableOpacity style={styles.button} onPress={handleButtonPress}>
+        <Icon name="search" size={20} color="#fff" />
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  input: {
-    width: 320,
-    borderWidth: 1,
-    justifyContent: 'center',
+  container: {
+    flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',    
+  },
+  input: {
+    flex: 1,
+    borderWidth: 1,
+    backgroundColor: '#F5FCFF',
     padding: 10,
     marginVertical: 10,
-    borderRadius: 20
+    borderRadius: 20,
+  },
+  button: {
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 20,
+    marginLeft: 10,
   },
 });
 
