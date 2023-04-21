@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native';
-import { MainSlider } from '../../components/MainSlider';
+import { MainSlider } from '../../components/MainSlider/MainSlider';
 import { Text, View } from '../../theme/Themed';
-import { CardData } from '../../components/Card/card';
+import { CardData } from '../../components/card/card';
 import { ListOfEvents } from '../../components/ListOfEvents';
 import { CategoriesSlider } from '../../components/CategoriesSlider';
 import React, { useState } from 'react';
 import { SearchInput } from '../../components/SearchInput';
-import { CardData3 } from '../../components/Card/card3';
+import { CardData3 } from '../../components/card/card3';
 
 export default function TabOneScreen() {
   const [text, setText] = useState('');

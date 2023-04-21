@@ -13,7 +13,7 @@ export interface CardProps {
 
 const Card: React.FC<CardProps> = ({ data }) => {
   return (
-    <View style={styles.card}>
+    <View style={styles.card}>  
       <Image source={{ uri: data.image }} style={styles.image} />
       <View style={styles.content}>
         <Text style={styles.title}>{data.title}</Text>

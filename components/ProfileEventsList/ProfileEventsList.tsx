@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, StyleSheet, FlatList, Image, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -21,10 +22,11 @@ type TRenderItemProps = {
 }
 
 export const ProfileEventsList = ({ data }: TProfileEventsListProps) => {
+  const navigation = useNavigation()
   const renderItem: React.FC<TRenderItemProps> = ({
     item: { id, name, date, image },
   }) => (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate('CardDetails')}>
       <View style={styles.card}>
         <Image style={styles.image} source={{ uri: image }} />
         <View style={styles.cardContent}>
@@ -50,14 +52,14 @@ export const ProfileEventsList = ({ data }: TProfileEventsListProps) => {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20, 
-    padding: 20
+    padding:20
   },
   card: {
     flexDirection: 'row',
     backgroundColor: 'white',
     borderRadius: 10,
     margin: 5,
-    width: '48%',
+    width: 160,
     height: 200,
     shadowColor: '#000',
     shadowOffset: {

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Button } from '../../components/Button'; 
+import { Button } from '../../components/button'; 
 import { SearchInput } from '../../components/SearchInput';
 import { ProfileEventsList } from '../../components/ProfileEventsList';
+import { createStackNavigator, StackNavigationProp, } from '@react-navigation/stack';
 
+
+  
 interface TabTwoScreenProps {
   name: string;
   email: string;
@@ -18,6 +21,7 @@ type TData = {
   date: string;
   image: string;
 }[]
+const Stack = createStackNavigator();
 
 const data: TData = [
   {
@@ -42,6 +46,7 @@ const data: TData = [
 
 
 const TabTwoScreen = ({ name, email, phone,image }: TabTwoScreenProps) => {
+
   const [text, setText] = useState('');
 
   const handleTextChange = (newText: string) => {
@@ -83,6 +88,8 @@ const TabTwoScreen = ({ name, email, phone,image }: TabTwoScreenProps) => {
           placeholder="Escribe algo..."
         />
         <ProfileEventsList data={data} />
+
+  
       </View>
     </View>
   );
