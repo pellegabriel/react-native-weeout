@@ -7,8 +7,8 @@ import { ProfileScreen } from './screens/Profile';
 export type RootStackParamList = {
   Home: undefined
   Profile: undefined
-  EventDetails: undefined;
-}
+  EventDetails: { eventId: string }
+};
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 

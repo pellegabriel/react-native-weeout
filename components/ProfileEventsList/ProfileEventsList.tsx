@@ -11,7 +11,7 @@ export const ProfileEventsList = () => {
   const renderItem: React.FC = ({
     item: { id, name, date, image },
   }: { item: TFakeProfile }) => (
-    <TouchableOpacity onPress={() => navigate('EventDetails')}>
+    <TouchableOpacity onPress={() => navigate('EventDetails', { eventId: id })}>
       <View style={styles.card}>
         <Image style={styles.image} source={{ uri: image }} />
         <View style={styles.cardContent}>

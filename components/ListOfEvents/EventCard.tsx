@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { TFakeEvent } from '../../utils/fakeData';
 
 export interface CardProps {
@@ -8,15 +8,15 @@ export interface CardProps {
 
 export const EventCard: React.FC<CardProps> = ({ data }) => {
   return (
-    <View style={styles.card}>
-      <View style={styles.imageContainer}>
-      <Image source={{ uri: data.image }} style={styles.image} />
+      <View style={styles.card}>
+        <View style={styles.imageContainer}>
+        <Image source={{ uri: data.image }} style={styles.image} />
+        </View>
+        <View style={styles.content}>
+          <Text style={styles.title}>{data.title}</Text>
+          <Text style={styles.description}>{data.description}</Text>
+        </View>
       </View>
-      <View style={styles.content}>
-        <Text style={styles.title}>{data.title}</Text>
-        <Text style={styles.description}>{data.description}</Text>
-      </View>
-    </View>
   );
 };
 
