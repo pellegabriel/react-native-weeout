@@ -1,17 +1,9 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { TFakeCategory } from '../../utils/fakeData';
 
-export interface CardData3 {
-  title: string;
-  icon: string;
-}
-
-export interface CardProps {
-  data: CardData3;
-}
-
-const Card3: React.FC<CardProps> = ({ }) => {
+export const CategoryCard: React.FC<TFakeCategory> = ({ title, icon }) => {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
@@ -45,5 +37,3 @@ const styles = StyleSheet.create({
     color: '#4e4e4e',
   },
 });
-
-export default Card3;

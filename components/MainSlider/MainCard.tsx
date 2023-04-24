@@ -1,22 +1,15 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+import { TFakeEvent } from '../../utils/fakeData';
 
-export interface CardData {
-  title: string;
-  image: string;
-  description: string;
+export interface MainCardProps {
+  data: TFakeEvent;
 }
 
-export interface CardProps {
-  data: CardData;
-}
-
-const Card2: React.FC<CardProps> = ({ data }) => {
+const MainCard: React.FC<MainCardProps> = ({ data }) => {
   return (
-    <View style={styles.card}>
-      <View style={styles.imageContainer}>
+    <View style={styles.mainCard}>  
       <Image source={{ uri: data.image }} style={styles.image} />
-      </View>
       <View style={styles.content}>
         <Text style={styles.title}>{data.title}</Text>
         <Text style={styles.description}>{data.description}</Text>
@@ -26,9 +19,9 @@ const Card2: React.FC<CardProps> = ({ data }) => {
 };
 
 const styles = StyleSheet.create({
-  card: {
+  mainCard: {
     width: 350,
-    height: 100,
+    height: 160,
     backgroundColor: '#fff',
     borderRadius: 10,
     shadowColor: '#000',
@@ -42,7 +35,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   imageContainer: {
-    width: '30%',
+    width: '50%',
     height: '100%',
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
@@ -66,4 +59,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Card2;
+export default MainCard;

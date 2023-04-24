@@ -1,19 +1,14 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import Card3, { CardData3 } from '../card/card3';
+import { CategoryCard } from './CategoryCard';
+import { fakeCategories } from '../../utils/fakeData';
 
-interface ScrollCardProps {
-  cards: CardData3[];
-}
-
-export const CategoriesSlider: React.FC<ScrollCardProps> = ({ cards }) => {
+export const CategoriesSlider: React.FC = () => {
   return (
     <ScrollView horizontal={true} style={styles.wrapper}>
       <View style={styles.container}>
-        {cards.map((card: CardData3, index: number) => (
-          <View key={index} style={styles.card}>
-            <Card3 data={card} />
-          </View>
+        {fakeCategories.map((category, index) => (
+          <CategoryCard key={index} {...category} />
         ))}
       </View>
     </ScrollView>

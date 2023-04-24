@@ -1,52 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Button } from '../../components/button'; 
-import { SearchInput } from '../../components/SearchInput';
-import { ProfileEventsList } from '../../components/ProfileEventsList';
-import { createStackNavigator, StackNavigationProp, } from '@react-navigation/stack';
-
-
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Button } from '../components/Button';
+import { SearchInput } from '../components/SearchInput';
+import { ProfileEventsList } from '../components/ProfileEventsList';
+import { fakeProfile } from '../utils/fakeData';
   
-interface TabTwoScreenProps {
-  name: string;
-  email: string;
-  phone: string;
-  image: string;
-}
-
-type TData = {
-  id: string;
-  name: string;
-  date: string;
-  image: string;
-}[]
-const Stack = createStackNavigator();
-
-const data: TData = [
-  {
-    id: '1',
-    name: 'John Doe',
-    date: '2022-04-15',
-    image: 'https://source.unsplash.com/random/300x301',
-  },
-  {
-    id: '2',
-    name: 'Jane Smith',
-    date: '2022-04-16',
-    image: 'https://source.unsplash.com/random/300x301',
-  },
-  {
-    id: '3',
-    name: 'Bob Johnson',
-    date: '2022-04-17',
-    image: 'https://source.unsplash.com/random/300x301',
-  },
-];
-
-
-const TabTwoScreen = ({ name, email, phone,image }: TabTwoScreenProps) => {
-
+export const ProfileScreen = () => {
   const [text, setText] = useState('');
 
   const handleTextChange = (newText: string) => {
@@ -77,19 +37,21 @@ const TabTwoScreen = ({ name, email, phone,image }: TabTwoScreenProps) => {
 
         <View style={styles.contact}>
           <Text style={styles.contactLabel}>Correo electrónico:</Text>
-          <Text style={styles.contactText}>{email}</Text>
+          <Text style={styles.contactText}>{fakeProfile.email}</Text>
           <Text style={styles.contactLabel}>Teléfono:</Text>
-          <Text style={styles.contactText}>{phone}</Text>
+          <Text style={styles.contactText}>{fakeProfile.phone}</Text>
         </View>
-        <Button/>
+
+        <Button />
+
         <SearchInput
           value={text}
           onChangeText={handleTextChange}
           placeholder="Escribe algo..."
         />
-        <ProfileEventsList data={data} />
 
-  
+        <ProfileEventsList />
+
       </View>
     </View>
   );
@@ -131,7 +93,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
-    elevation: 4,
   },
   
   profileImage: {
@@ -142,7 +103,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
-    elevation: 4,
   },
   
   profileInfo: {
@@ -165,7 +125,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
-    elevation: 4,
   },
   
   editButtonText: {
@@ -187,5 +146,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default TabTwoScreen;

@@ -1,45 +1,31 @@
 import React from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
-import Swiper from 'react-native-swiper';
-import Card, { CardData } from '../card/card';
 import { Button } from 'react-native';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Swiper from 'react-native-swiper';
+import { View, StyleSheet } from 'react-native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { RootStackParamList } from '../../App';
+import MainCard from './MainCard';
+import { fakeEvents } from '../../utils/fakeData';
 
-interface ScrollCardProps {
-  cards: CardData[];
+interface MainSliderProps {
+  navigation: BottomTabNavigationProp<RootStackParamList>;
 }
-// function DetailsScreen() {
-//   return (
-//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//       <Text>Details Screen</Text>
-//     </View>
-//   );
-// }
-export const MainSlider: React.FC<ScrollCardProps> = ({ cards },{ navigation }) => {
+
+export const MainSlider: React.FC<MainSliderProps> = ({ navigation }) => {
   return (
-  // <NavigationContainer>
     <Swiper style={styles.wrapper}  showsButtons={true}>
-      {cards.map((card: CardData, index: number) => (
+      {fakeEvents.map((event, index) => (
         <View key={index} style={styles.slide}>
-          <Card data={card} />
+          <MainCard data={event} />
             <Button
             title="Go to Details"
-            onPress={() => navigation.navigate('Details')}
+            onPress={() => navigation.navigate('EventDetails')}
             />
         </View>
       ))}
     </Swiper>
-        
-        // <Stack.Navigator initialRouteName="Home">
-        //   <Stack.Screen name="Details" component={DetailsScreen} />
-        // </Stack.Navigator>
-      // </NavigationContainer>
   );
 };
-
-
-// const Stack = createNativeStackNavigator();
 
 const styles = StyleSheet.create({
   wrapper: {},

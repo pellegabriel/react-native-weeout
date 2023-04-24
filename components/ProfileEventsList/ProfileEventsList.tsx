@@ -1,32 +1,17 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { View, StyleSheet, FlatList, Image, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import { View, StyleSheet, FlatList, Image, Text, TouchableOpacity } from 'react-native';
+import { RootStackParamList } from '../../App';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { TFakeProfile, fakeProfiles } from '../../utils/fakeData';
 
-type TProfileEventsListProps = {
-  data: {
-    id: string;
-    name: string;
-    date: string;
-    image: string;
-  }[]
-}
+export const ProfileEventsList = () => {
+  const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
 
-type TRenderItemProps = {
-  item: {
-    id: string;
-    name: string;
-    date: string;
-    image: string;
-  }
-}
-
-export const ProfileEventsList = ({ data }: TProfileEventsListProps) => {
-  const navigation = useNavigation()
-  const renderItem: React.FC<TRenderItemProps> = ({
+  const renderItem: React.FC = ({
     item: { id, name, date, image },
-  }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('CardDetails')}>
+  }: { item: TFakeProfile }) => (
+    <TouchableOpacity onPress={() => navigate('EventDetails')}>
       <View style={styles.card}>
         <Image style={styles.image} source={{ uri: image }} />
         <View style={styles.cardContent}>
@@ -40,7 +25,7 @@ export const ProfileEventsList = ({ data }: TProfileEventsListProps) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={data}
+        data={fakeProfiles}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         numColumns={2}

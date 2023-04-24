@@ -1,17 +1,14 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, ScrollView } from 'react-native';
-import Card2, { CardData } from '../card/card2';
+import { fakeEvents } from '../../utils/fakeData';
+import { EventCard } from './EventCard';
 
-interface ScrollCardProps {
-  cards: CardData[];
-}
-
-export const ListOfEvents: React.FC<ScrollCardProps> = ({ cards }) => {
+export const ListOfEvents: React.FC = () => {
   return (
     <ScrollView style={styles.container}>
-      {cards.map((card: CardData, index: number) => (
+      {fakeEvents.map((event, index) => (
         <View key={index} style={styles.cardContainer}>
-          <Card2 data={card} />
+          <EventCard data={event} />
         </View>
       ))}
     </ScrollView>
@@ -20,7 +17,7 @@ export const ListOfEvents: React.FC<ScrollCardProps> = ({ cards }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
   },
   cardContainer: {
     marginBottom: 10,
