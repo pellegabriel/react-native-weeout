@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Alert } from 'react-native';
 
 interface SearchInputProps {
   value: string;
@@ -16,9 +17,17 @@ export const SearchInput = ({ value, onChangeText, placeholder }: SearchInputPro
     onChangeText(newText);
   };
 
+  const showAlert = (title: string, message: string) => {
+    Alert.alert(
+      title,
+      message,
+      [{ text: 'OK' }]
+    );
+  }
+  
   const handleButtonPress = () => {
     // Hacer algo cuando se presione el botón
-    console.log('Botón presionado');
+    showAlert('Esto deberia llevar a la busqueda que realizas', 'Estamos en ello');
   };
 
   return (

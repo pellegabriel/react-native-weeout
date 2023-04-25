@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar"
 import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native"
-import { SearchInput } from "../components/SearchInput";
+import { ScrollView, StyleSheet, Text, View } from "react-native"
+import { SearchInput } from "../components/SearchInput/SearchInput";
 import { MainSlider } from "../components/MainSlider";
 import { CategoriesSlider } from "../components/CategoriesSlider";
 import { ListOfEvents } from "../components/ListOfEvents";
@@ -70,12 +70,17 @@ export const HomeScreen = ({ navigation }) => {
     ];
   
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
+      <View style={styles.container1}> 
+      <View   style={styles.search}>      
+
         <SearchInput
           value={text}
           onChangeText={handleTextChange}
           placeholder="Escribe algo..."
         />
+        </View>
+
         <View style={styles.separator}>
         <Text style={styles.title}>Eventos que estan ocurriendo ahora </Text>
        </View>
@@ -87,16 +92,21 @@ export const HomeScreen = ({ navigation }) => {
         <View style={styles.containerScroll2}>
             <CategoriesSlider />
         </View>
+        <Text style={styles.title2}>Los que tienes cerca </Text>
 
-        <ListOfEvents />
-        
-      </View>
+        <View style={styles.containerScroll3}>
+        <ListOfEvents />        
+        </View>
+     
+        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+    },  container1: {
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -105,12 +115,30 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       display: 'flex',
       justifyContent:'flex-start'
+    }, 
+    title2: {
+      fontSize: 25,
+      fontWeight: 'bold',
+      display: 'flex',
+      justifyContent:'flex-start', 
+      padding: 20,
+      paddingLeft: 0
+    },search: {
+      fontSize: 30,
+      fontWeight: 'bold',
+      display: 'flex',
+      justifyContent:'center',
+      width: 340,
+      marginTop: 30
     },
     containerScroll:{
       height:200
     },
     containerScroll2:{
-      height:200
+      height:100
+    },   containerScroll3:{
+      height:1000
+      ,flex: 1
     },
     separator: {
       marginTop: 60,

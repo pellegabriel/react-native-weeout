@@ -15,8 +15,8 @@ export const ProfileEventsList = () => {
       <View style={styles.card}>
         <Image style={styles.image} source={{ uri: image }} />
         <View style={styles.cardContent}>
-          <Text style={styles.title}>{name}</Text>
-          <Text style={styles.subtitle}>{date}</Text>
+          <Text style={styles.title}>{name}Nombre del Evento</Text>
+          <Text style={styles.subtitle}>{date}Subtitulo</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -37,10 +37,10 @@ export const ProfileEventsList = () => {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20, 
-    padding:20
+    padding:10
   },
   card: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     backgroundColor: 'white',
     borderRadius: 10,
     margin: 5,
@@ -57,20 +57,20 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: '70%',
+    height: '60%',
     borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   cardContent: {
     flex: 1,
     padding: 10,
   },
   title: {
-    fontSize: 18,
+    fontSize: 13,
     fontWeight: 'bold',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 10,
     marginTop: 5,
   },
 });

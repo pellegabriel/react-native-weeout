@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Button } from '../components/Button';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { Button } from '../components/button/button';
 import { SearchInput } from '../components/SearchInput';
 import { ProfileEventsList } from '../components/ProfileEventsList';
 import { fakeProfile } from '../utils/fakeData';
@@ -13,7 +13,10 @@ export const ProfileScreen = () => {
     setText(newText);
   };
   return (
-    <View style={styles.container}>
+
+    <View style={styles.container1}>
+          <ScrollView style={styles.container}>
+
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton}>
           <Icon name="arrow-left" size={20} color="#fff" />
@@ -30,7 +33,7 @@ export const ProfileScreen = () => {
 
           <View style={styles.profileInfo}>
             <TouchableOpacity style={styles.editButton}>
-              <Icon name="pencil" size={20} color="#cccccc  " />
+              <Icon name="pencil" size={20}/>
             </TouchableOpacity>
           </View>
         </View>
@@ -53,14 +56,20 @@ export const ProfileScreen = () => {
         <ProfileEventsList />
 
       </View>
+      </ScrollView>
+
     </View>
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000', // cambiar a '#F2F2F2' o cualquier otro tono de gris claro
+    height:500
+  },
+  container1: {
+    flex: 1,
     display: 'flex', justifyContent:'center'
   },
   header: {
@@ -78,7 +87,6 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   title: {
-    color: '#fff', // cambiar a '#D50A0A' o cualquier otro color que prefieras
     fontSize: 20,
     fontWeight: 'bold',
     
@@ -110,7 +118,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   profileName: {
-    color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
@@ -128,7 +135,6 @@ const styles = StyleSheet.create({
   },
   
   editButtonText: {
-    color: '#D50A0A',
     fontSize: 16,
     marginLeft: 5,
   },
@@ -136,13 +142,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   contactLabel: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
   },
   contactText: {
-    color: '#fff',
     fontSize: 16,
   },
 });

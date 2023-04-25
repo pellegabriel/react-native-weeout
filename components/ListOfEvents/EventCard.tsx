@@ -8,7 +8,7 @@ export interface CardProps {
 
 export const EventCard: React.FC<CardProps> = ({ data }) => {
   return (
-      <View style={styles.card}>
+      <TouchableOpacity style={styles.card}>
         <View style={styles.imageContainer}>
         <Image source={{ uri: data.image }} style={styles.image} />
         </View>
@@ -16,14 +16,14 @@ export const EventCard: React.FC<CardProps> = ({ data }) => {
           <Text style={styles.title}>{data.title}</Text>
           <Text style={styles.description}>{data.description}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
     width: 350,
-    height: 100,
+    height: 170,
     backgroundColor: '#fff',
     borderRadius: 10,
     shadowColor: '#000',
@@ -57,6 +57,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   description: {
-    fontSize: 12,
+    fontSize: 9,
   },
 });

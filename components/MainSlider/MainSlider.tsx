@@ -17,10 +17,6 @@ export const MainSlider: React.FC<MainSliderProps> = ({ navigation }) => {
       {fakeEvents.map((event, index) => (
         <View key={index} style={styles.slide}>
           <MainCard data={event} />
-            <Button
-            title="Go to Details"
-            onPress={() => navigation.navigate('EventDetails')}
-            />
         </View>
       ))}
     </Swiper>

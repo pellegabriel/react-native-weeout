@@ -1,20 +1,116 @@
-import { StatusBar } from "expo-status-bar"
 import { StyleSheet, Text, View } from "react-native"
+import { MaterialIcons } from '@expo/vector-icons';
+import { ImageGrid } from "./ImageGrid";
 
-export const EventDetailsScreen = () => {
+interface Props {
+    title: string;
+    subtitle: string;
+    description: string;
+    startDate: Date;
+    endDate: Date;
+    location: string;
+    createdBy: string;
+    images: { id: number; uri: string }[];
+    columns: number;
+  }
+  const event = {
+    title: 'Mi evento',
+    subtitle: 'Un evento muy interesante',
+    description: 'Un evento para aprender mucho sobre React Native',
+    startDate: new Date('2023-05-01T10:00:00Z'),
+    endDate: new Date('2023-05-01T12:00:00Z'),
+    location: 'Mi casa',
+    createdBy: 'Juan Perez',
+  };
+export const EventDetailsScreen : React.FC<Props> = ({ images   }) => {
     return (
+      <View>
+
         <View style={styles.container}>
-            <Text>Event details Screen</Text>
-            <StatusBar style="auto" />
+        <View style={styles.header}>
+          <View style={styles.iconContainer}>
+            <MaterialIcons name="event" size={36} color="#fff" />
+          </View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>{event.title}</Text>
+            <Text style={styles.subtitle}>{event.subtitle}</Text>
+          </View>
         </View>
+        <View style={styles.body}>
+          <Text style={styles.description}>{event.description}</Text>
+          <View style={styles.infoContainer}>
+            <MaterialIcons name="schedule" size={20} color="#000" />
+            <Text style={styles.infoText}>
+              {event.startDate.toLocaleDateString()} - {event.endDate.toLocaleDateString()}
+            </Text>
+          </View>
+          <View style={styles.infoContainer}>
+            <MaterialIcons name="place" size={20} color="#000" />
+            <Text style={styles.infoText}>{event.location}</Text>
+          </View>
+          <View style={styles.infoContainer}>
+            <MaterialIcons name="person" size={20} color="#000" />
+            <Text style={styles.infoText}>Created by {event.createdBy}</Text>
+          </View>
+        </View>
+      </View>
+      <ImageGrid images={images} columns={2} />
+      </View>
+
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: 'center',
-        justifyContent: 'center',
+      backgroundColor: '#fff',
+      borderRadius: 10,
+      marginHorizontal: 16,
+      marginVertical: 8,
+      elevation: 2,
     },
-})
+    header: {
+      backgroundColor: '#6C63FF',
+      borderTopLeftRadius: 10,
+      borderTopRightRadius: 10,
+      padding: 16,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    iconContainer: {
+      backgroundColor: '#C9C3FF',
+      borderRadius: 30,
+      width: 60,
+      height: 60,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    titleContainer: {
+      marginLeft: 16,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: '#fff',
+      marginBottom: 4,
+    },
+    subtitle: {
+      fontSize: 16,
+      color: '#fff',
+    },
+    body: {
+      padding: 16,
+    },
+    description: {
+      fontSize: 16,
+      marginBottom: 16,
+    },
+    infoContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 8,
+    },
+    infoText: {
+      fontSize: 16,
+      marginLeft: 8,
+    },
+  });

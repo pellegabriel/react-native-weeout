@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { TFakeEvent } from '../../utils/fakeData';
 
 export interface MainCardProps {
@@ -10,17 +10,14 @@ const MainCard: React.FC<MainCardProps> = ({ data }) => {
   return (
     <View style={styles.mainCard}>  
       <Image source={{ uri: data.image }} style={styles.image} />
-      <View style={styles.content}>
-        <Text style={styles.title}>{data.title}</Text>
-        <Text style={styles.description}>{data.description}</Text>
-      </View>
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   mainCard: {
-    width: 350,
+    width: 300,
     height: 160,
     backgroundColor: '#fff',
     borderRadius: 10,
