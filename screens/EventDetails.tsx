@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native"
 import { MaterialIcons } from '@expo/vector-icons';
-import { ImageGrid } from "./ImageGrid";
+import { ImageGrid } from "../components/ImageGrid/ImageGrid";
+import Grid from "../components/ImageGrid/Grid";
 
 interface Props {
     title: string;
@@ -13,6 +14,8 @@ interface Props {
     images: { id: number; uri: string }[];
     columns: number;
   }
+
+
   const event = {
     title: 'Mi evento',
     subtitle: 'Un evento muy interesante',
@@ -54,7 +57,7 @@ export const EventDetailsScreen : React.FC<Props> = ({ images   }) => {
           </View>
         </View>
       </View>
-      <ImageGrid images={images} columns={2} />
+      <Grid/>
       </View>
 
     )
