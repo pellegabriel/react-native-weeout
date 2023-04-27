@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native"
 import { MaterialIcons } from '@expo/vector-icons';
 import { ImageGrid } from "../components/ImageGrid/ImageGrid";
-import Grid from "../components/ImageGrid/Grid";
+// import Grid from "../components/ImageGrid/Grid";
 
 interface Props {
     title: string;
@@ -57,7 +57,9 @@ export const EventDetailsScreen : React.FC<Props> = ({ images   }) => {
           </View>
         </View>
       </View>
-      <Grid/>
+      <ImageGrid images={images} columns={2} onImageSelected={function (uri: string): void {
+          throw new Error("Function not implemented.");
+        } } />
       </View>
 
     )
