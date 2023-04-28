@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native"
 import { MaterialIcons } from '@expo/vector-icons';
+// import { ViewImage } from "../components/ImageGrid/Grid";
 import { ImageGrid } from "../components/ImageGrid/ImageGrid";
-// import Grid from "../components/ImageGrid/Grid";
 
 interface Props {
     title: string;
@@ -14,8 +14,6 @@ interface Props {
     images: { id: number; uri: string }[];
     columns: number;
   }
-
-
   const event = {
     title: 'Mi evento',
     subtitle: 'Un evento muy interesante',
@@ -24,9 +22,11 @@ interface Props {
     endDate: new Date('2023-05-01T12:00:00Z'),
     location: 'Mi casa',
     createdBy: 'Juan Perez',
+    
   };
-export const EventDetailsScreen : React.FC<Props> = ({ images   }) => {
-    return (
+export const EventDetailsScreen : React.FC<Props> = ({}) => {
+
+  return (
       <View>
 
         <View style={styles.container}>
@@ -56,11 +56,13 @@ export const EventDetailsScreen : React.FC<Props> = ({ images   }) => {
             <Text style={styles.infoText}>Created by {event.createdBy}</Text>
           </View>
         </View>
+         {/* <View>
+          <ViewImage />
+        </View> */}
       </View>
-      <ImageGrid images={images} columns={2} onImageSelected={function (uri: string): void {
-          throw new Error("Function not implemented.");
-        } } />
-      </View>
+      <ImageGrid/>
+
+        </View>
 
     )
 }
@@ -72,6 +74,19 @@ const styles = StyleSheet.create({
       marginHorizontal: 16,
       marginVertical: 8,
       elevation: 2,
+    },
+    imageContainer: {
+      flex: 1,
+      marginHorizontal: 5,
+      marginBottom: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#eee',
+    },
+    image: {
+      width: 170,
+      borderRadius: 5,
+      height: 170,
     },
     header: {
       backgroundColor: '#6C63FF',

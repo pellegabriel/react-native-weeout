@@ -50,48 +50,36 @@
 //     height: 170,
 //   },
 // });
-import React, { useState } from 'react';
+import React from 'react';
 import {  StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import { TFakeImages, fakeImages } from '../../utils/fakeData';
+import { useNavigation } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { RootStackParamList } from '../../App';
 
-const images = [
-  { id: 1, uri: 'https://source.unsplash.com/random/400x400?nature' },
-  { id: 2, uri: 'https://source.unsplash.com/random/400x400?water' },
-  { id: 3, uri: 'https://source.unsplash.com/random/400x400?mountain' },
-  { id: 4, uri: 'https://source.unsplash.com/random/400x400?beach' },
-];
+export const ImageGrid = () => {
+  const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
 
-interface ImageGridProps {
-  images: { id: number; uri: string }[];
-  columns: number;
-  onImageSelected: (uri: string) => void;
-}
-
-export const ImageGrid: React.FC<ImageGridProps> = ({ onImageSelected }) => {
-  const [, setSelectedImageId] = useState<number | null>(null);
-
-  const renderItem = ({ item }) => {
-    const handleImagePress = () => {
-      setSelectedImageId(item.id);
-      onImageSelected(item.uri);
-    };
-
-    return (
-      <TouchableOpacity onPress={handleImagePress} style={styles.imageContainer}>
-        <Image source={{ uri: item.uri }} style={styles.image} />
+  const renderItem: React.FC = ({
+    item: { uri},
+  }: { item: TFakeImages }) => (
+    <TouchableOpacity onPress={() => navigate('ImageDetails', { imageId: item.id })} style={styles.imageContainer}>
+    <Image source={{ uri }} style={styles.image} />
       </TouchableOpacity>
+    );
+    return (
+      <FlatList
+        data={fakeImages}
+        renderItem={renderItem}
+        numColumns={2}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.container}
+      />
     );
   };
 
-  return (
-    <FlatList
-      data={images}
-      renderItem={renderItem}
-      numColumns={2}
-      keyExtractor={(item) => item.id.toString()}
-      contentContainerStyle={styles.container}
-    />
-  );
-};
+
+
 
 const styles = StyleSheet.create({
   container: {
