@@ -6,10 +6,8 @@ import { EventCard } from './EventCard';
 export const ListOfEvents: React.FC = () => {
   return (
     <ScrollView style={styles.container}>
-      {fakeEvents.map((event, index) => (
-        <View key={index} style={styles.cardContainer}>
-          <EventCard data={event} />
-        </View>
+      {fakeEvents.map((event) => (
+        <EventCard key={event.title} data={event} />
       ))}
     </ScrollView>
   );
@@ -20,8 +18,5 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 40,
     paddingRight: 40,
-  },
-  cardContainer: {
-    marginBottom: 10,
   },
 });

@@ -115,19 +115,19 @@ export const fakeCategories: TFakeCategory[] = [
 
 export const fakeEvents: TFakeEvent[] = [
     {
-        title: 'Card 1',
-        image: 'https://source.unsplash.com/random/300x300',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi doloribus voluptates nihil nisi magnam ullam unde, illum repellendus commodi earum fugiat similique neque sapiente debitis molestias amet eos error culpa?',
+        title: 'Caminata saludable',
+        image: 'https://secure.meetupstatic.com/photos/event/e/6/0/8/600_504898888.webp?w=300',
+        description: '📍 ¿Dónde?: Reserva Ecológica de Puerto Madero▶👉 Nos encontramos, todos los domingos, en los bancos de la estatua de Lola Mora.',
       },
       {
-        title: 'Card 2',
-        image: 'https://source.unsplash.com/random/300x300',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi doloribus voluptates nihil nisi magnam ullam unde, illum repellendus commodi earum fugiat similique neque sapiente debitis molestias amet eos error culpa?',
+        title: 'Yoga class in English in Palermo',
+        image: 'https://secure.meetupstatic.com/photos/event/3/d/9/e/600_511695774.webp?w=750',
+        description: 'This is a Yoga and Meditation class I give in Palermo, Buenos Aires. The class is in English.It`s a beginner/intermediate level so If you have little experience in yoga you are also very welcome to join!',
       },
       {
-        title: 'Card 3',
+        title: 'Meditacion Sahaja Yoga gratuita en español online',
         image: 'https://source.unsplash.com/random/300x300',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi doloribus voluptates nihil nisi magnam ullam unde, illum repellendus commodi earum fugiat similique neque sapiente debitis molestias amet eos error culpa?',
+        description: 'La meditación Sahaja Yoga implica el despertar de la energía interna a través de pasos simples y naturales, produciendo beneficios tangibles de salud y reducción del estrés.',
       },
 ]
 
