@@ -5,7 +5,8 @@ interface ImageDetailsProps {
   uri: string;
 }
 
-export const ImageDetails: React.FC<ImageDetailsProps> = ({ uri }) => {
+export const ImageDetailsScreen: React.FC<ImageDetailsProps> = ({ uri }) => {
+  
   return (
     <View style={styles.container}>
       <Image source={{ uri }} style={styles.image} />

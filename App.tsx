@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from './screens/Home';
 import { EventDetailsScreen } from './screens/EventDetails';
 import { ProfileScreen } from './screens/Profile';
-import { ImageDetails } from './screens/ImageDetailsScreen';
+import { ImageDetailsScreen } from './screens/ImageDetails';
 import { useEffect, useState } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from './supabase';
@@ -40,7 +40,7 @@ export default function App() {
           <Tab.Screen name="Home" component={HomeScreen} />
           <Tab.Screen name="EventDetails" component={EventDetailsScreen} />
           <Tab.Screen name="Profile" component={ProfileScreen} />
-          <Tab.Screen name="ImageDetails" component={ImageDetails} initialParams={{ imageId: 1 }}/>
+          <Tab.Screen name="ImageDetails" component={ImageDetailsScreen} initialParams={{ imageId: 1 }}/>
         </Tab.Navigator>
       ) : <Login />
       }

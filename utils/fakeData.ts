@@ -18,6 +18,11 @@ export type TFakeProfile = {
     phone: string;
 }
 
+export type TFakeImages = {
+ id: number;
+ uri: string 
+}
+
 export const fakeProfile: TFakeProfile = 
 {
     id: '1',
@@ -131,4 +136,9 @@ export const fakeEvent: TFakeEvent = {
     image: 'https://source.unsplash.com/random/300x300',
     description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi doloribus voluptates nihil nisi magnam ullam unde, illum repellendus commodi earum fugiat similique neque sapiente debitis molestias amet eos error culpa?',
 }
-
+export const fakeImages: TFakeImages[] = [
+    { id: 1, uri: 'https://source.unsplash.com/random/400x400?nature' },
+    { id: 2, uri: 'https://source.unsplash.com/random/400x400?water' },
+    { id: 3, uri: 'https://source.unsplash.com/random/400x400?mountain' },
+    { id: 4, uri: 'https://source.unsplash.com/random/400x400?beach' },
+  ];
