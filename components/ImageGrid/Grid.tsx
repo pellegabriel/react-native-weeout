@@ -1,21 +1,47 @@
-// import React from 'react';
-// import { View } from 'react-native';
-// import { ImageGrid } from './ImageGrid';
+import { useState } from "react";
+import ImageView from "react-native-image-viewing";
+import { View, StyleSheet } from "react-native";
 
+const images = [
+    {
+      uri: "https://images.unsplash.com/photo-1571501679680-de32f1e7aad4",
+    },
+    {
+      uri: "https://images.unsplash.com/photo-1573273787173-0eb81a833b34",
+    },
+    {
+      uri: "https://images.unsplash.com/photo-1569569970363-df7b6160d111",
+    },
+  ];
+  
+  export const ImageGrid = () => {
+    const [visible, setIsVisible] = useState(false);
 
-
-// const Grid = () => {
-//   const images = [
-//     { id: 1, uri: 'https://source.unsplash.com/random/400x400?nature' },
-//     { id: 2, uri: 'https://source.unsplash.com/random/400x400?water' },
-//     { id: 3, uri: 'https://source.unsplash.com/random/400x400?mountain' },
-//     { id: 4, uri: 'https://source.unsplash.com/random/400x400?beach' },
-//   ];
-//   return (
-//     <View style={{ flex: 1 }}>
-//       <ImageGrid images={images} columns={2} />
-//     </View>
-//   );
-// };
-
-// export default Grid;
+    return (
+        <View         style={styles.image}
+        >
+        <ImageView
+        images={images}
+        imageIndex={0}
+        visible={visible}
+        onRequestClose={() => setIsVisible(false)}
+      />
+      </View>
+      );
+  }
+ const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 10,
+    paddingTop: 10,
+  },
+  imageContainer: {
+    flex: 1,
+    marginHorizontal: 5,
+    marginBottom: 10,
+  },
+  image: {
+    width: 170,
+    borderRadius: 5,
+    height: 170,
+  },
+});
