@@ -60,19 +60,51 @@ export const fakeProfiles: TFakeProfile[] = [
 export const fakeCategories: TFakeCategory[] = [
     {
         title: 'Deporte',
-        icon: ''
+        icon: 'football-ball'
     },
     {
         title: 'Cocina',
-        icon: ''
+        icon: 'utensils'
     },
     {
         title: 'Indumentaria',
-        icon: ''
+        icon: 'tshirt'
+    },
+    {
+        title: 'Negocios',
+        icon: 'user-tie'
     },
     {
         title: 'Deporte',
-        icon: ''
+        icon: 'football-ball'
+    },
+    {
+        title: 'Musica',
+        icon: 'music'
+    },
+    {
+        title: 'Deporte',
+        icon: 'football-ball'
+    },
+    {
+        title: 'Cocina',
+        icon: 'utensils'
+    },
+    {
+        title: 'Indumentaria',
+        icon: 'tshirt'
+    },
+    {
+        title: 'Negocios',
+        icon: 'user-tie'
+    },
+    {
+        title: 'Deporte',
+        icon: 'football-ball'
+    },
+    {
+        title: 'Musica',
+        icon: 'music'
     },
 ]
 

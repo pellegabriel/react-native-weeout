@@ -1,39 +1,34 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, Text, View } from 'react-native';
 import { CategoryCard } from './CategoryCard';
 import { fakeCategories } from '../../utils/fakeData';
 
 export const CategoriesSlider: React.FC = () => {
   return (
-    <ScrollView horizontal={true} style={styles.wrapper}>
-      <View style={styles.container}>
-        {fakeCategories.map((category, index) => (
-          <CategoryCard key={index} {...category} />
-        ))}
+      <View style={styles.wrapper}>
+        <Text style={styles.sectionTitle}>Elegi entre distintas categorias:</Text>
+        <ScrollView horizontal={true} contentContainerStyle={styles.cardsContainer}>
+          {fakeCategories.map((category, index) => (
+            <CategoryCard key={index} {...category} />
+          ))}
+        </ScrollView>
       </View>
-    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
-    height: 50
+    width: '100%',
+    marginTop: 40,
   },
-  container: {
-    flexDirection: 'row',
+  sectionTitle: {
+    marginLeft: 40,
+    marginBottom: 20,
   },
-  card: {
-    width: '16%',
-    margin: 1,
+  cardsContainer: {
+    paddingLeft: 40,
+    paddingRight: 40,
+    paddingBottom: 20,
   },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 10,
-  },
+  
 });

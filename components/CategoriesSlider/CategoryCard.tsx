@@ -1,39 +1,34 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
 import { TFakeCategory } from '../../utils/fakeData';
+import Icons from '@expo/vector-icons/FontAwesome5';
 
 export const CategoryCard: React.FC<TFakeCategory> = ({ title, icon }) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.wrapper}>
       <View style={styles.iconContainer}>
-      <AntDesign name="smileo" size={29} color="black" />
+        <Icons name={icon} size={20} color="#f5694d" />
       </View>
-    </View>
+      <Text>{title}</Text>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: 60,
-    height: 60,
-    backgroundColor: '#4e4e4e',
-    borderRadius: 30,
-    justifyContent: 'center',
+  wrapper: {
+    display: 'flex',
+    marginRight: 20,
+    marginBottom: 0,
     alignItems: 'center',
-    margin: 5,
   },
   iconContainer: {
-    justifyContent: 'center',
+    marginBottom: 6,
+    width: 60,
+    height: 60,
+    borderWidth: 1,
+    borderRadius: 14,
     alignItems: 'center',
-  },
-  textContainer: {
-    marginTop: 5,
+    borderColor: '#4e4e4e',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 12,
-    color: '#4e4e4e',
   },
 });

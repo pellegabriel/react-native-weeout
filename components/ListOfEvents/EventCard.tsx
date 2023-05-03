@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     width: 350,
     height: 170,
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: 14,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 6,
     flexDirection: 'row',
+    marginBottom:20
   },
   imageContainer: {
     width: '30%',
