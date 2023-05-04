@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native"
-import { SearchInput } from "../components/SearchInput/SearchInput";
+// import { SearchInput } from "../components/SearchInput/SearchInput";
 import { MainSlider } from "../components/MainSlider";
 import { CategoriesSlider } from "../components/CategoriesSlider";
 import { ListOfEvents } from "../components/ListOfEvents";
 import { supabase } from "../supabase";
-import { StatusBar } from "expo-status-bar";
+// import { StatusBar } from "expo-status-bar";
 
 export const HomeScreen = ({ navigation }) => {
-  const [text, setText] = useState('');
+  // const [text, setText] = useState('');
 
-  const handleTextChange = (newText: string) => {
-    setText(newText);
-  };
+  // const handleTextChange = (newText: string) => {
+  //   setText(newText);
+  // };
 
 
   const fetchEvents = async () => {
