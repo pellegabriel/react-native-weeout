@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { Button } from '../components/Button';
+import { Button } from '@aws-amplify/ui-react';
 import { SearchInput } from '../components/SearchInput';
 import { ProfileEventsList } from '../components/ProfileEventsList';
 import { fakeProfile } from '../utils/fakeData';
