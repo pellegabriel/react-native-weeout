@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { View, Image, StyleSheet, useWindowDimensions } from 'react-native';
 import { TFakeEvent } from '../../utils/fakeData';
 
 export interface MainCardProps {
@@ -8,8 +8,6 @@ export interface MainCardProps {
 
 const MainCard: React.FC<MainCardProps> = ({ data }) => {
   const { width } = useWindowDimensions();
-
-
   return (
     <View style={styles.mainCard}>  
       <Image  source={{ uri: data.image }} style={{ width: width - 80, height: 200 }} />

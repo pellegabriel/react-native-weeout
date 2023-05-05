@@ -3,7 +3,7 @@ import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
 import { TFakeCategory } from '../../utils/fakeData';
 import Icons from '@expo/vector-icons/FontAwesome5';
 
-export const CategoryCard: React.FC<TFakeCategory> = ({ title, icon }) => {
+export const CategoryCard: React.FC<TFakeCategory> = ({ title, icon, startDate, location }) => {
   return (
     <TouchableOpacity style={styles.wrapper}>
       <View style={styles.iconContainer}>

@@ -3,20 +3,27 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from './screens/Home';
 import { EventDetailsScreen } from './screens/EventDetails';
 import { ProfileScreen } from './screens/Profile';
-import { ImageDetailsScreen } from './screens/ImageDetails';
-import { useEffect, useState } from 'react';
+// import { ImageDetailsScreen } from './screens/ImageDetails';
+import React, { useEffect, useState } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from './supabase';
 import Login from './components/Login/Login';
+import { Button , Image} from 'react-native';
+import Icons from '@expo/vector-icons/FontAwesome5';
+import { createStackNavigator } from '@react-navigation/stack';
+import { SearchScreen } from './screens/Search';
+import EventCreate from './screens/EventCreate';
+
 
 export type RootStackParamList = {
   Home: undefined
   Profile: undefined
   EventDetails: { eventId: string }
-  ImageGrid: undefined;
-  ImageDetails: { imageId: number };
+  'Search events': undefined;
+  EventCreate: undefined
 };
 
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
 export default function App() {
@@ -24,7 +31,6 @@ export default function App() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log(session)
       setSession(session)
     })
 
@@ -33,14 +39,51 @@ export default function App() {
     })
   }, [])
 
+  const HomeStack = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{  headerShown: false }} />
+      </Stack.Navigator>
+    );
+  }
+
   return (
     <NavigationContainer>
       {session && session.user ? (
         <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="EventDetails" component={EventDetailsScreen} />
-          <Tab.Screen name="Profile" component={ProfileScreen} />
-          <Tab.Screen name="ImageDetails" component={ImageDetailsScreen} initialParams={{ imageId: 1 }}/>
+          <Tab.Screen
+            name="Home"
+            component={HomeStack}
+            options={{
+              headerShown: false,
+              tabBarIcon: () => <Icons name='home' size={18} color="#f5694d" />
+            }}
+          />
+          <Tab.Screen
+            name="Search events"
+            component={SearchScreen}
+            options={{
+              headerShown: false,
+              tabBarIcon: () => <Icons name='search' size={18} color="#f5694d" />
+            }}
+          />
+                    <Tab.Screen
+            name="EventCreate"
+            component={EventCreate}
+            options={{
+              headerShown: false,
+              tabBarIcon: () => <Icons name='search' size={18} color="#f5694d" />
+            }}
+          />
+          <Tab.Screen name="Profile" component={ProfileScreen} 
+              options={{
+              headerRight: () => (
+                <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
+              ),
+              tabBarIcon: () => <Icons name='user-alt' size={18} color="#f5694d" />
+            }}
+          />
         </Tab.Navigator>
       ) : <Login />
       }

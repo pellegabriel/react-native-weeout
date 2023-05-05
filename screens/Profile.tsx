@@ -4,62 +4,57 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'rea
 import { SearchInput } from '../components/SearchInput';
 import { ProfileEventsList } from '../components/ProfileEventsList';
 import { fakeProfile } from '../utils/fakeData';
-import { Button } from '../components/Button';
-  
+
+
 export const ProfileScreen = () => {
   const [text, setText] = useState('');
+
 
   const handleTextChange = (newText: string) => {
     setText(newText);
   };
   return (
-
     <View style={styles.container1}>
-          <ScrollView style={styles.container}>
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backButton}>
+            <Icon name="arrow-left" size={20} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.title}>Mi Perfil</Text>
+        </View>
 
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
-          <Icon name="arrow-left" size={20} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.title}>Mi Perfil</Text>
-      </View>
+        <View style={styles.body}>
+          <View style={styles.profile}>
+            <Image
+              style={styles.profileImage}
+              source={{ uri: 'https://source.unsplash.com/random/300x301' }}
+            />
 
-      <View style={styles.body}>
-        <View style={styles.profile}>
-          <Image
-            style={styles.profileImage}
-            source={{ uri: 'https://source.unsplash.com/random/300x301' }}
+            <View style={styles.profileInfo}>
+              <TouchableOpacity style={styles.editButton}>
+                <Icon name="pencil" size={20}/>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.contact}>
+            <Text style={styles.contactLabel}>Correo electrónico:</Text>
+            <Text style={styles.contactText}>{fakeProfile.email}</Text>
+            <Text style={styles.contactLabel}>Teléfono:</Text>
+            <Text style={styles.contactText}>{fakeProfile.phone}</Text>
+          </View>
+
+          <SearchInput
+            value={text}
+            onChangeText={handleTextChange}
+            placeholder="Escribe algo..."
           />
 
-          <View style={styles.profileInfo}>
-            <TouchableOpacity style={styles.editButton}>
-              <Icon name="pencil" size={20}/>
-            </TouchableOpacity>
-          </View>
+          <ProfileEventsList />
+
         </View>
-
-        <View style={styles.contact}>
-          <Text style={styles.contactLabel}>Correo electrónico:</Text>
-          <Text style={styles.contactText}>{fakeProfile.email}</Text>
-          <Text style={styles.contactLabel}>Teléfono:</Text>
-          <Text style={styles.contactText}>{fakeProfile.phone}</Text>
-        </View>
-
-        <Button />
-
-        <SearchInput
-          value={text}
-          onChangeText={handleTextChange}
-          placeholder="Escribe algo..."
-        />
-
-        <ProfileEventsList />
-
-      </View>
       </ScrollView>
-
     </View>
-
   );
 };
 
