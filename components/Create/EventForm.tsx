@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Audio } from 'expo-av';
+import AppImagePicker from '../Camara/ImagePicker';
 
 type EventFormProps = {
   onSubmit: (eventData: EventData) => void;
@@ -23,13 +24,20 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
   });
 
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
-
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const handleChange = (key: keyof EventData, value: string) => {
     setEventData((prevData) => ({ ...prevData, [key]: value }));
   };
 
   const handleSubmit = () => {
     onSubmit(eventData);
+  };
+
+  const formatTime = (timeInSeconds: number): string => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
   const startRecording = async () => {
@@ -40,7 +48,7 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
         alert('No se otorgaron permisos para grabar audio');
         return;
       }
-  
+
       const newRecording = new Audio.Recording();
       await newRecording.prepareToRecordAsync({
         android: {
@@ -70,25 +78,34 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
       
       await newRecording.startAsync();
       setRecording(newRecording);
+
+      // Iniciar el contador de tiempo
+      setElapsedTime(0);
+      const newIntervalId = setInterval(() => {
+        setElapsedTime((prevTime) => prevTime + 1);
+      }, 1000);
+      setIntervalId(newIntervalId);
     } catch (err) {
       console.error('No se pudo iniciar la grabación', err);
     }
-    
   };
-  
-  
 
   const stopRecording = async () => {
     try {
       if (recording) {
         await recording.stopAndUnloadAsync();
         setRecording(null);
+
+        // Detener el contador de tiempo
+        if (intervalId) {
+          clearInterval(intervalId);
+          setIntervalId(null);
+        }
       }
     } catch (err) {
       console.error('No se pudo detener la grabación', err);
     }
   };
-
   return (
     <View style={styles.container}>
       <Text>Título</Text>
@@ -120,6 +137,7 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
         <Picker.Item label="Categoría 3" value="categoria3" />
       </Picker>
       <View style={styles.audioControls}>
+        <Text style={styles.timer}>{formatTime(elapsedTime)}</Text>
         <TouchableOpacity onPress={startRecording} style={styles.audioControlButton}>
           <Text style={styles.audioControlButtonText}>Iniciar grabación</Text>
         </TouchableOpacity>
@@ -127,6 +145,7 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
           <Text style={styles.audioControlButtonText}>Detener grabación</Text>
         </TouchableOpacity>
       </View>
+      <AppImagePicker/>
       <Text onPress={handleSubmit} style={styles.submitButton}>
         Crear Evento
       </Text>
@@ -139,6 +158,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
+  },
+    timer: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   input: {
     height: 40,
