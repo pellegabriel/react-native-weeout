@@ -6,6 +6,7 @@ import { CategoriesSlider } from "../components/CategoriesSlider";
 import { ListOfEvents } from "../components/ListOfEvents";
 import { supabase } from "../supabase";
 // import { StatusBar } from "expo-status-bar";
+import Map from '../components/Map/index'
 
 export const HomeScreen = ({ navigation }) => {
   // const [text, setText] = useState('');
@@ -48,8 +49,10 @@ export const HomeScreen = ({ navigation }) => {
       </View>
 
       <CategoriesSlider />
+      <View style={styles.mapContainer}>
+      <Map events={[]}  />
 
-
+      </View>
       <View style={styles.titleContainer}>
         <Text style={styles.listOfEventsTitle}>
           ¡Descubre los eventos más populares!
@@ -66,6 +69,11 @@ const styles = StyleSheet.create({
       flex: 1,
       display: 'flex',
       backgroundColor: '#fff'
+    },
+    mapContainer:{
+      width:410,
+      height:340,
+      padding: 30,
     },
     titleContainer: {
       marginTop: 14,

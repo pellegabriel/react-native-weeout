@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
+import MapMarker from './Market';
 // import { Event } from '../../src/models';
 
 const styles = StyleSheet.create({
@@ -41,6 +42,8 @@ function Map({ events = [], region }: IProps) {
         style={styles.container}
         onMapReady={onMapReady}
       >
+        <MapMarker />
+
         {/* {events.map((event) => (
         //   <Marker
         //     key={event.id}
