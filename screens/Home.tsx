@@ -1,121 +1,99 @@
-import { StatusBar } from "expo-status-bar"
-import { useState } from "react";
+import { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native"
-import { SearchInput } from "../components/SearchInput/SearchInput";
+// import { SearchInput } from "../components/SearchInput/SearchInput";
 import { MainSlider } from "../components/MainSlider";
 import { CategoriesSlider } from "../components/CategoriesSlider";
 import { ListOfEvents } from "../components/ListOfEvents";
+import { supabase } from "../supabase";
+// import { StatusBar } from "expo-status-bar";
+import Map from '../components/Map/index'
 
 export const HomeScreen = ({ navigation }) => {
-    const [text, setText] = useState('');
+  // const [text, setText] = useState('');
 
-    const handleTextChange = (newText: string) => {
-      setText(newText);
-    };
-  
-    const cards3 = [
-      {
-        title: 'Card 1',
-        icon: 'icono'
-      },
-      {
-        title: 'Card 2',
-        icon: 'icono'
-      },
-      {
-        title: 'Card 3',
-        icon: 'icono'
-      },
-      {
-        title: 'Card 4',
-        icon: 'icono'
-      },
-      {
-        title: 'Card 5',
-        icon: 'icono'
-      },
-    ]
-  
-    const cards = [
-      {
-        title: 'Card 1',
-        image: 'https://source.unsplash.com/random/300x300',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi doloribus voluptates nihil nisi magnam ullam unde, illum repellendus commodi earum fugiat similique neque sapiente debitis molestias amet eos error culpa?',
-      },
-      {
-        title: 'Card 2',
-        image: 'https://source.unsplash.com/random/300x301',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi doloribus voluptates nihil nisi magnam ullam unde, illum repellendus commodi earum fugiat similique neque sapiente debitis molestias amet eos error culpa?',
-      },
-      {
-        title: 'Card 3',
-        image: 'https://source.unsplash.com/random/300x302',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi doloribus voluptates nihil nisi magnam ullam unde, illum repellendus commodi earum fugiat similique neque sapiente debitis molestias amet eos error culpa?',
-      },
-      {
-        title: 'Card 4',
-        image: 'https://source.unsplash.com/random/300x300',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi doloribus voluptates nihil nisi magnam ullam unde, illum repellendus commodi earum fugiat similique neque sapiente debitis molestias amet eos error culpa?',
-      },
-      {
-        title: 'Card 5',
-        image: 'https://source.unsplash.com/random/300x301',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi doloribus voluptates nihil nisi magnam ullam unde, illum repellendus commodi earum fugiat similique neque sapiente debitis molestias amet eos error culpa?',
-      },
-      {
-        title: 'Card 6',
-        image: 'https://source.unsplash.com/random/300x302',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi doloribus voluptates nihil nisi magnam ullam unde, illum repellendus commodi earum fugiat similique neque sapiente debitis molestias amet eos error culpa?',
-      },
-    ];
-  
-    return (
-      <ScrollView style={styles.container}>
-      <View style={styles.container1}> 
-      <View   style={styles.search}>      
+  // const handleTextChange = (newText: string) => {
+  //   setText(newText);
+  // };
 
+
+  const fetchEvents = async () => {
+    const data = await supabase.from('events').select('title')
+
+    console.log({data})
+  }
+
+  useEffect(() => {
+    fetchEvents()  
+  }, [])
+  
+  
+  return (
+    <ScrollView style={styles.container}>
+
+      {/* <View style={styles.search}>      
         <SearchInput
           value={text}
           onChangeText={handleTextChange}
           placeholder="Escribe algo..."
         />
-        </View>
+      </View> */}
 
-        <View style={styles.separator}>
-        <Text style={styles.title}>Eventos que estan ocurriendo ahora </Text>
-       </View>
-  
-        <View style={styles.containerScroll}>
-            <MainSlider navigation={navigation} />
-        </View>
+      <MainSlider navigation={navigation} />
 
-        <View style={styles.containerScroll2}>
-            <CategoriesSlider />
-        </View>
-        <Text style={styles.title2}>Los que tienes cerca </Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Bienvenido a Weeout</Text>
 
-        <View style={styles.containerScroll3}>
-        <ListOfEvents />        
-        </View>
-     
-        </View>
-        </ScrollView>
-    );
+        <Text style={styles.subtitle}>
+          ¡La app definitiva para los amantes de los eventos!
+        </Text>
+      </View>
+
+      <CategoriesSlider />
+      <View style={styles.mapContainer}>
+      <Map events={[]}  />
+
+      </View>
+      <View style={styles.titleContainer}>
+        <Text style={styles.listOfEventsTitle}>
+          ¡Descubre los eventos más populares!
+        </Text>
+      </View>
+
+      <ListOfEvents />        
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-    },  container1: {
-      alignItems: 'center',
-      justifyContent: 'center',
+      display: 'flex',
+      backgroundColor: '#fff'
+    },
+    mapContainer:{
+      width:410,
+      height:340,
+      padding: 30,
+    },
+    titleContainer: {
+      marginTop: 14,
+      marginBottom: 20,
+      paddingLeft: 40,
+      paddingRight: 40,
     },
     title: {
-      fontSize: 30,
-      fontWeight: 'bold',
+      fontSize: 50,
       display: 'flex',
-      justifyContent:'flex-start'
-    }, 
+      fontWeight: 'bold',
+      justifyContent:'flex-start',
+    },
+    subtitle: {
+      fontSize: 18,
+      marginTop: 20,
+    },
+    highlight: {
+      color: '#f5694d'
+    },
     title2: {
       fontSize: 25,
       fontWeight: 'bold',
@@ -123,7 +101,8 @@ const styles = StyleSheet.create({
       justifyContent:'flex-start', 
       padding: 20,
       paddingLeft: 0
-    },search: {
+    },
+    search: {
       fontSize: 30,
       fontWeight: 'bold',
       display: 'flex',
@@ -131,18 +110,9 @@ const styles = StyleSheet.create({
       width: 340,
       marginTop: 30
     },
-    containerScroll:{
-      height:200
+    listOfEventsTitle: {
+      fontSize: 18,
+      marginTop: 20,
+      // fontWeight: 'bold',
     },
-    containerScroll2:{
-      height:100
-    },   containerScroll3:{
-      height:1000
-      ,flex: 1
-    },
-    separator: {
-      marginTop: 60,
-      height: 80,
-      width: '80%',
-    },
-  });
+});

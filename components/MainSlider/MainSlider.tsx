@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { View, StyleSheet } from 'react-native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -11,9 +10,9 @@ interface MainSliderProps {
   navigation: BottomTabNavigationProp<RootStackParamList>;
 }
 
-export const MainSlider: React.FC<MainSliderProps> = ({ navigation }) => {
+export const MainSlider: React.FC<MainSliderProps> = () => {
   return (
-    <Swiper style={styles.wrapper}  showsButtons={true}>
+    <Swiper style={styles.wrapper} showsButtons={false} dotStyle={{ backgroundColor: '#f5694d',  opacity: 0.3 }} activeDotStyle={{ backgroundColor: '#f5694d' }} contentContainerStyle={{  }}>
       {fakeEvents.map((event, index) => (
         <View key={index} style={styles.slide}>
           <MainCard data={event} />
@@ -24,7 +23,9 @@ export const MainSlider: React.FC<MainSliderProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  wrapper: {},
+  wrapper: {
+    height: 340,
+  },
   slide: {
     flex: 1,
     justifyContent: 'center',
