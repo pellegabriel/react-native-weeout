@@ -5,15 +5,14 @@ import { EventDetailsScreen } from './screens/EventDetails';
 import { ProfileScreen } from './screens/Profile';
 // import { ImageDetailsScreen } from './screens/ImageDetails';
 import React, { useEffect, useState } from 'react';
-import { Session } from '@supabase/supabase-js';
+import { Session, createClient } from '@supabase/supabase-js';
 import { supabase } from './supabase';
 import Login from './components/Login/Login';
 import { Button , Image} from 'react-native';
 import Icons from '@expo/vector-icons/FontAwesome5';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SearchScreen } from './screens/Search';
-import EventCreate from './screens/EventCreate';
-
+import { CreateEventScreen } from './screens/CreateEvent';
 
 export type RootStackParamList = {
   Home: undefined
@@ -42,7 +41,7 @@ export default function App() {
   const HomeStack = () => {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="HomeStack" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{  headerShown: false }} />
       </Stack.Navigator>
     );
@@ -68,9 +67,9 @@ export default function App() {
               tabBarIcon: () => <Icons name='search' size={18} color="#f5694d" />
             }}
           />
-                    <Tab.Screen
+          <Tab.Screen
             name="EventCreate"
-            component={EventCreate}
+            component={CreateEventScreen}
             options={{
               headerShown: false,
               tabBarIcon: () => <Icons name='search' size={18} color="#f5694d" />

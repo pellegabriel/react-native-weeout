@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Audio } from 'expo-av';
 import AppImagePicker from '../Camara/ImagePicker';
+import { UserMarker } from '../Map/UserMarker';
+import { Input } from 'react-native-elements';
+import Icons from '@expo/vector-icons/FontAwesome5';
 
 type EventFormProps = {
   onSubmit: (eventData: EventData) => void;
@@ -16,6 +19,7 @@ export type EventData = {
 };
 
 const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
+  const [audioUri, setAudioUri] = useState<string | null>(null);
   const [eventData, setEventData] = useState<EventData>({
     title: '',
     subtitle: '',
@@ -94,8 +98,10 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
     try {
       if (recording) {
         await recording.stopAndUnloadAsync();
+        const uri = recording.getURI();
+        setAudioUri(uri);
         setRecording(null);
-
+  
         // Detener el contador de tiempo
         if (intervalId) {
           clearInterval(intervalId);
@@ -106,69 +112,147 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
       console.error('No se pudo detener la grabación', err);
     }
   };
+
+  const playAudio = async () => {
+    if (audioUri) {
+      const soundObject = new Audio.Sound();
+      try {
+        await soundObject.loadAsync({ uri: audioUri });
+        await soundObject.playAsync();
+      } catch (error) {
+        console.error('Error al reproducir el audio', error);
+      }
+    }
+  };
+
+  function handleDragEnd(event: string): void {
+    throw new Error('Function not implemented.');
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Título</Text>
-      <TextInput
-        style={styles.input}
-        value={eventData.title}
-        onChangeText={(text) => handleChange('title', text)}
-      />
-      <Text>Subtítulo</Text>
-      <TextInput
-        style={styles.input}
-        value={eventData.subtitle}
-        onChangeText={(text) => handleChange('subtitle', text)}
-      />
-      <Text>Descripción</Text>
-      <TextInput
-        style={styles.input}
-        value={eventData.description}
-        onChangeText={(text) => handleChange('description', text)}
-      />
-      <Text>Categoría</Text>
-      <Picker
-        selectedValue={eventData.category}
-        onValueChange={(value) => handleChange('category', value)}
-        style={styles.picker}
-      >
-        <Picker.Item label="Categoría 1" value="categoria1" />
-        <Picker.Item label="Categoría 2" value="categoria2" />
-        <Picker.Item label="Categoría 3" value="categoria3" />
-      </Picker>
-      <View style={styles.audioControls}>
+    <ScrollView style={styles.container}>   
+      <View style={styles.container1}>
+        
+        <Text style={styles.label}>Título:</Text>
+        <Input
+          value={eventData.title}
+          onChangeText={(text) => handleChange('title', text)}
+          inputStyle={styles.input}
+          placeholder="Correr en el bosque..."
+          containerStyle={styles.inputContainer}
+          inputContainerStyle={styles.inputInnerContainer}
+        />
+
+        <Text style={styles.label}>Subtitulo:</Text>
+        <Input
+          value={eventData.subtitle}
+          onChangeText={(text) => handleChange('title', text)}
+          inputStyle={styles.input}
+          placeholder="Correr en el bosque..."
+          containerStyle={styles.inputContainer}
+          inputContainerStyle={styles.inputInnerContainer}
+        />
+
+        <Text style={styles.label}>Description:</Text>
+        <Input
+          value={eventData.description}
+          onChangeText={(text) => handleChange('title', text)}
+          inputStyle={styles.input}
+          placeholder="Correr en el bosque..."
+          containerStyle={styles.inputContainer}
+          inputContainerStyle={styles.inputInnerContainer}
+        />
+
+        <Text style={styles.label}>Categoría:</Text>
+        <Picker
+          selectedValue={eventData.category}
+          onValueChange={(value) => handleChange('category', value)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Categoría 1" value="categoria1" />
+          <Picker.Item label="Categoría 2" value="categoria2" />
+          <Picker.Item label="Categoría 3" value="categoria3" />
+        </Picker>
+        
+        <Text style={styles.label}>Graba un audio contando acerca del evento:</Text>
         <Text style={styles.timer}>{formatTime(elapsedTime)}</Text>
-        <TouchableOpacity onPress={startRecording} style={styles.audioControlButton}>
-          <Text style={styles.audioControlButtonText}>Iniciar grabación</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={stopRecording} style={styles.audioControlButton}>
-          <Text style={styles.audioControlButtonText}>Detener grabación</Text>
-        </TouchableOpacity>
+
+        <View style={styles.audioControls}>          
+          <TouchableOpacity onPress={startRecording} style={styles.audioControlButton}>
+              <Icons
+                      size={15}
+                      color="#f5694d"
+                      name='microphone'
+              />                
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={stopRecording} style={styles.audioControlButton}>
+              <Icons
+                  size={15}
+                  color="#f5694d"
+                  name='stop'
+              />                 
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={playAudio} style={styles.audioControlButton}>
+              <Icons
+                  size={15}
+                  color="#f5694d"
+                  name='play'
+              />          
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.label}>Subi una foto del evento:</Text>
+        <AppImagePicker />
+          <UserMarker
+            map_point='{"latitude": -34.91554, "longitude": -57.91454}'
+            center={{ latitude: -34.92317666584001, longitude: -57.94956215165454 }}
+            zoom={10}
+            onDragEnd={handleDragEnd}
+          />
+
+          <Text onPress={handleSubmit} style={styles.submitButton}>
+            Crear Evento
+          </Text>
       </View>
-      <AppImagePicker/>
-      <Text onPress={handleSubmit} style={styles.submitButton}>
-        Crear Evento
-      </Text>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    marginTop: 10,
+    paddingBottom: 120,
+  }, container1: {
+    marginTop: 10,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    
   },
-    timer: {
+  titleHome:{
+    padding:10,
+    fontSize: 22,
+  },
+  timer: {
     fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 10,
+    fontWeight: 'bold',
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 6,
+    fontWeight: 'bold'
+  },
+  inputContainer: {
+    paddingHorizontal: 0,
+  },
+  inputInnerContainer: {
+    borderBottomWidth: 0,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 10,
+    paddingHorizontal: 8,
+    borderColor: '#f5694d',
   },
   picker: {
     height: 50,
@@ -181,17 +265,26 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 10,
     fontWeight: 'bold',
-    
   },
   audioControls: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
+    justifyContent: 'center',
+    alignContent: 'center',
+    padding: 20, 
+    width:200
   },
   audioControlButton: {
-    backgroundColor: 'purple',
+    borderColor: 'purple',
+    borderWidth: 2, 
     borderRadius: 5,
-    padding: 10,
+    padding: 10,    
+    marginTop: 10,
+    width: 50,
+    height: 50,
+    margin: 10, 
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   audioControlButtonText: {
     color: 'white',
@@ -201,136 +294,3 @@ const styles = StyleSheet.create({
 });
 
 export default EventForm;
-
-
-// import React, { useState, useRef } from 'react';
-// import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-// import { Picker } from '@react-native-picker/picker';
-// import AudioRecorderPlayer from 'react-native-audio-recorder-player';
-
-// type EventFormProps = {
-//   onSubmit: (eventData: EventData) => void;
-// };
-
-// type EventData = {
-//   title: string;
-//   subtitle: string;
-//   description: string;
-//   category: string;
-// };
-
-// const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
-//   const [eventData, setEventData] = useState<EventData>({
-//     title: '',
-//     subtitle: '',
-//     description: '',
-//     category: '',
-//   });
-
-//   const audioRecorderPlayerRef = useRef(new AudioRecorderPlayer());
-
-//   const handleChange = (key: keyof EventData, value: string) => {
-//     setEventData((prevData) => ({ ...prevData, [key]: value }));
-//   };
-
-//   const handleSubmit = () => {
-//     onSubmit(eventData);
-//   };
-
-//   const startRecording = async () => {
-//     const path = 'sdcard/recorded_audio.mp4'; // Asegúrate de que la ruta de acceso sea válida y tenga permisos de escritura.
-//     await audioRecorderPlayerRef.current.startRecorder(path);
-//   };
-
-//   const stopRecording = async () => {
-//     await audioRecorderPlayerRef.current.stopRecorder();
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <Text>Título</Text>
-//       <TextInput
-//         style={styles.input}
-//         value={eventData.title}
-//         onChangeText={(text) => handleChange('title', text)}
-//       />
-//       <Text>Subtítulo</Text>
-//       <TextInput
-//         style={styles.input}
-//         value={eventData.subtitle}
-//         onChangeText={(text) => handleChange('subtitle', text)}
-//       />
-//       <Text>Descripción</Text>
-//       <TextInput
-//         style={styles.input}
-//         value={eventData.description}
-//         onChangeText={(text) => handleChange('description', text)}
-//       />
-//       <Text>Categoría</Text>
-//       <Picker
-//         selectedValue={eventData.category}
-//         onValueChange={(value) => handleChange('category', value)}
-//         style={styles.picker}
-//       >
-//         <Picker.Item label="Categoría 1" value="categoria1" />
-//         <Picker.Item label="Categoría 2" value="categoria2" />
-//         <Picker.Item label="Categoría 3" value="categoria3" />
-//       </Picker>
-//       <View style={styles.audioControls}>
-//         <TouchableOpacity onPress={startRecording} style={styles.audioControlButton}>
-//           <Text style={styles.audioControlButtonText}>Iniciar grabación</Text>
-//         </TouchableOpacity>
-//         <TouchableOpacity onPress={stopRecording} style={styles.audioControlButton}>
-//           <Text style={styles.audioControlButtonText}>Detener grabación</Text>
-//         </TouchableOpacity>
-//       </View>
-//       <Text onPress={handleSubmit} style={styles.submitButton}>
-//         Crear Evento
-//       </Text>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     paddingHorizontal: 20,
-//   },
-//   input: {
-//     height: 40,
-//     borderColor: 'gray',
-//     borderWidth: 1,
-//     marginBottom: 10,
-//   },
-//   picker: {
-//     height: 50,
-//     width: '100%',
-//     marginBottom: 10,
-//   },
-//   submitButton: {
-//     backgroundColor: 'blue',
-//     color: 'white',
-//     textAlign: 'center',
-//     padding: 10,
-//     fontWeight: 'bold',
-    
-//   },
-//   audioControls: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     marginBottom: 20,
-//   },
-//   audioControlButton: {
-//     backgroundColor: 'purple',
-//     borderRadius: 5,
-//     padding: 10,
-//   },
-//   audioControlButtonText: {
-//     color: 'white',
-//     textAlign: 'center',
-//     fontWeight: 'bold',
-//   },
-// });
-
-// export default EventForm;

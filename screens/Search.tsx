@@ -13,7 +13,6 @@ export const SearchScreen = () => {
 
     const SearchCategory = ({ title, id }) => {
         const [isSelected, setIsSelected] = useState(false)
-
         const handleClick = () => {
             const dataCopy = [...data]
             const index = dataCopy.findIndex(categoria => categoria.id === id);
@@ -24,8 +23,6 @@ export const SearchScreen = () => {
             setSelectedCategories(id)
             console.log(isSelected)
         }
-
-
         return (
             <TouchableOpacity style={styles.category} onPress={handleClick} >
                 <Text style={isSelected ? styles.categoryTextSelected : styles.categoryText}>
@@ -38,14 +35,12 @@ export const SearchScreen = () => {
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.title}>Encuentra el evento perfecto para ti</Text>
-
             <Input
                 inputStyle={styles.input}
                 placeholder="Correr en el bosque..."
                 containerStyle={styles.inputContainer}
                 inputContainerStyle={styles.inputInnerContainer}
             />
-
             <ScrollView horizontal style={styles.categoriesList}>
                 {data.map((category) => (
                     <SearchCategory {...category} />
