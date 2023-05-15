@@ -21,7 +21,6 @@ export const SearchScreen = () => {
             
             setData(dataCopy)
             setSelectedCategories(id)
-            console.log(isSelected)
         }
         return (
             <TouchableOpacity style={styles.category} onPress={handleClick} >

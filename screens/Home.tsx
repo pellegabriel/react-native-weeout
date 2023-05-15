@@ -18,8 +18,6 @@ export const HomeScreen = ({ navigation }) => {
 
   const fetchEvents = async () => {
     const data = await supabase.from('events').select('title')
-
-    console.log({data})
   }
 
   useEffect(() => {

@@ -1,20 +1,24 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text } from 'react-native';
 import EventForm, { EventData } from '../components/Create/EventForm';
+import { supabase } from '../supabase';
+import { AdressInputWithMap } from '../components/Map/AdressInputWithMap';
 
 export const CreateEventScreen = () => {
 
-  const handleEventSubmit = (eventData: EventData) => {
+  const handleEventSubmit = async (eventData: EventData) => {
     // Aquí se maneja la lógica de guardar o procesar los datos del evento
-    console.log('Datos del evento:', eventData);
-
     // Por ejemplo, puedes guardar los datos en una base de datos, enviarlos a un servidor, etc.
+    const insertData = await supabase.from('events').insert(eventData)
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Crea tu propio Evento</Text>
+    <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
+      <Text style={styles.title}>Crea tu propio evento</Text>
+
       <EventForm onSubmit={handleEventSubmit} />
+    
+      <AdressInputWithMap map_point={''} />
     </ScrollView>
   );
 };
@@ -22,21 +26,15 @@ export const CreateEventScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: 'flex',
-    paddingHorizontal: 40,
+    padding: 15,
     paddingVertical: 100,
-    backgroundColor: '#fff'
+    paddingHorizontal: 40,
+    backgroundColor: '#f0f2f5', // Color de fondo claro de Facebook
   },
   title: {
     fontSize: 40,
     display: 'flex',
-    marginBottom: 40,
     fontWeight: 'bold',
     justifyContent:'flex-start',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
   },
 });

@@ -83,14 +83,22 @@ const AppImagePicker: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 10, // Añade un pequeño padding para evitar que los elementos toquen los bordes de la pantalla
+  },
+  buttonsContainer: { // Nuevo estilo para el contenedor de botones
+    justifyContent: 'space-between', // Distribuye el espacio de manera uniforme entre los botones
+    width: '100%', // Ocupa todo el ancho disponible
   },
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: '#1877f2', 
     padding: 10,
-    margin: 10,
     borderRadius: 5,
+    alignItems: 'center',
+    marginHorizontal: 20 
+
   },
   buttonText: {
     color: 'white',
@@ -109,5 +117,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
 });
+
 
 export default AppImagePicker;

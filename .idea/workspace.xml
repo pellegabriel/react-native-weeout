@@ -6,16 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="3ab0ae86-5d2c-47b2-be80-3043a1c95744" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Camara/ImagePicker.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Camara/ImagePicker.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/Create/EventForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Create/EventForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ListOfEvents/ListOfEvents.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ListOfEvents/ListOfEvents.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Map/UserMarker.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Map/UserMarker.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ListOfEvents/EventCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ListOfEvents/EventCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Map/UserMarker.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/EventCreate.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/CreateEvent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/CreateEvent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Home.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/screens/Search.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Search.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/supabase.ts" beforeDir="false" afterPath="$PROJECT_DIR$/supabase.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/supabase.ts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

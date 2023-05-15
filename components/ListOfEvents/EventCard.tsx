@@ -17,11 +17,9 @@ export const EventCard: React.FC<CardProps> = ({ data }) => {
   const [sound, setSound] = React.useState();
 
   async function playSound() {
-    console.log('Loading Sound');
     const { sound } = await Audio.Sound.createAsync(audioSample);
     setSound(sound);
 
-    console.log('Playing Sound');
     await sound.playAsync();
   }
 
@@ -36,7 +34,6 @@ export const EventCard: React.FC<CardProps> = ({ data }) => {
   React.useEffect(() => {
     return sound
       ? () => {
-          console.log('Unloading Sound');
           sound.unloadAsync();
         }
       : undefined;
