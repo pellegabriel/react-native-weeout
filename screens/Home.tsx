@@ -1,41 +1,13 @@
-import { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native"
-// import { SearchInput } from "../components/SearchInput/SearchInput";
 import { MainSlider } from "../components/MainSlider";
 import { CategoriesSlider } from "../components/CategoriesSlider";
 import { ListOfEvents } from "../components/ListOfEvents";
-import { supabase } from "../supabase";
-// import { StatusBar } from "expo-status-bar";
 import Map from '../components/Map/index'
 
 export const HomeScreen = ({ navigation }) => {
-  // const [text, setText] = useState('');
 
-  // const handleTextChange = (newText: string) => {
-  //   setText(newText);
-  // };
-
-
-  const fetchEvents = async () => {
-    const data = await supabase.from('events').select('title')
-  }
-
-  useEffect(() => {
-    fetchEvents()  
-  }, [])
-  
-  
   return (
     <ScrollView style={styles.container}>
-
-      {/* <View style={styles.search}>      
-        <SearchInput
-          value={text}
-          onChangeText={handleTextChange}
-          placeholder="Escribe algo..."
-        />
-      </View> */}
-
       <MainSlider navigation={navigation} />
 
       <View style={styles.titleContainer}>
@@ -48,7 +20,7 @@ export const HomeScreen = ({ navigation }) => {
 
       <CategoriesSlider />
       <View style={styles.mapContainer}>
-      <Map events={[]}  />
+      <Map events={[]}/>
 
       </View>
       <View style={styles.titleContainer}>

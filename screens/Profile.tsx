@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { SearchInput } from '../components/SearchInput';
 import { ProfileEventsList } from '../components/ProfileEventsList';
 import { fakeProfile } from '../utils/fakeData';
 
@@ -44,11 +43,11 @@ export const ProfileScreen = () => {
             <Text style={styles.contactText}>{fakeProfile.phone}</Text>
           </View>
 
-          <SearchInput
-            value={text}
-            onChangeText={handleTextChange}
-            placeholder="Escribe algo..."
-          />
+          {/* <SearchBar
+        value={}
+        onChangeText={handleTextChange}
+        placeholder="Search"
+      /> */}
 
           <ProfileEventsList />
 

@@ -2,7 +2,6 @@ import React from 'react';
 import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import { EventCard } from './EventCard';
 import { useGetEvents } from '../../api/events';
-import { fakeEvents } from '../../utils/fakeData';
 
 export const ListOfEvents: React.FC = () => {
   const { data, error, loading } = useGetEvents()

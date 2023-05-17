@@ -1,10 +1,8 @@
 import MapView, { Marker } from 'react-native-maps';
-import { View, StyleSheet, Alert, KeyboardAvoidingView, ScrollView, Dimensions } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { Button, Input } from 'react-native-elements';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBBVk4iIjHSYXgGjZA08-VKCCCbm03Z2is';
 
@@ -16,9 +14,10 @@ const defaultCenter = {
 interface IProps {
   map_point: string;
   center?: { latitude: number; longitude: number };
+  onChange: (address: string) => void;
 }
 
-export const AdressInputWithMap = ({ map_point, center }: IProps) => {
+export const AdressInputWithMap = ({ map_point, center, onChange }: IProps) => {
   const [position, setPosition] = useState(center || defaultCenter);
   const [address, setAddress] = useState('');
 
@@ -44,38 +43,36 @@ export const AdressInputWithMap = ({ map_point, center }: IProps) => {
   const handlePlaceSelect = (data, details) => {
     const { lat, lng } = details.geometry.location;
     setPosition({ latitude: lat, longitude: lng });
-    // onDragEnd(details.formatted_address);
+    setAddress(details.formatted_address);
+    onChange(details.formatted_address);
   };
 
   return (
     <View style={styles.container}>
       <ScrollView
         horizontal
-        keyboardShouldPersistTaps='always'
+        keyboardShouldPersistTaps='handled'
         contentContainerStyle={styles.inputContainer}
       >
         <GooglePlacesAutocomplete
-          query={{ key: GOOGLE_MAPS_API_KEY, language: 'es' }}
-          onPress={handlePlaceSelect}
           fetchDetails={true}
-          enablePoweredByContainer={false}
           placeholder="Type a place"
-          keyboardShouldPersistTaps='always'
+          onPress={handlePlaceSelect}
+          query={{ key: GOOGLE_MAPS_API_KEY, language: 'es' }}
         />
       </ScrollView>
 
       <MapView
         style={styles.map}
         region={{
-          latitude: position.latitude,
-          longitude: position.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
+          latitude: position.latitude,
+          longitude: position.longitude,
         }}
       >
         <Marker
           coordinate={position}
-          draggable
           onDragEnd={(e) => setPosition(e.nativeEvent.coordinate)}
         />
       </MapView>
@@ -86,6 +83,7 @@ export const AdressInputWithMap = ({ map_point, center }: IProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingBottom: 60,
   },
   mapContainer: {
     flex: 1,
@@ -98,6 +96,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flex: 1,
+    marginBottom: 20
   },
   inputStyle: {
     width: Dimensions.get('screen').width - 30,

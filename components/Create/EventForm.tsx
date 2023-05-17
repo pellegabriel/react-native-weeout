@@ -1,220 +1,142 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { Audio } from 'expo-av';
-import AppImagePicker from '../Camara/ImagePicker';
-// import { UserMarker } from '../Map/UserMarker';
+import React, { useState } from 'react';
 import { Input } from 'react-native-elements';
-import Icons from '@expo/vector-icons/FontAwesome5';
-import { Sound } from 'expo-av/build/Audio';
-
-type EventFormProps = {
-  onSubmit: (eventData: EventData) => void;
-};
+import { Picker } from '@react-native-picker/picker';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { AudioControls } from '../AudioControls';
+import AppImagePicker from '../Camara/ImagePicker';
+import { AdressInputWithMap } from '../Map/AdressInputWithMap';
+import { useCreateEvent } from '../../api/events';
+import { DateComponent } from '../DatePicker/DatePicker';
 
 export type EventData = {
-  title: string;
-  subtitle: string;
-  description: string;
-  category: string;
+  categoria?: string | null
+  created_by?: string | null
+  description?: string | null
+  event_date_end?: string | null
+  event_date_start?: string | null
+  event_end_time?: string | null
+  event_time_end?: string | null
+  event_time_start?: string | null
+  id?: number
+  images?: number | null
+  location?: string | null
+  subtitle?: string | null
+  title?: string | null
 };
 
-const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
-  const [audioUri, setAudioUri] = useState<string | null>(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const [eventData, setEventData] = useState<EventData>({
+const EventForm: React.FC = () => {
+  const { createEvent } = useCreateEvent()
+  const [formData, setFormData] = useState({
+    id: 12,
     title: '',
+    image: '',
+    location: '',
     subtitle: '',
+    categoria: '',
+    created_by: '',
     description: '',
-    category: '',
+    event_date_start: '1970-01-01 00:00:02',
+    event_date_end: '1970-01-02 00:00:06',
+    event_time_end: '1970-01-04 00:00:01',
+    event_time_start: '1970-01-05 00:00:03',
   });
+//react-useId para generar un id unico 
+//guardar la ubicacion el audio y la foto
+  const handleInputChange = (field: keyof EventData, value: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
 
-  const [sound, setSound] = React.useState<Sound>();
-  const [recording, setRecording] = useState<Audio.Recording | null>(null);
-  const [elapsedTime, setElapsedTime] = useState<number>(0);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
-
-  const handleChange = (key: keyof EventData, value: string) => {
-    setEventData((prevData) => ({ ...prevData, [key]: value }));
+  const handleAddressChange = (location: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      location,
+    }));
   };
 
   const handleSubmit = () => {
-    onSubmit(eventData);
-  };
-
-  const formatTime = (timeInSeconds: number): string => {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = timeInSeconds % 60;
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
-
-  const startRecording = async () => {
-     if (recording) {
-      console.log('Ya hay una grabación en curso');
-      return;
-    }
-
-    setIsRecording(true);
-
-    try {
-      console.log('Requesting permissions..');
-      await Audio.requestPermissionsAsync();
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      });
-
-      console.log('Starting recording..');
-      const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
-      
-      setRecording(recording);
-      console.log('Recording started');
-
-      // Iniciar el contador de tiempo
-      setElapsedTime(0);
-      const newIntervalId = setInterval(() => {
-        setElapsedTime((prevTime) => prevTime + 1);
-      }, 1000);
-      setIntervalId(newIntervalId);
-
-    } catch (err) {
-        console.error('Failed to start recording', err);
-      }
-  };
-
-  const stopRecording = async () =>{
-    try {
-      console.log('Stopping recording..');
-      setRecording(undefined);
-      await recording.stopAndUnloadAsync();
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-      });
-      const uri = recording.getURI();
-      setAudioUri(uri)
-      console.log('Recording stopped and stored at', uri);
-
-      // Detener el contador de tiempo
-      if (intervalId) {
-        clearInterval(intervalId);
-        setIntervalId(null);
-      }
-    } catch (error) {
-      console.log('error', error)
-    }
+    createEvent(formData)
   }
 
-  const playAudio = async () => {
-    console.log('Loading Sound');
-    const { sound } = await Audio.Sound.createAsync({ uri: audioUri })
-    setSound(sound);
-
-    console.log('Playing Sound');
-    await sound.playAsync();
-  };
-
-  useEffect(() => {
-    return sound
-      ? () => {
-          console.log('Unloading Sound');
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
+  const Label = ({ text }: { text: string}) => {
+    return (
+      <Text style={styles.label}>{text}:</Text>
+    )
+  }
 
   return (
-    <ScrollView style={styles.container}>   
+    <ScrollView style={styles.container}>
       <View style={styles.container1}>
-        
-        <Text style={styles.label}>Título:</Text>
+        <Label text='Titulo' />
         <Input
-          value={eventData.title}
-          onChangeText={(text) => handleChange('title', text)}
+          value={formData.title}
+          onChangeText={(text) => handleInputChange('title', text)}
           inputStyle={styles.input}
           placeholder="Escalada en el cerro Otto"
           containerStyle={styles.inputContainer}
           inputContainerStyle={styles.inputInnerContainer}
         />
 
-        <Text style={styles.label}>Subtitulo:</Text>
+        <Label text='Subtitulo' />
         <Input
-          value={eventData.subtitle}
-          onChangeText={(text) => handleChange('title', text)}
+          value={formData.subtitle}
+          onChangeText={(text) => handleInputChange('subtitle', text)} 
           inputStyle={styles.input}
           placeholder="Evento para para mayores de 26"
           containerStyle={styles.inputContainer}
           inputContainerStyle={styles.inputInnerContainer}
         />
 
-        <Text style={styles.label}>Description:</Text>
+        <Label text='Description' />
         <Input
-          value={eventData.description}
-          onChangeText={(text) => handleChange('title', text)}
+          multiline
+          value={formData.description}
+          onChangeText={(text) => handleInputChange('description', text)} 
           inputStyle={styles.input}
           placeholder="En este evento vamos a..."
           containerStyle={styles.inputContainer}
           inputContainerStyle={styles.inputInnerContainer}
         />
 
-        <Text style={styles.label}>Categoría:</Text>
+        <Label text='Categoría' />
         <Picker
           style={styles.picker}
-          selectedValue={eventData.category}
-          onValueChange={(value) => handleChange('category', value)}
+          selectedValue={formData.categoria}
+          onValueChange={(value) => handleInputChange('categoria', value)}
         >
-          <Picker.Item label='Teatro' value='Teatro' />
-          <Picker.Item label='Musica' value='Musica' />
-          <Picker.Item label='Actividades sociales' value='sociales' />
-          <Picker.Item label='Baile' value='Baile' />
-          <Picker.Item label='Presentaciones' value='Presentaciones' />
-          <Picker.Item label='Arte' value='Arte' />
-          <Picker.Item label='Medio ambiente' value='Medio ambiente' />
-          <Picker.Item label='Deportes' value='Deportes' />
-          <Picker.Item label='Actividad  fisica' value='Actividad  fisica' />
-          <Picker.Item label='Literatura' value='Literatura' />
-          <Picker.Item label='Política' value='Política' />
-          <Picker.Item label='Religion' value='Religion' />
-          <Picker.Item label='Espiritualidad' value='Espiritualidad' />
-          <Picker.Item label='Salud y bienestar' value='Salud y bienestar' />
-          <Picker.Item label='Trabajo y negocios' value='Trabajo y negocios' />
-          <Picker.Item label='Vida nocturna' value='Vida nocturna' />
+            <Picker.Item label='Teatro' value='Teatro' />
+            <Picker.Item label='Musica' value='Musica' />
+            <Picker.Item label='Actividades sociales' value='sociales' />
+            <Picker.Item label='Baile' value='Baile' />
+            <Picker.Item label='Presentaciones' value='Presentaciones' />
+            <Picker.Item label='Arte' value='Arte' />
+            <Picker.Item label='Medio ambiente' value='Medio ambiente' />
+            <Picker.Item label='Deportes' value='Deportes' />
+            <Picker.Item label='Actividad  fisica' value='Actividad  fisica' />
+            <Picker.Item label='Literatura' value='Literatura' />
+            <Picker.Item label='Política' value='Política' />
+            <Picker.Item label='Religion' value='Religion' />
+            <Picker.Item label='Espiritualidad' value='Espiritualidad' />
+            <Picker.Item label='Salud y bienestar' value='Salud y bienestar' />
+            <Picker.Item label='Trabajo y negocios' value='Trabajo y negocios' />
+            <Picker.Item label='Vida nocturna' value='Vida nocturna' />
         </Picker>
-        
-        <Text style={styles.label}>Graba un audio contando acerca del evento:</Text>
-        <Text style={styles.timer}>{formatTime(elapsedTime)}</Text>
+        <DateComponent/>
+        <Label text='Graba un audio contando acerca del evento' />
 
-        <View style={styles.audioControls}>          
-          <TouchableOpacity onPress={startRecording} 
-            disabled={isRecording}
-            style={styles.audioControlButton}
-          >
-            <Icons
-              size={15}
-              color="#f5694d"
-              name='microphone'
-            />                
-          </TouchableOpacity>
+        <AudioControls />
 
-          <TouchableOpacity onPress={stopRecording} style={styles.audioControlButton}>
-            <Icons
-              size={15}
-              color="#f5694d"
-              name='stop'
-            />                 
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={playAudio} style={styles.audioControlButton}>
-              <Icons
-                  size={15}
-                  color="#f5694d"
-                  name='play'
-              />          
-          </TouchableOpacity>
-        </View>
-
-        <Text style={styles.label}>Subi una foto del evento:</Text>
-
+        <Label text='Subi una foto del evento' />
         <AppImagePicker />
+        
+        <Label text='Ubicasion del evento' />
+        <AdressInputWithMap onChange={handleAddressChange} map_point="" />
+
+        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+          <Text style={styles.buttonText}>Crear evento</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -223,8 +145,8 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
-    paddingBottom: 30,
     paddingTop: 20,
+    paddingBottom: 140,
   }, 
   container1: {
     marginTop: 10,
@@ -262,12 +184,10 @@ const styles = StyleSheet.create({
     borderColor: '#4e4e4e',
   },
   picker: {
-    height: 50,
-    width: '100%',
+    paddingHorizontal: 8,
     marginBottom: 10,
-    backgroundColor: '#fff',
-    borderColor: '#ccd0d5',
-    borderWidth: 1,
+    boxSizing: 'border-box',
+    borderWidth: 3,
     borderRadius: 5,
   },
   submitButton: {
@@ -279,31 +199,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 20
   },
-  audioControls: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
-    padding: 20, 
-    width: '100%',
-  },
-  audioControlButton: {
-    borderColor: '#f5694d',
-    borderWidth: 2, 
+  button: {
+    backgroundColor:  '#f5694d',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 5,
-    padding: 10,
-    marginTop: 10,
-    width: 50,
-    height: 50,
-    margin: 10, 
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
   },
-  audioControlButtonText: {
-    color: '#fff',
-    textAlign: 'center',
+  buttonText: {
+    color: '#FFFFFF',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

@@ -1,24 +1,13 @@
-import React from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
-import EventForm, { EventData } from '../components/Create/EventForm';
-import { supabase } from '../supabase';
-import { AdressInputWithMap } from '../components/Map/AdressInputWithMap';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, Button } from 'react-native';
+import EventForm from '../components/Create/EventForm';
 
 export const CreateEventScreen = () => {
-
-  const handleEventSubmit = async (eventData: EventData) => {
-    // Aquí se maneja la lógica de guardar o procesar los datos del evento
-    // Por ejemplo, puedes guardar los datos en una base de datos, enviarlos a un servidor, etc.
-    const insertData = await supabase.from('events').insert(eventData)
-  };
-
   return (
-    <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
+    <ScrollView style={styles.container} keyboardShouldPersistTaps="always">
       <Text style={styles.title}>Crea tu propio evento</Text>
 
-      <EventForm onSubmit={handleEventSubmit} />
-    
-      <AdressInputWithMap map_point={''} />
+      <EventForm />
     </ScrollView>
   );
 };
@@ -35,6 +24,6 @@ const styles = StyleSheet.create({
     fontSize: 40,
     display: 'flex',
     fontWeight: 'bold',
-    justifyContent:'flex-start',
+    justifyContent: 'flex-start',
   },
 });
