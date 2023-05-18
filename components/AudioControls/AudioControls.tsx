@@ -4,7 +4,7 @@ import { Audio } from 'expo-av';
 import { Sound } from 'expo-av/build/Audio';
 import Icons from '@expo/vector-icons/FontAwesome5';
 
-export const AudioControls = () => {
+export const AudioControls = ({ onAudioRecorded }: { onAudioRecorded: (audioUri: string) => void }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUri, setAudioUri] = useState<string | null>(null);
   const [sound, setSound] = React.useState<Sound>();
@@ -19,7 +19,7 @@ export const AudioControls = () => {
   };
 
   const startRecording = async () => {
-     if (recording) {
+    if (recording) {
       console.log('Ya hay una grabación en curso');
       return;
     }
@@ -36,7 +36,7 @@ export const AudioControls = () => {
 
       console.log('Starting recording..');
       const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
-      
+
       setRecording(recording);
       console.log('Recording started');
 
@@ -46,22 +46,22 @@ export const AudioControls = () => {
         setElapsedTime((prevTime) => prevTime + 1);
       }, 1000);
       setIntervalId(newIntervalId);
-
     } catch (err) {
-        console.error('Failed to start recording', err);
-      }
+      console.error('Failed to start recording', err);
+    }
   };
 
-  const stopRecording = async () =>{
+  const stopRecording = async () => {
     try {
       console.log('Stopping recording..');
-      setRecording(undefined);
-      await recording.stopAndUnloadAsync();
+      setRecording(null);
+      await recording?.stopAndUnloadAsync();
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: false,
       });
-      const uri = recording.getURI();
-      setAudioUri(uri)
+      const uri = recording?.getURI() || '';
+      setAudioUri(uri);
+      onAudioRecorded(uri);
       console.log('Recording stopped and stored at', uri);
 
       // Detener el contador de tiempo
@@ -70,25 +70,24 @@ export const AudioControls = () => {
         setIntervalId(null);
       }
     } catch (error) {
-      console.log('error', error)
+      console.log('error', error);
     }
-  }
+  };
 
   const playAudio = async () => {
-    const { sound } = await Audio.Sound.createAsync({ uri: audioUri })
+    const { sound } = await Audio.Sound.createAsync({ uri: audioUri });
     setSound(sound);
     await sound.playAsync();
   };
 
   useEffect(() => {
-    return sound
-      ? () => {
-          console.log('Unloading Sound');
-          sound.unloadAsync();
-        }
-      : undefined;
+    return () => {
+      if (sound) {
+        console.log('Unloading Sound');
+        sound.unloadAsync();
+      }
+    };
   }, [sound]);
-
     
   return (
     <View style={styles.audioControls}>          

@@ -49,18 +49,25 @@ const EventForm: React.FC = () => {
       [field]: value,
     }));
   };
-
-  const handleAddressChange = (location: string) => {
+  const handleImagesChange = (images: string[]) => {
+    // Realiza cualquier acción necesaria con el arreglo de imágenes
+    console.log('Imágenes seleccionadas:', images);
+  };
+  const handleAddressChange = (addressData: { address: string, latitude: number, longitude: number }) => {
     setFormData((prevData) => ({
       ...prevData,
-      location,
+      location: addressData.address,
     }));
   };
 
   const handleSubmit = () => {
     createEvent(formData)
   }
-
+  const handleAudioRecorded = (audioUri) => {
+    // Aquí puedes realizar acciones con la URI del audio grabado
+    console.log('Audio grabado:', audioUri);
+    // Puedes guardar la URI en el estado del formulario u realizar otras acciones necesarias
+  };
   const Label = ({ text }: { text: string}) => {
     return (
       <Text style={styles.label}>{text}:</Text>
@@ -128,9 +135,9 @@ const EventForm: React.FC = () => {
         </Picker>
         {/* <DateComponent/> */}
         <Label text='Graba un audio contando acerca del evento' />
-        <AudioControls />
+        <AudioControls onAudioRecorded={handleAudioRecorded} />
         <Label text='Subi una foto del evento' />
-        <AppImagePicker />
+        <AppImagePicker onImagesChange={handleImagesChange} />
         
         <Label text='Ubicasion del evento' />
         <AdressInputWithMap onChange={handleAddressChange} map_point="" />

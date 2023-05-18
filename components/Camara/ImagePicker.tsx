@@ -3,7 +3,11 @@ import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 
-const AppImagePicker: React.FC = () => {
+interface AppImagePickerProps {
+  onImagesChange: (images: string[]) => void;
+}
+
+const AppImagePicker: React.FC<AppImagePickerProps> = ({ onImagesChange }) => {
   const [images, setImages] = useState<string[]>([]);
 
   const requestPermissions = async () => {
@@ -35,9 +39,10 @@ const AppImagePicker: React.FC = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
     if (!result.canceled && result.assets && result.assets.length > 0 && typeof result.assets[0].uri === 'string') {
-      setImages([...images, result.assets[0].uri]);
+      const newImages = [...images, result.assets[0].uri];
+      setImages(newImages);
+      onImagesChange(newImages);
     }
   };
 
@@ -56,7 +61,9 @@ const AppImagePicker: React.FC = () => {
     });
 
     if (!result.canceled && result.assets && result.assets.length > 0 && typeof result.assets[0].uri === 'string') {
-      setImages([...images, result.assets[0].uri]);
+      const newImages = [...images, result.assets[0].uri];
+      setImages(newImages);
+      onImagesChange(newImages);
     }
   };
 

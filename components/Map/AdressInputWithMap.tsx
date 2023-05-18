@@ -10,11 +10,10 @@ const defaultCenter = {
   latitude: -34.92317666584001,
   longitude: -57.94956215165454,
 };
-
 interface IProps {
   map_point: string;
   center?: { latitude: number; longitude: number };
-  onChange: (address: string) => void;
+  onChange: (addressData: { address: string, latitude: number, longitude: number }) => void; // Cambio en la definición de onChange
 }
 
 export const AdressInputWithMap = ({ map_point, center, onChange }: IProps) => {
@@ -44,9 +43,8 @@ export const AdressInputWithMap = ({ map_point, center, onChange }: IProps) => {
     const { lat, lng } = details.geometry.location;
     setPosition({ latitude: lat, longitude: lng });
     setAddress(details.formatted_address);
-    onChange(details.formatted_address);
+    onChange({ address: details.formatted_address, latitude: lat, longitude: lng });
   };
-
   return (
     <View style={styles.container}>
       <ScrollView
