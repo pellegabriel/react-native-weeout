@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ScrollView, StyleSheet, Text, Button } from 'react-native';
 import EventForm from '../components/Create/EventForm';
+
 
 export const CreateEventScreen = () => {
   return (

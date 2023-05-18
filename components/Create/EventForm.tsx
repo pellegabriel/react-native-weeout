@@ -6,7 +6,8 @@ import { AudioControls } from '../AudioControls';
 import AppImagePicker from '../Camara/ImagePicker';
 import { AdressInputWithMap } from '../Map/AdressInputWithMap';
 import { useCreateEvent } from '../../api/events';
-import { DateComponent } from '../DatePicker/DatePicker';
+import  DatePicker  from '../DatePicker/DatePicker';
+import uuid from 'react-native-uuid';
 
 export type EventData = {
   categoria?: string | null
@@ -17,7 +18,7 @@ export type EventData = {
   event_end_time?: string | null
   event_time_end?: string | null
   event_time_start?: string | null
-  id?: number
+  id?: string;
   images?: number | null
   location?: string | null
   subtitle?: string | null
@@ -27,7 +28,7 @@ export type EventData = {
 const EventForm: React.FC = () => {
   const { createEvent } = useCreateEvent()
   const [formData, setFormData] = useState({
-    id: 12,
+    id: uuid.v4(),
     title: '',
     image: '',
     location: '',
@@ -101,6 +102,8 @@ const EventForm: React.FC = () => {
         />
 
         <Label text='Categoría' />
+        <DatePicker/>
+
         <Picker
           style={styles.picker}
           selectedValue={formData.categoria}
@@ -123,11 +126,9 @@ const EventForm: React.FC = () => {
             <Picker.Item label='Trabajo y negocios' value='Trabajo y negocios' />
             <Picker.Item label='Vida nocturna' value='Vida nocturna' />
         </Picker>
-        <DateComponent/>
+        {/* <DateComponent/> */}
         <Label text='Graba un audio contando acerca del evento' />
-
         <AudioControls />
-
         <Label text='Subi una foto del evento' />
         <AppImagePicker />
         
