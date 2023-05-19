@@ -1,40 +1,4 @@
-// import React, { useState } from 'react';
-// import { View, Text } from 'react-native';
-// import RNPickerSelect, { Item } from 'react-native-picker-select';
-
-// interface Option {
-//   label: string;
-//   value: string;
-// }
-
-// const MySelect: React.FC = () => {
-//   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-
-//   const handleValueChange = (value: string) => {
-//     setSelectedOption(value);
-//   };
-
-//   const options: Option[] = [
-//     { label: 'Opción 1', value: '1' },
-//     { label: 'Opción 2', value: '2' },
-//     { label: 'Opción 3', value: '3' },
-//   ];
-
-//   return (
-//     <View>
-//       <Text>Picker Select</Text>
-//       <RNPickerSelect
-//         onValueChange={handleValueChange}
-//         items={options}
-//         placeholder={{ label: 'Seleccione una opción', value: null }}
-//         value={selectedOption}
-//       />
-//     </View>
-//   );
-// };
-
-// export default MySelect;
-
+ 
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { CheckBox } from 'react-native-elements';

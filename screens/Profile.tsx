@@ -3,6 +3,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { ProfileEventsList } from '../components/ProfileEventsList';
 import { fakeProfile } from '../utils/fakeData';
+import UserCategory from '../components/profile/UserCategory';
 
 
 export const ProfileScreen = () => {
@@ -42,13 +43,7 @@ export const ProfileScreen = () => {
             <Text style={styles.contactLabel}>Teléfono:</Text>
             <Text style={styles.contactText}>{fakeProfile.phone}</Text>
           </View>
-
-          {/* <SearchBar
-        value={}
-        onChangeText={handleTextChange}
-        placeholder="Search"
-      /> */}
-
+          <UserCategory/>
           <ProfileEventsList />
 
         </View>
