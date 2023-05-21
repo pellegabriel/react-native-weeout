@@ -3,10 +3,11 @@ import { MainSlider } from "../components/MainSlider";
 import { CategoriesSlider } from "../components/CategoriesSlider";
 import { ListOfEvents } from "../components/ListOfEvents";
 import Map from '../components/Map/index'
+import FloatingButton from "../components/profile/FloatingButton";
 
 export const HomeScreen = ({ navigation }) => {
 
-  return (
+  return (<>
     <ScrollView style={styles.container}>
       <MainSlider navigation={navigation} />
 
@@ -29,8 +30,11 @@ export const HomeScreen = ({ navigation }) => {
         </Text>
       </View>
 
-      <ListOfEvents />        
+      <ListOfEvents />   
+     
     </ScrollView>
+          <FloatingButton/></>
+
   );
 }
 

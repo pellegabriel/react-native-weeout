@@ -18,7 +18,8 @@ interface IProps {
 
 export const AdressInputWithMap = ({ map_point, center, onChange }: IProps) => {
   const [position, setPosition] = useState(center || defaultCenter);
-  const [address, setAddress] = useState('');
+const [address, setAddress] = useState(map_point || '');
+
 
   const getAddress = async (lat: number, lng: number) => {
     try {
@@ -41,10 +42,12 @@ export const AdressInputWithMap = ({ map_point, center, onChange }: IProps) => {
 
   const handlePlaceSelect = (data, details) => {
     const { lat, lng } = details.geometry.location;
-    setPosition({ latitude: lat, longitude: lng });
+    const newPosition = { latitude: lat, longitude: lng };
+    setPosition(newPosition);
     setAddress(details.formatted_address);
     onChange({ address: details.formatted_address, latitude: lat, longitude: lng });
   };
+  
   return (
     <View style={styles.container}>
       <ScrollView

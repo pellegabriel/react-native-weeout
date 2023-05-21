@@ -8,7 +8,6 @@ import React, { useEffect, useState } from 'react';
 import { Session, createClient } from '@supabase/supabase-js';
 import { supabase } from './supabase';
 import Login from './components/Login/Login';
-import { Button , Image} from 'react-native';
 import Icons from '@expo/vector-icons/FontAwesome5';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SearchScreen } from './screens/Search';
@@ -47,6 +46,14 @@ export default function App() {
     );
   }
 
+  const UserStack = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="EventCreate" component={CreateEventScreen} options={{  headerShown: false }} />
+      </Stack.Navigator>
+    );
+  }
   return (
     <NavigationContainer>
       {session && session.user ? (
@@ -67,7 +74,15 @@ export default function App() {
               tabBarIcon: () => <Icons name='search' size={18} color="#f5694d" />
             }}
           />
-          <Tab.Screen
+           <Tab.Screen
+            name="Profile"
+            component={UserStack}
+            options={{
+              headerShown: false,
+              tabBarIcon: () => <Icons name='home' size={18} color="#f5694d" />
+            }}
+          />
+          {/* <Tab.Screen
             name="EventCreate"
             component={CreateEventScreen}
             options={{
@@ -75,14 +90,19 @@ export default function App() {
               tabBarIcon: () => <Icons name='search' size={18} color="#f5694d" />
             }}
           />
-          <Tab.Screen name="Profile" component={ProfileScreen} 
+          <Tab.Screen 
+          name="Profile" 
+          component={ProfileScreen} 
               options={{
-              headerRight: () => (
-                <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
-              ),
-              tabBarIcon: () => <Icons name='user-alt' size={18} color="#f5694d" />
-            }}
-          />
+                headerShown: false,
+                tabBarIcon: () => <Icons name='home' size={18} color="#f5694d" />
+              }}
+              // headerRight: () => (
+              //   <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
+              // ),
+              // tabBarIcon: () => <Icons name='user-alt' size={18} color="#f5694d" />
+            
+          /> */}
         </Tab.Navigator>
       ) : <Login />
       }

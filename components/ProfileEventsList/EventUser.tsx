@@ -12,7 +12,7 @@ export interface CardProps {
   data: TFakeEvent;
 }
 
-export const EventCard: React.FC<CardProps> = ({ data }) => {
+export const EventUser: React.FC<CardProps> = ({ data }) => {
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
   const [sound, setSound] = React.useState<Audio.Sound | undefined>();
 

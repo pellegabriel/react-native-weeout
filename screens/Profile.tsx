@@ -4,6 +4,9 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'rea
 import { ProfileEventsList } from '../components/ProfileEventsList';
 import { fakeProfile } from '../utils/fakeData';
 import UserCategory from '../components/profile/UserCategory';
+import { Button } from 'react-native';
+import { supabase } from '../supabase';
+import FloatingButton from '../components/profile/FloatingButton';
 
 
 export const ProfileScreen = () => {
@@ -21,7 +24,9 @@ export const ProfileScreen = () => {
             <Icon name="arrow-left" size={20} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.title}>Mi Perfil</Text>
+
         </View>
+        {/* <Button title="Sign Out" onPress={() => supabase.auth.signOut()} /> */}
 
         <View style={styles.body}>
           <View style={styles.profile}>
@@ -33,21 +38,28 @@ export const ProfileScreen = () => {
             <View style={styles.profileInfo}>
               <TouchableOpacity style={styles.editButton}>
                 <Icon name="pencil" size={20}/>
+
               </TouchableOpacity>
+
             </View>
           </View>
 
           <View style={styles.contact}>
+          <Text style={styles.contactLabel1}>Tus Datos</Text>
             <Text style={styles.contactLabel}>Correo electrónico:</Text>
             <Text style={styles.contactText}>{fakeProfile.email}</Text>
             <Text style={styles.contactLabel}>Teléfono:</Text>
             <Text style={styles.contactText}>{fakeProfile.phone}</Text>
           </View>
+          <Text style={styles.titleFilter}>Filtra entre tus eventos </Text>
           <UserCategory/>
           <ProfileEventsList />
 
         </View>
+        
       </ScrollView>
+      <FloatingButton/>
+
     </View>
   );
 };
@@ -66,7 +78,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: 20
+    marginTop: 20,
+
   },
   backButton: {
     position: 'absolute',
@@ -78,7 +91,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    
+    marginRight: 20
+  },  
+  titleFilter: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginRight: 20,
+    marginBottom: 20
   },
   
   body: {
@@ -121,6 +140,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
+    width:30
   },
   
   editButtonText: {
@@ -130,12 +150,17 @@ const styles = StyleSheet.create({
   contact: {
     marginBottom: 20,
   },
+  contactLabel1:{
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
   contactLabel: {
-    fontSize: 18,
+    fontSize: 12,
     fontWeight: 'bold',
     marginBottom: 5,
   },
   contactText: {
-    fontSize: 16,
+    fontSize: 11,
   },
 });

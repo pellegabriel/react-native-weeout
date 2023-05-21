@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { AudioControls } from '../AudioControls';
 import AppImagePicker from '../Camara/ImagePicker';
-import { AdressInputWithMap } from '../Map/AdressInputWithMap';
+// import { AdressInputWithMap } from '../Map/AdressInputWithMap';
 import { useCreateEvent } from '../../api/events';
 import  DatePicker  from '../DatePicker/DatePicker';
 import uuid from 'react-native-uuid';
@@ -53,12 +53,7 @@ const EventForm: React.FC = () => {
     // Realiza cualquier acción necesaria con el arreglo de imágenes
     console.log('Imágenes seleccionadas:', images);
   };
-  const handleAddressChange = (addressData: { address: string, latitude: number, longitude: number }) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      location: addressData.address,
-    }));
-  };
+
 
   const handleSubmit = () => {
     createEvent(formData)
@@ -139,13 +134,12 @@ const EventForm: React.FC = () => {
         <Label text='Subi una foto del evento' />
         <AppImagePicker onImagesChange={handleImagesChange} />
         
-        <Label text='Ubicasion del evento' />
-        <AdressInputWithMap onChange={handleAddressChange} map_point="" />
 
-        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+        {/* <TouchableOpacity onPress={handleSubmit} style={styles.button}>
           <Text style={styles.buttonText}>Crear evento</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
+
     </ScrollView>
   );
 };
