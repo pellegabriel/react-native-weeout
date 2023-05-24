@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { CheckBox } from 'react-native-elements';
+import { useGetCategories } from '../../api/useGetCategories';
 
 const categories = {
   Row: [
@@ -26,7 +27,12 @@ const categories = {
 
 const MultipleChoiceForm = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const {
+    
+    data,error,loading
 
+  } = useGetCategories()
+  
   const handleCategorySelection = (categoryTitle: string) => {
     let newSelectedCategories = [...selectedCategories];
 
@@ -40,7 +46,7 @@ const MultipleChoiceForm = () => {
 
     setSelectedCategories(newSelectedCategories);
   };
-
+  console.log(data, error, loading)
   return (
     <View style={styles.container}>
               <Text style={styles.title}>Elegí las categorías para el evento</Text>
@@ -49,12 +55,12 @@ const MultipleChoiceForm = () => {
     <ScrollView style={styles.container2}>
 
     <View style={styles.container3}>
-      {categories.Row.map((category, index) => (
+      {data.map(({label, id}) => (
         <CheckBox
-          key={index}
-          title={category.title}
-          checked={selectedCategories.includes(category.title)}
-          onPress={() => handleCategorySelection(category.title)}
+          key={id}
+          title={label}
+          checked={selectedCategories.includes(label)}
+          onPress={() => handleCategorySelection(label)}
         />
         
       ))}

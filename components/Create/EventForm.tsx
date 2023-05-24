@@ -8,6 +8,8 @@ import AppImagePicker from '../Camara/ImagePicker';
 import { useCreateEvent } from '../../api/events';
 import  DatePicker  from '../DatePicker/DatePicker';
 import uuid from 'react-native-uuid';
+import { supabase } from '../../supabase';
+// import { Multiple } from './Multiple';
 
 export type EventData = {
   categoria?: string | null
@@ -49,10 +51,11 @@ const EventForm: React.FC = () => {
       [field]: value,
     }));
   };
+  
   const handleImagesChange = (images: string[]) => {
-    // Realiza cualquier acción necesaria con el arreglo de imágenes
+  
     console.log('Imágenes seleccionadas:', images);
-  };
+  } 
 
 
   const handleSubmit = () => {
@@ -91,7 +94,6 @@ const EventForm: React.FC = () => {
           containerStyle={styles.inputContainer}
           inputContainerStyle={styles.inputInnerContainer}
         />
-
         <Label text='Description' />
         <Input
           multiline
@@ -139,6 +141,7 @@ const EventForm: React.FC = () => {
           <Text style={styles.buttonText}>Crear evento</Text>
         </TouchableOpacity> */}
       </View>
+      {/* <Multiple/> */}
 
     </ScrollView>
   );
@@ -148,7 +151,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 10,
     paddingTop: 20,
-    paddingBottom: 140,
+    paddingBottom: 10,
   }, 
   container1: {
     marginTop: 10,

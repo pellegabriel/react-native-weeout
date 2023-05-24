@@ -7,65 +7,78 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootStackParamList } from '..//App';
 
 export const SearchScreen = () => {
-    const [selectedCategories, setSelectedCategories] = useState([])
-    const [data, setData] = useState(fakeCategories)
+    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+    const [data, setData] = useState(fakeCategories);
     const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
-
-    const SearchCategory = ({ title, id }) => {
-        const [isSelected, setIsSelected] = useState(false)
-        const handleClick = () => {
-            const dataCopy = [...data]
-            const index = dataCopy.findIndex(categoria => categoria.id === id);
-            const categoriaSeleccionada = dataCopy.splice(index, 1)[0];
-            dataCopy.unshift(categoriaSeleccionada);
-            
-            setData(dataCopy)
-            setSelectedCategories(id)
-        }
-        return (
-            <TouchableOpacity style={styles.category} onPress={handleClick} >
-                <Text style={isSelected ? styles.categoryTextSelected : styles.categoryText}>
-                   {title}
-                </Text>
-            </TouchableOpacity>
-        )
-    }
-
+  
+    const SearchCategory = ({ title, id, isSelected, onPress }) => {
+      return (
+        <TouchableOpacity style={styles.category} onPress={onPress}>
+          <Text style={isSelected ? styles.categoryTextSelected : styles.categoryText}>
+            {title}
+          </Text>
+        </TouchableOpacity>
+      );
+    };
+  
+    const handleCategoryClick = (categoryId) => {
+      const dataCopy = [...data];
+      const index = dataCopy.findIndex((categoria) => categoria.id === categoryId);
+      const categoriaSeleccionada = dataCopy.splice(index, 1)[0];
+      dataCopy.unshift(categoriaSeleccionada);
+  
+      setData(dataCopy);
+      setSelectedCategoryId(categoryId);
+    };
+  
     return (
-        <ScrollView style={styles.container}>
-            <Text style={styles.title}>Encuentra el evento perfecto para ti</Text>
-            <Input
-                inputStyle={styles.input}
-                placeholder="Correr en el bosque..."
-                containerStyle={styles.inputContainer}
-                inputContainerStyle={styles.inputInnerContainer}
+      <ScrollView style={styles.container}>
+        <Text style={styles.title}>Encuentra el evento perfecto para ti</Text>
+        <Input
+          inputStyle={styles.input}
+          placeholder="Correr en el bosque..."
+          containerStyle={styles.inputContainer}
+          inputContainerStyle={styles.inputInnerContainer}
+        />
+        <ScrollView horizontal style={styles.categoriesList}>
+          {data.map((category) => (
+            <SearchCategory
+              key={category.id}
+              title={category.title}
+              id={category.id}
+              isSelected={category.id === selectedCategoryId}
+              onPress={() => handleCategoryClick(category.id)}
             />
-            <ScrollView horizontal style={styles.categoriesList}>
-                {data.map((category) => (
-                    <SearchCategory {...category} />
-                ))}
-            </ScrollView>
-
-            <View style={styles.listOfImages}>
-                {fakeImages.map(({ uri, id }) => (
-                    <TouchableOpacity
-                    style={styles.imageContainer}
-                    // onPress={() => navigate('ImageDetails', { imageId: id })}
-                    >
-                    <Image source={{ uri }} style={styles.image} />
-                    </TouchableOpacity>
-                ))}
-            </View>
+          ))}
         </ScrollView>
-    )
-}
+  
+        <View style={styles.listOfImages}>
+          {fakeImages.map(({ uri, id }) => (
+            <TouchableOpacity
+              key={id}
+              style={styles.imageContainer}
+              // onPress={() => navigate('ImageDetails', { imageId: id })}
+            >
+              <Image source={{ uri }} style={styles.image} />
+              <Text style={styles.titleImage}>Encuentra el evento perfecto para ti</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+    );
+  };
 
 const styles = StyleSheet.create({
+    titleImage:{
+        width: 160,
+        fontSize: 12,
+        padding: 3
+    },
     container: {
       flex: 1,
       paddingVertical: 100,
       display: 'flex',
-      backgroundColor: '#fff'
+      backgroundColor: '#fff',
     },
     title: {
       paddingHorizontal: 40,
@@ -112,14 +125,19 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         flexDirection: 'row',
         justifyContent: 'center',
+        paddingBottom: 100
+
+
       },
       imageContainer: {
         marginVertical: 10,
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        borderWidth: 1,
+        borderColor: '#f5694d',
       },
       image: {
         width: 160,
         height: 160,
-        borderRadius: 5,
+        borderTopRadius: 5,
       },
 });
