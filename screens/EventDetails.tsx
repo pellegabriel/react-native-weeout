@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Icons from '@expo/vector-icons/FontAwesome5';
 import { ImageGrid } from "../components/ImageGrid/ImageGrid";
 import { StatusBar } from "expo-status-bar";
@@ -7,6 +7,7 @@ import { fakeImages } from "../utils/fakeData";
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootStackParamList } from '../App';
+import DetailMap from "../components/Map/DetailMap";
 
 interface Props {
     title: string;
@@ -38,6 +39,7 @@ export const EventDetailsScreen : React.FC<Props> = ({}) => {
       <StatusBar />
       <View style={styles.container}>
         <View style={styles.header}>
+          
           <View style={styles.iconContainer}>
             <Icons name='calendar' size={30} color="#f5694d" />
           </View>
@@ -47,7 +49,23 @@ export const EventDetailsScreen : React.FC<Props> = ({}) => {
           </View>
         </View>
         <View style={styles.body}>
-          <Text style={styles.description}>{event.description}</Text>
+        <Text style={styles.description}>{event.description}</Text>
+
+        <FlatList
+  data={fakeImages}
+  keyExtractor={(item) => item.id.toString()}
+  renderItem={({ item }) => (
+    <TouchableOpacity
+      style={styles.imageContainer}
+      // onPress={() => navigate('ImageDetails', { imageId: item.id })}
+    >
+      <Image source={{ uri: item.uri }} style={styles.image} />
+    </TouchableOpacity>
+  )}
+  horizontal={true} // Orientación horizontal
+  numColumns={1} // Número de columnas (1 en este caso)
+  style={styles.flatList}
+/>
           <View style={styles.infoContainer}>
             <Icons name='calendar' size={20} color="#f5694d" />
             <Text style={styles.infoText}>
@@ -63,24 +81,25 @@ export const EventDetailsScreen : React.FC<Props> = ({}) => {
             <Text style={styles.infoText}>Created by {event.createdBy}</Text>
           </View>
         </View>
+        <View style={styles.mapContainer}>
+
+<DetailMap events={[]}/>
+</View>
       </View>
 
 
-        <View style={styles.listOfImages}>
-          {fakeImages.map(({ uri, id }) => (
-            <TouchableOpacity
-            style={styles.imageContainer}
-            // onPress={() => navigate('ImageDetails', { imageId: id })}
-            >
-              <Image source={{ uri }} style={styles.image} />
-            </TouchableOpacity>
-          ))}
-        </View>
+
+
       </ScrollView> 
     )
 }
 
 const styles = StyleSheet.create({
+  flatList: {
+    maxHeight: 300, // Establece la altura máxima deseada
+    flex: 1,
+    marginBottom: 20
+  },
     container: {
       marginTop: 60,
       borderRadius: 10,
@@ -88,11 +107,20 @@ const styles = StyleSheet.create({
       marginVertical: 8,
       borderWidth: 1,
       borderColor: '#f5694d',
+    },    mapContainer:{
+      width:360,
+      height:240,
+      paddingTop: 0,
+      padding: 20,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
     },
     listOfImages: {
       flexWrap: 'wrap',
       flexDirection: 'row',
       justifyContent: 'center',
+
     },
     imageContainer: {
       marginVertical: 10,

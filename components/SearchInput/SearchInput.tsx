@@ -1,68 +1,73 @@
-import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { Alert } from 'react-native';
+// import React, { useState } from 'react';
+// import { View, TextInput, StyleSheet } from 'react-native';
+// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+// import {faYinYang } from '@fortawesome/free-solid-svg-icons';
+// import { faWrench } from '@fortawesome/free-solid-svg-icons';
+// import { ColorValue } from 'react-native';
 
-interface SearchInputProps {
-  value: string;
-  onChangeText: (text: string) => void;
-  placeholder?: string;
-}
+// const SearchBar: React.FC = () => {
+//   const [searchText, setSearchText] = useState('');
 
-export const SearchInput = ({ value, onChangeText, placeholder }: SearchInputProps) => {
-  const [text, setText] = useState(value);
+//   const handleInputChange = (newText: string) => {
+//     setSearchText(newText);
+//   };
 
-  const handleTextChange = (newText: string) => {
-    setText(newText);
-    onChangeText(newText);
-  };
+//   return (
+//     <View style={styles.box}>
+//       <TextInput
+//         value={searchText}
+//         onChangeText={handleInputChange}
+//         placeholder="Search"
+//         placeholderTextColor="#ffd52d"
+//         style={styles.input}
+//       />
+//       <FontAwesomeIcon icon={faWrench} style={styles.icon} color="#ffd52d" />
+//       <FontAwesomeIcon icon={faYinYang} style={styles.youtubeIcon} color="#ff1717" />
+//     </View>
+//   );
+// };
 
-  const showAlert = (title: string, message: string) => {
-    Alert.alert(
-      title,
-      message,
-      [{ text: 'OK' }]
-    );
-  }
-  
-  const handleButtonPress = () => {
-    // Hacer algo cuando se presione el botón
-    showAlert('Esto deberia llevar a la busqueda que realizas', 'Estamos en ello');
-  };
+// interface Styles {
+//   box: any;
+//   input: any;
+//   icon: any;
+//   youtubeIcon: any;
+// }
 
-  return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        value={text}
-        onChangeText={handleTextChange}
-        placeholder={placeholder}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleButtonPress}>
-        <Icon name="search" size={20} color="#fff" />
-      </TouchableOpacity>
-    </View>
-  );
-};
+// const styles = StyleSheet.create<Styles>({
+//   box: {
+//     position: 'relative',
+//   },
+//   input: {
+//     padding: 10,
+//     width: 80,
+//     height: 80,
+//     backgroundColor: 'transparent',
+//     borderWidth: 4,
+//     borderColor: '#ffd52d',
+//     borderRadius: 50,
+//     fontFamily: 'Comic Sans MS',
+//     fontSize: 26,
+//     color: '#ffd52d',
+//     outline: 'none',
+//     transitionDuration: 0.5,
+//   },
+//   icon: {
+//     position: 'absolute',
+//     top: '50%',
+//     right: 40,
+//     transform: [{ translateX: '-50%' }, { translateY: '-50%' }],
+//     fontSize: 26,
+//     transitionDuration: 0.2,
+//   },
+//   youtubeIcon: {
+//     position: 'absolute',
+//     top: '50%',
+//     right: 15,
+//     transform: [{ translateX: '-50%' }, { translateY: '-50%' }],
+//     fontSize: 26,
+//     transitionDuration: 0.2,
+//   },
+// });
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    borderWidth: 1,
-    backgroundColor: '#F5FCFF',
-    padding: 10,
-    marginVertical: 10,
-    borderRadius: 20,
-  },
-  button: {
-    backgroundColor: 'blue',
-    padding: 10,
-    borderRadius: 20,
-    marginLeft: 10,
-  },
-});
-
+// export default SearchBar;

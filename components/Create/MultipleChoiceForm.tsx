@@ -1,43 +1,8 @@
-// import React, { useState } from 'react';
-// import { View, Text } from 'react-native';
-// import RNPickerSelect, { Item } from 'react-native-picker-select';
-
-// interface Option {
-//   label: string;
-//   value: string;
-// }
-
-// const MySelect: React.FC = () => {
-//   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-
-//   const handleValueChange = (value: string) => {
-//     setSelectedOption(value);
-//   };
-
-//   const options: Option[] = [
-//     { label: 'Opción 1', value: '1' },
-//     { label: 'Opción 2', value: '2' },
-//     { label: 'Opción 3', value: '3' },
-//   ];
-
-//   return (
-//     <View>
-//       <Text>Picker Select</Text>
-//       <RNPickerSelect
-//         onValueChange={handleValueChange}
-//         items={options}
-//         placeholder={{ label: 'Seleccione una opción', value: null }}
-//         value={selectedOption}
-//       />
-//     </View>
-//   );
-// };
-
-// export default MySelect;
-
+ 
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { CheckBox } from 'react-native-elements';
+import { useGetCategories } from '../../api/useGetCategories';
 
 const categories = {
   Row: [
@@ -62,7 +27,12 @@ const categories = {
 
 const MultipleChoiceForm = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const {
+    
+    data,error,loading
 
+  } = useGetCategories()
+  
   const handleCategorySelection = (categoryTitle: string) => {
     let newSelectedCategories = [...selectedCategories];
 
@@ -76,7 +46,7 @@ const MultipleChoiceForm = () => {
 
     setSelectedCategories(newSelectedCategories);
   };
-
+  console.log(data, error, loading)
   return (
     <View style={styles.container}>
               <Text style={styles.title}>Elegí las categorías para el evento</Text>
@@ -85,12 +55,12 @@ const MultipleChoiceForm = () => {
     <ScrollView style={styles.container2}>
 
     <View style={styles.container3}>
-      {categories.Row.map((category, index) => (
+      {data.map(({label, id}) => (
         <CheckBox
-          key={index}
-          title={category.title}
-          checked={selectedCategories.includes(category.title)}
-          onPress={() => handleCategorySelection(category.title)}
+          key={id}
+          title={label}
+          checked={selectedCategories.includes(label)}
+          onPress={() => handleCategorySelection(label)}
         />
         
       ))}
