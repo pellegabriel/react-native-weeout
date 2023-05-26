@@ -5,6 +5,7 @@ type TUseGetCategories = {
     data: {
         id:number,
         label:string
+        icon_name:string
     }[]
     error:string
     loading:boolean
