@@ -18,7 +18,7 @@ interface IProps {
 
 export const AdressInputWithMap = ({ map_point, center, onChange }: IProps) => {
   const [position, setPosition] = useState(center || defaultCenter);
-const [address, setAddress] = useState(map_point || '');
+  const [address, setAddress] = useState(map_point || '');
 
 
   const getAddress = async (lat: number, lng: number) => {
@@ -84,20 +84,19 @@ const [address, setAddress] = useState(map_point || '');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 60,
   },
   mapContainer: {
     flex: 1,
   },
   map: {
     flex: 1,
-    width: Dimensions.get('screen').width - 30,
+    width: Dimensions.get('screen').width - 80,
     height: 200,
-    borderRadius: 30,
+    borderRadius: 6
   },
   inputContainer: {
     flex: 1,
-    marginBottom: 20
+    marginBottom: 8
   },
   inputStyle: {
     width: Dimensions.get('screen').width - 30,

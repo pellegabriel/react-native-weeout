@@ -12,10 +12,14 @@ import FloatingButton from '../components/profile/FloatingButton';
 export const ProfileScreen = () => {
   const [text, setText] = useState('');
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+  }
 
   const handleTextChange = (newText: string) => {
     setText(newText);
   };
+
   return (
     <View style={styles.container1}>
       <ScrollView style={styles.container}>
@@ -40,7 +44,6 @@ export const ProfileScreen = () => {
                 <Icon name="pencil" size={20}/>
 
               </TouchableOpacity>
-
             </View>
           </View>
 
@@ -55,9 +58,15 @@ export const ProfileScreen = () => {
           <UserCategory/>
           <ProfileEventsList />
 
+          <TouchableOpacity onPress={handleSignOut}>
+            <Text style={styles.signOutText}>
+              Logout
+            </Text>
+          </TouchableOpacity>
         </View>
         
       </ScrollView>
+
       <FloatingButton/>
 
     </View>
@@ -120,7 +129,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
   },
-  
   profileInfo: {
     flexDirection: 'column',
     justifyContent: 'center',
@@ -142,7 +150,6 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     width:30
   },
-  
   editButtonText: {
     fontSize: 16,
     marginLeft: 5,
@@ -163,4 +170,7 @@ const styles = StyleSheet.create({
   contactText: {
     fontSize: 11,
   },
+  signOutText: {
+    textAlign: 'center'
+  }
 });

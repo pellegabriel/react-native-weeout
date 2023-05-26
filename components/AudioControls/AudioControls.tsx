@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Audio } from 'expo-av';
+import uuid from 'react-native-uuid';
 import { Sound } from 'expo-av/build/Audio';
 import Icons from '@expo/vector-icons/FontAwesome5';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { uploadAudio } from '../../api/audio';
+
 
 export const AudioControls = ({ onAudioRecorded }: { onAudioRecorded: (audioUri: string) => void }) => {
-  const [isRecording, setIsRecording] = useState(false);
-  const [audioUri, setAudioUri] = useState<string | null>(null);
   const [sound, setSound] = React.useState<Sound>();
-  const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const [audioUri, setAudioUri] = useState<string | null>(null);
+  const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+  
+  const [isRecording, setIsRecording] = useState(false);
   
   const formatTime = (timeInSeconds: number): string => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -62,13 +66,15 @@ export const AudioControls = ({ onAudioRecorded }: { onAudioRecorded: (audioUri:
       const uri = recording?.getURI() || '';
       setAudioUri(uri);
       onAudioRecorded(uri);
-      console.log('Recording stopped and stored at', uri);
 
       // Detener el contador de tiempo
       if (intervalId) {
         clearInterval(intervalId);
         setIntervalId(null);
       }
+
+      uploadAudio(`audio-${uuid.v4()}`, uri)
+
     } catch (error) {
       console.log('error', error);
     }
@@ -113,11 +119,11 @@ export const AudioControls = ({ onAudioRecorded }: { onAudioRecorded: (audioUri:
       </TouchableOpacity>
 
       <TouchableOpacity onPress={playAudio} style={styles.audioControlButton}>
-          <Icons
-              size={15}
-              color="#f5694d"
-              name='play'
-          />          
+        <Icons
+            size={15}
+            color="#f5694d"
+            name='play'
+        />          
       </TouchableOpacity>
     </View>
   )
@@ -130,6 +136,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20, 
     width: '100%',
+    marginBottom: 40
   },
   audioControlButton: {
     borderColor: '#f5694d',

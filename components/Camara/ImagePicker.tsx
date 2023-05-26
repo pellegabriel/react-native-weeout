@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { uploadImages } from '../../api/images';
 
 interface AppImagePickerProps {
   onImagesChange: (images: string[]) => void;
@@ -39,6 +40,7 @@ const AppImagePicker: React.FC<AppImagePickerProps> = ({ onImagesChange }) => {
       aspect: [4, 3],
       quality: 1,
     });
+
     if (!result.canceled && result.assets && result.assets.length > 0 && typeof result.assets[0].uri === 'string') {
       const newImages = [...images, result.assets[0].uri];
       setImages(newImages);
@@ -65,19 +67,23 @@ const AppImagePicker: React.FC<AppImagePickerProps> = ({ onImagesChange }) => {
       setImages(newImages);
       onImagesChange(newImages);
     }
+
+    uploadImages(result.assets[0].fileName, result.assets[0].uri)
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={takePhoto} style={styles.button}>
-        <Text style={styles.buttonText}>Tomar foto</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity onPress={takePhoto} style={styles.button}>
+          <Text style={styles.buttonText}>Tomar foto</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={pickImage} style={styles.button}>
-        <Text style={styles.buttonText}>Seleccionar imagen</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={pickImage} style={styles.button}>
+          <Text style={styles.buttonText}>Seleccionar imagen</Text>
+        </TouchableOpacity>
+      </View>
 
-      <View style={styles.imagesContainer}>
+      <ScrollView horizontal style={styles.imagesContainer}>
         {images.map((uri, index) => (
           <Image
             key={index}
@@ -86,7 +92,7 @@ const AppImagePicker: React.FC<AppImagePickerProps> = ({ onImagesChange }) => {
             resizeMode="contain"
           />
         ))}
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -95,6 +101,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginBottom: 40,
+    flexDirection: 'column',
+  },
+  buttonsContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -114,6 +124,7 @@ const styles = StyleSheet.create({
     height: 100,
     marginTop: 20,
     marginBottom: 20,
+    marginRight: 20,
     borderColor: 'gray',
     borderWidth: 1,
   },

@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
+import uuid from 'react-native-uuid';
 import { Input } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { AudioControls } from '../AudioControls';
-import AppImagePicker from '../Camara/ImagePicker';
-// import { AdressInputWithMap } from '../Map/AdressInputWithMap';
 import { useCreateEvent } from '../../api/events';
+import AppImagePicker from '../Camara/ImagePicker';
 import  DatePicker  from '../DatePicker/DatePicker';
-import uuid from 'react-native-uuid';
-import { supabase } from '../../supabase';
-// import { Multiple } from './Multiple';
+import { AdressInputWithMap } from '../Map/AdressInputWithMap';
+import FloatingButtonAcept from './FloatingButtonAcept';
 
 export type EventData = {
   categoria?: string | null
@@ -29,6 +28,7 @@ export type EventData = {
 
 const EventForm: React.FC = () => {
   const { createEvent } = useCreateEvent()
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     id: uuid.v4(),
     title: '',
@@ -38,13 +38,19 @@ const EventForm: React.FC = () => {
     categoria: '',
     created_by: '',
     description: '',
-    event_date_start: '1970-01-01 00:00:02',
-    event_date_end: '1970-01-02 00:00:06',
-    event_time_end: '1970-01-04 00:00:01',
-    event_time_start: '1970-01-05 00:00:03',
+    event_date_start: null,
+    event_date_end: null,
+    event_time_end: null,
+    event_time_start: null,
   });
-//react-useId para generar un id unico 
-//guardar la ubicacion el audio y la foto
+
+  const handleAddressChange = (addressData: { address: string, latitude: number, longitude: number }) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      location: addressData.address,
+    }));
+  };
+
   const handleInputChange = (field: keyof EventData, value: string) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -53,97 +59,104 @@ const EventForm: React.FC = () => {
   };
   
   const handleImagesChange = (images: string[]) => {
-  
     console.log('Imágenes seleccionadas:', images);
   } 
-
 
   const handleSubmit = () => {
     createEvent(formData)
   }
+
   const handleAudioRecorded = (audioUri) => {
-    // Aquí puedes realizar acciones con la URI del audio grabado
     console.log('Audio grabado:', audioUri);
     // Puedes guardar la URI en el estado del formulario u realizar otras acciones necesarias
   };
-  const Label = ({ text }: { text: string}) => {
-    return (
-      <Text style={styles.label}>{text}:</Text>
-    )
-  }
+
+  const Label = ({ text }: { text: string}) => (
+    <Text style={styles.label}>{text}:</Text>
+  )
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.container1}>
-        <Label text='Titulo' />
-        <Input
-          value={formData.title}
-          onChangeText={(text) => handleInputChange('title', text)}
-          inputStyle={styles.input}
-          placeholder="Escalada en el cerro Otto"
-          containerStyle={styles.inputContainer}
-          inputContainerStyle={styles.inputInnerContainer}
-        />
+    <>
+      <ScrollView style={styles.container}>
+        <View style={styles.container1}>
+          <Label text='Titulo' />
+          <Input
+            value={formData.title}
+            onChangeText={(text) => handleInputChange('title', text)}
+            inputStyle={styles.input}
+            placeholder="Escalada en el cerro Otto"
+            containerStyle={styles.inputContainer}
+            inputContainerStyle={styles.inputInnerContainer}
+          />
 
-        <Label text='Subtitulo' />
-        <Input
-          value={formData.subtitle}
-          onChangeText={(text) => handleInputChange('subtitle', text)} 
-          inputStyle={styles.input}
-          placeholder="Evento para para mayores de 26"
-          containerStyle={styles.inputContainer}
-          inputContainerStyle={styles.inputInnerContainer}
-        />
-        <Label text='Description' />
-        <Input
-          multiline
-          value={formData.description}
-          onChangeText={(text) => handleInputChange('description', text)} 
-          inputStyle={styles.input}
-          placeholder="En este evento vamos a..."
-          containerStyle={styles.inputContainer}
-          inputContainerStyle={styles.inputInnerContainer}
-        />
+          <Label text='Subtitulo' />
+          <Input
+            value={formData.subtitle}
+            onChangeText={(text) => handleInputChange('subtitle', text)} 
+            inputStyle={styles.input}
+            placeholder="Evento para para mayores de 26"
+            containerStyle={styles.inputContainer}
+            inputContainerStyle={styles.inputInnerContainer}
+          />
 
-        <Label text='Categoría' />
-        <DatePicker/>
+          <Label text='Description' />
+          <Input
+            multiline
+            value={formData.description}
+            onChangeText={(text) => handleInputChange('description', text)} 
+            inputStyle={styles.input}
+            placeholder="En este evento vamos a..."
+            containerStyle={styles.inputContainer}
+            inputContainerStyle={styles.inputInnerContainer}
+          />
 
-        <Picker
-          style={styles.picker}
-          selectedValue={formData.categoria}
-          onValueChange={(value) => handleInputChange('categoria', value)}
+          <Label text='Fecha del evento' />
+          <DatePicker />
+
+          <Label text='Elegi la categoria del evento' />
+          <Picker
+            style={styles.picker}
+            selectedValue={formData.categoria}
+            onValueChange={(value) => handleInputChange('categoria', value)}
+          >
+              <Picker.Item label='Teatro' value='Teatro' />
+              <Picker.Item label='Musica' value='Musica' />
+              <Picker.Item label='Actividades sociales' value='sociales' />
+              <Picker.Item label='Baile' value='Baile' />
+              <Picker.Item label='Presentaciones' value='Presentaciones' />
+              <Picker.Item label='Arte' value='Arte' />
+              <Picker.Item label='Medio ambiente' value='Medio ambiente' />
+              <Picker.Item label='Deportes' value='Deportes' />
+              <Picker.Item label='Actividad  fisica' value='Actividad  fisica' />
+              <Picker.Item label='Literatura' value='Literatura' />
+              <Picker.Item label='Política' value='Política' />
+              <Picker.Item label='Religion' value='Religion' />
+              <Picker.Item label='Espiritualidad' value='Espiritualidad' />
+              <Picker.Item label='Salud y bienestar' value='Salud y bienestar' />
+              <Picker.Item label='Trabajo y negocios' value='Trabajo y negocios' />
+              <Picker.Item label='Vida nocturna' value='Vida nocturna' />
+          </Picker>
+
+          <Label text='Graba un audio contando acerca del evento' />
+          <AudioControls onAudioRecorded={handleAudioRecorded} />
+
+          <Label text='Subi una foto del evento' />
+          <AppImagePicker onImagesChange={handleImagesChange} />
+
+        </View>
+      </ScrollView>
+
+      <Label text='Ubicacion del evento' />
+      <View style={styles.adressContainer}>
+        <AdressInputWithMap onChange={handleAddressChange} map_point="" />
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={styles.button} disabled={loading} onPress={() => {}}
         >
-            <Picker.Item label='Teatro' value='Teatro' />
-            <Picker.Item label='Musica' value='Musica' />
-            <Picker.Item label='Actividades sociales' value='sociales' />
-            <Picker.Item label='Baile' value='Baile' />
-            <Picker.Item label='Presentaciones' value='Presentaciones' />
-            <Picker.Item label='Arte' value='Arte' />
-            <Picker.Item label='Medio ambiente' value='Medio ambiente' />
-            <Picker.Item label='Deportes' value='Deportes' />
-            <Picker.Item label='Actividad  fisica' value='Actividad  fisica' />
-            <Picker.Item label='Literatura' value='Literatura' />
-            <Picker.Item label='Política' value='Política' />
-            <Picker.Item label='Religion' value='Religion' />
-            <Picker.Item label='Espiritualidad' value='Espiritualidad' />
-            <Picker.Item label='Salud y bienestar' value='Salud y bienestar' />
-            <Picker.Item label='Trabajo y negocios' value='Trabajo y negocios' />
-            <Picker.Item label='Vida nocturna' value='Vida nocturna' />
-        </Picker>
-        {/* <DateComponent/> */}
-        <Label text='Graba un audio contando acerca del evento' />
-        <AudioControls onAudioRecorded={handleAudioRecorded} />
-        <Label text='Subi una foto del evento' />
-        <AppImagePicker onImagesChange={handleImagesChange} />
-        
-
-        {/* <TouchableOpacity onPress={handleSubmit} style={styles.button}>
           <Text style={styles.buttonText}>Crear evento</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
-      {/* <Multiple/> */}
-
-    </ScrollView>
+    </>
   );
 };
 
@@ -179,6 +192,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingHorizontal: 0,
+    marginBottom: 40
   },
   inputInnerContainer: {
     borderBottomWidth: 0,
@@ -190,7 +204,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     paddingHorizontal: 8,
-    marginBottom: 10,
+    marginBottom: 60,
     boxSizing: 'border-box',
     borderWidth: 3,
     borderRadius: 5,
@@ -205,6 +219,7 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   button: {
+    marginTop: 60,
     backgroundColor:  '#f5694d',
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -215,6 +230,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  adressContainer: {
+    marginBottom: 160
+  }
 });
 
 

@@ -37,7 +37,8 @@ const DatePicker = () => {
       style={{
         borderWidth: 1,
         borderColor: 'gray',
-        height: 350
+        height: 350,
+        marginBottom: 60
       }}
       current={'2012-03-01'}
       onDayPress={onDayPress}

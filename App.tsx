@@ -40,8 +40,15 @@ export default function App() {
   const HomeStack = () => {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="HomeStack" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{  headerShown: false }} />
+        <Stack.Screen name="EventCreate" component={CreateEventScreen} options={{
+          headerTitle: '',
+          headerStyle: {
+            backgroundColor: 'transparent'
+          },
+          }}/>
+
       </Stack.Navigator>
     );
   }
@@ -50,10 +57,16 @@ export default function App() {
     return (
       <Stack.Navigator>
         <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="EventCreate" component={CreateEventScreen} options={{  headerShown: false }} />
+        <Stack.Screen name="EventCreate" component={CreateEventScreen} options={{
+          headerTitle: '',
+          headerStyle: {
+            backgroundColor: 'transparent'
+          },
+          }}/>
       </Stack.Navigator>
     );
   }
+
   return (
     <NavigationContainer>
       {session && session.user ? (
@@ -82,27 +95,6 @@ export default function App() {
               tabBarIcon: () => <Icons name='home' size={18} color="#f5694d" />
             }}
           />
-          {/* <Tab.Screen
-            name="EventCreate"
-            component={CreateEventScreen}
-            options={{
-              headerShown: false,
-              tabBarIcon: () => <Icons name='search' size={18} color="#f5694d" />
-            }}
-          />
-          <Tab.Screen 
-          name="Profile" 
-          component={ProfileScreen} 
-              options={{
-                headerShown: false,
-                tabBarIcon: () => <Icons name='home' size={18} color="#f5694d" />
-              }}
-              // headerRight: () => (
-              //   <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
-              // ),
-              // tabBarIcon: () => <Icons name='user-alt' size={18} color="#f5694d" />
-            
-          /> */}
         </Tab.Navigator>
       ) : <Login />
       }
