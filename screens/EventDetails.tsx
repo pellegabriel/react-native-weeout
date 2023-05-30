@@ -4,27 +4,36 @@ import { ImageGrid } from "../components/ImageGrid/ImageGrid";
 import { StatusBar } from "expo-status-bar";
 import { Image } from "react-native-elements";
 import { fakeImages } from "../utils/fakeData";
-import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { RootStackParamList } from '../App';
 import DetailMap from "../components/Map/DetailMap";
+import { useNavigation, RouteProp } from '@react-navigation/native';
+import { RootStackParamList } from '../App';
+import { useGetEvents } from "../api/events";
 
-interface Props {
-  title: string;
-  subtitle: string;
-  description: string;
-  startDate: Date;
-  endDate: Date;
-  location: string;
-  createdBy: string;
-  images: { id: number; uri: string }[];
-  columns: number;
-  event: any
-}
-
-
-export const EventDetailsScreen: React.FC<Props> = ({ event }) => {
+export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootStackParamList, 'EventDetails'> }) => {
+  const { eventId } = route.params; // Extract the event ID from the navigation params
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
+
+  const { data: eventsData, error: eventsError, loading: eventsLoading } = useGetEvents();
+
+  if (eventsError) {
+    return (
+      <View>
+        <Text>{eventsError}</Text>
+      </View>
+    );
+  }
+
+  // Find the event with the matching ID
+  const event = eventsData?.find((event) => event.id === eventId);
+
+  if (!event || eventsLoading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView>

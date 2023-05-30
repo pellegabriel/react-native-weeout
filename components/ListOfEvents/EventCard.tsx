@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { gecodificateLocation } from '../../api/geocodification';
+
 export interface CardProps {
   data: any;
 }
@@ -82,6 +83,7 @@ export const EventCard: React.FC<CardProps> = ({ data }) => {
     </TouchableOpacity>
   );
 };
+
 
 
 const styles = StyleSheet.create({
