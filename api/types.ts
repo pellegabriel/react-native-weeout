@@ -9,16 +9,19 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      Categories: {
+      categories: {
         Row: {
+          icon_name: string | null
           id: number
           label: string | null
         }
         Insert: {
+          icon_name?: string | null
           id?: number
           label?: string | null
         }
         Update: {
+          icon_name?: string | null
           id?: number
           label?: string | null
         }
@@ -35,7 +38,7 @@ export interface Database {
           event_time_start: string | null
           id: number
           image: string | null
-          location: string | null
+          location: Json | null
           subtitle: string | null
           title: string | null
         }
@@ -50,7 +53,7 @@ export interface Database {
           event_time_start?: string | null
           id?: number
           image?: string | null
-          location?: string | null
+          location?: Json | null
           subtitle?: string | null
           title?: string | null
         }
@@ -65,7 +68,7 @@ export interface Database {
           event_time_start?: string | null
           id?: number
           image?: string | null
-          location?: string | null
+          location?: Json | null
           subtitle?: string | null
           title?: string | null
         }

@@ -10,28 +10,20 @@ import { RootStackParamList } from '../App';
 import DetailMap from "../components/Map/DetailMap";
 
 interface Props {
-    title: string;
-    subtitle: string;
-    description: string;
-    startDate: Date;
-    endDate: Date;
-    location: string;
-    createdBy: string;
-    images: { id: number; uri: string }[];
-    columns: number;
-  }
+  title: string;
+  subtitle: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+  location: string;
+  createdBy: string;
+  images: { id: number; uri: string }[];
+  columns: number;
+  event: any
+}
 
-  const event = {
-    title: 'Mi evento',
-    subtitle: 'Un evento muy interesante',
-    description: 'Un evento para aprender mucho sobre React Native',
-    startDate: new Date('2023-05-01T10:00:00Z'),
-    endDate: new Date('2023-05-01T12:00:00Z'),
-    location: 'Mi casa',
-    createdBy: 'Juan Perez',  
-  };
 
-export const EventDetailsScreen : React.FC<Props> = ({}) => {
+export const EventDetailsScreen: React.FC<Props> = ({ event }) => {
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
 
   return (
@@ -39,60 +31,59 @@ export const EventDetailsScreen : React.FC<Props> = ({}) => {
       <StatusBar />
       <View style={styles.container}>
         <View style={styles.header}>
-          
           <View style={styles.iconContainer}>
             <Icons name='calendar' size={30} color="#f5694d" />
           </View>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>{event.title}</Text>
-            <Text style={styles.subtitle}>{event.subtitle}</Text>
+            <Text style={styles.title}>{event?.title}</Text>
+            <Text style={styles.subtitle}>{event?.subtitle}</Text>
           </View>
         </View>
         <View style={styles.body}>
-        <Text style={styles.description}>{event.description}</Text>
+          <Text style={styles.description}>{event?.description}</Text>
 
-        <FlatList
-  data={fakeImages}
-  keyExtractor={(item) => item.id.toString()}
-  renderItem={({ item }) => (
-    <TouchableOpacity
-      style={styles.imageContainer}
-      // onPress={() => navigate('ImageDetails', { imageId: item.id })}
-    >
-      <Image source={{ uri: item.uri }} style={styles.image} />
-    </TouchableOpacity>
-  )}
-  horizontal={true} // Orientación horizontal
-  numColumns={1} // Número de columnas (1 en este caso)
-  style={styles.flatList}
-/>
+          <FlatList
+            data={event?.images}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.imageContainer}
+                // onPress={() => navigate('ImageDetails', { imageId: item.id })}
+              >
+                <Image source={{ uri: item.uri }} style={styles.image} />
+              </TouchableOpacity>
+            )}
+            horizontal={true}
+            numColumns={1}
+            style={styles.flatList}
+          />
+
           <View style={styles.infoContainer}>
             <Icons name='calendar' size={20} color="#f5694d" />
             <Text style={styles.infoText}>
-              {event.startDate.toLocaleDateString()} - {event.endDate.toLocaleDateString()}
+              {event?.startDate.toLocaleDateString()} - {event?.endDate.toLocaleDateString()}
             </Text>
           </View>
+
           <View style={styles.infoContainer}>
             <Icons name='map-marker' size={20} color="#f5694d" />
-            <Text style={styles.infoText}>{event.location}</Text>
+            <Text style={styles.infoText}>{event?.location}</Text>
           </View>
+
           <View style={styles.infoContainer}>
             <Icons name='user' size={20} color="#f5694d" />
-            <Text style={styles.infoText}>Created by {event.createdBy}</Text>
+            <Text style={styles.infoText}>Created by {event?.createdBy}</Text>
           </View>
         </View>
+
         <View style={styles.mapContainer}>
-
-<DetailMap events={[]}/>
-</View>
+          <DetailMap events={[event]} />
+        </View>
       </View>
+    </ScrollView>
+  );
+};
 
-
-
-
-      </ScrollView> 
-    )
-}
 
 const styles = StyleSheet.create({
   flatList: {

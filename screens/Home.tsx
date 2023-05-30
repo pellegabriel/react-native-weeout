@@ -9,7 +9,7 @@ export const HomeScreen = ({ navigation }) => {
 
   return (<>
     <ScrollView style={styles.container}>
-      <MainSlider navigation={navigation} />
+      {/* <MainSlider navigation={navigation} /> */}
 
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Bienvenido a Weeout</Text>
@@ -19,9 +19,9 @@ export const HomeScreen = ({ navigation }) => {
         </Text>
       </View>
 
-      <CategoriesSlider />
+      <CategoriesSlider id={0} label={""} icon_name={""} />
       <View style={styles.mapContainer}>
-      <Map events={[]}/>
+      <Map/>
 
       </View>
       <View style={styles.titleContainer}>

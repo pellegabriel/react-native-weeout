@@ -19,7 +19,7 @@ export const useGetCategories = (): TUseGetCategories => {
     const fetchCategories = async () => {
       try {
           setLoading(true)
-          const { data } = await supabase.from("").select();
+          const { data } = await supabase.from("categories").select();
           setData(data)
       } catch (err){
           setError(err)

@@ -63,7 +63,9 @@ export const AudioControls = ({ onAudioRecorded }: { onAudioRecorded: (audioUri:
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: false,
       });
-      const uri = recording?.getURI() || '';
+      
+      const uri = recording?.getURI();
+
       setAudioUri(uri);
       onAudioRecorded(uri);
 

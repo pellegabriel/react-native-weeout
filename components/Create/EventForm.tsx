@@ -8,47 +8,50 @@ import { useCreateEvent } from '../../api/events';
 import AppImagePicker from '../Camara/ImagePicker';
 import  DatePicker  from '../DatePicker/DatePicker';
 import { AdressInputWithMap } from '../Map/AdressInputWithMap';
-import FloatingButtonAcept from './FloatingButtonAcept';
 
 export type EventData = {
-  categoria?: string | null
-  created_by?: string | null
-  description?: string | null
-  event_date_end?: string | null
-  event_date_start?: string | null
-  event_end_time?: string | null
-  event_time_end?: string | null
-  event_time_start?: string | null
-  id?: string;
-  images?: number | null
-  location?: string | null
-  subtitle?: string | null
-  title?: string | null
+  categoria: string | null
+  created_by: string | null
+  description: string | null
+  event_date_end: string | null
+  event_date_start: string | null
+  event_end_time: string | null
+  event_time_end: string | null
+  event_time_start: string | null
+  id: string | number[]
+  image: string | null
+  location: {
+    lat: number | null 
+    lng: number | null
+  } | null
+  subtitle: string | null
+  title: string | null
 };
 
 const EventForm: React.FC = () => {
   const { createEvent } = useCreateEvent()
   const [loading, setLoading] = useState(false)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<EventData>({
     id: uuid.v4(),
-    title: '',
-    image: '',
-    location: '',
-    subtitle: '',
-    categoria: '',
-    created_by: '',
-    description: '',
-    event_date_start: null,
+    categoria: null,
+    created_by: null,
+    description: null,
     event_date_end: null,
+    event_date_start: null,
+    event_end_time: null,
     event_time_end: null,
     event_time_start: null,
+    image: null,
+    location: {
+      lat: null,
+      lng: null
+    },
+    subtitle: null,
+    title: null,
   });
 
-  const handleAddressChange = (addressData: { address: string, latitude: number, longitude: number }) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      location: addressData.address,
-    }));
+  const handleAddressChange = (location: { lat: number, lng: number }) => {
+    setFormData((prevData) => ({ ...prevData, location}));
   };
 
   const handleInputChange = (field: keyof EventData, value: string) => {
@@ -64,6 +67,7 @@ const EventForm: React.FC = () => {
 
   const handleSubmit = () => {
     createEvent(formData)
+    console.log({formData})
   }
 
   const handleAudioRecorded = (audioUri) => {
@@ -148,10 +152,12 @@ const EventForm: React.FC = () => {
 
       <Label text='Ubicacion del evento' />
       <View style={styles.adressContainer}>
-        <AdressInputWithMap onChange={handleAddressChange} map_point="" />
+        <AdressInputWithMap onChange={handleAddressChange} location={formData.location} map_point="" />
         <TouchableOpacity
+          disabled={loading}
           activeOpacity={0.5}
-          style={styles.button} disabled={loading} onPress={() => {}}
+          style={styles.button}
+          onPress={handleSubmit}
         >
           <Text style={styles.buttonText}>Crear evento</Text>
         </TouchableOpacity>

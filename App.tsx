@@ -3,9 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from './screens/Home';
 import { EventDetailsScreen } from './screens/EventDetails';
 import { ProfileScreen } from './screens/Profile';
-// import { ImageDetailsScreen } from './screens/ImageDetails';
 import React, { useEffect, useState } from 'react';
-import { Session, createClient } from '@supabase/supabase-js';
+import { Session } from '@supabase/supabase-js';
 import { supabase } from './supabase';
 import Login from './components/Login/Login';
 import Icons from '@expo/vector-icons/FontAwesome5';
@@ -21,7 +20,7 @@ export type RootStackParamList = {
   EventCreate: undefined
 };
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
 export default function App() {
@@ -40,7 +39,7 @@ export default function App() {
   const HomeStack = () => {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Home2" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{  headerShown: false }} />
         <Stack.Screen name="EventCreate" component={CreateEventScreen} options={{
           headerTitle: '',

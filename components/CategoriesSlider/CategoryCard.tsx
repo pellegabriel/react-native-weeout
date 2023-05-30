@@ -2,17 +2,24 @@ import React from 'react';
 import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
 import Icons from '@expo/vector-icons/FontAwesome5';
 
-interface CategoryCardProps {
-  id: number;
-  label: string;
-  icon_name: string;
+type CategoryCardProps = {
+  id: number
+  label: string
+  icon_name: string
+  isSelected:  boolean
+  handlePress: () => void
 }
 
-const CategoryCard: React.FC<CategoryCardProps> = ({ label, icon_name }) => {
+const CategoryCard: React.FC<CategoryCardProps> = ({ label, icon_name, isSelected, handlePress }) => {
+  console.log(isSelected)
+  const containerStyles = {
+    ...styles.iconContainer,
+    backgroundColor: isSelected ? '#f5694d' : 'white'
+  }
   return (
-    <TouchableOpacity style={styles.wrapper}>
-      <View style={styles.iconContainer}>
-        <Icons name={icon_name} size={20} color="#f5694d" />
+    <TouchableOpacity style={styles.wrapper} onPress={handlePress}>
+      <View style={containerStyles}>
+        <Icons name={icon_name} size={20} color={isSelected ? 'white' : "#f5694d"} />
       </View>
       <Text>{label}</Text>
     </TouchableOpacity>
@@ -20,7 +27,6 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ label, icon_name }) => {
 };
 
 export default CategoryCard;
-
 
 const styles = StyleSheet.create({
   wrapper: {

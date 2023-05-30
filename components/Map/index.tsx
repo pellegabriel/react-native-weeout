@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { useGetEvents } from '../../api/events';
+import MapMarker from './Market';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,7 +28,7 @@ function Map() {
   const { data, loading, error } = useGetEvents(); // Obtener los datos de los eventos usando el hook useGetEvents
   const [map, setMap] = useState(null);
 
-  const onMapReady = useCallback((map) => {
+  const onMapReady = useCallback((map: any) => {
     setMap(map);
   }, []);
 
@@ -40,20 +41,18 @@ function Map() {
   }
 
   return (
-    <View style={styles.container}>
-      <MapView
-        initialRegion={defaultRegion}
-        style={styles.container}
-        onMapReady={onMapReady}
-      >
-        {data.map((event: IEvent) => (
-          <Marker
-            key={event.id}
-            coordinate={{ latitude: event.latitude, longitude: event.longitude }}
-          />
-        ))}
-      </MapView>
-    </View>
+<View style={styles.container}>
+  <MapView
+    initialRegion={defaultRegion}
+    style={styles.container}
+    onMapReady={onMapReady}
+  >
+    {data && Array.isArray(data) && data.map((event: IEvent) => (
+
+<MapMarker key={event.id} loading={loading} error={error} data={event} />
+))}
+  </MapView>
+</View>
   );
 }
 
