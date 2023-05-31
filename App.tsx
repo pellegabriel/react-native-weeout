@@ -18,6 +18,8 @@ export type RootStackParamList = {
   EventDetails: { eventId: string }
   'Search events': undefined;
   EventCreate: undefined
+  Inicio: undefined;
+
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -39,7 +41,7 @@ export default function App() {
   const HomeStack = () => {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="Home2" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{  headerShown: false }} />
         <Stack.Screen name="EventCreate" component={CreateEventScreen} options={{
           headerTitle: '',
@@ -70,14 +72,14 @@ export default function App() {
     <NavigationContainer>
       {session && session.user ? (
         <Tab.Navigator>
-          <Tab.Screen
-            name="Home"
-            component={HomeStack}
-            options={{
-              headerShown: false,
-              tabBarIcon: () => <Icons name='home' size={18} color="#f5694d" />
-            }}
-          />
+       <Tab.Screen
+          name="Inicio"
+          component={HomeStack}
+          options={{
+            headerShown: false,
+            tabBarIcon: () => <Icons name='home' size={18} color="#f5694d" />
+          }}
+        />
           <Tab.Screen
             name="Search events"
             component={SearchScreen}

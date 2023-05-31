@@ -1,17 +1,16 @@
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import Icons from '@expo/vector-icons/FontAwesome5';
-import { ImageGrid } from "../components/ImageGrid/ImageGrid";
 import { StatusBar } from "expo-status-bar";
 import { Image } from "react-native-elements";
-import { fakeImages } from "../utils/fakeData";
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import DetailMap from "../components/Map/DetailMap";
+import Icons from '@expo/vector-icons/FontAwesome5';
+import { ScrollView, StyleSheet, Text, View } from "react-native"
 import { useNavigation, RouteProp } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+
 import { RootStackParamList } from '../App';
 import { useGetEvents } from "../api/events";
+import DetailMap from "../components/Map/DetailMap";
 
 export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootStackParamList, 'EventDetails'> }) => {
-  const { eventId } = route.params; // Extract the event ID from the navigation params
+  const { eventId } = route.params;
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
 
   const { data: eventsData, error: eventsError, loading: eventsLoading } = useGetEvents();
@@ -43,34 +42,21 @@ export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootS
           <View style={styles.iconContainer}>
             <Icons name='calendar' size={30} color="#f5694d" />
           </View>
+
           <View style={styles.titleContainer}>
             <Text style={styles.title}>{event?.title}</Text>
             <Text style={styles.subtitle}>{event?.subtitle}</Text>
           </View>
         </View>
+
         <View style={styles.body}>
           <Text style={styles.description}>{event?.description}</Text>
-
-          <FlatList
-            data={event?.images}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.imageContainer}
-                // onPress={() => navigate('ImageDetails', { imageId: item.id })}
-              >
-                <Image source={{ uri: item.uri }} style={styles.image} />
-              </TouchableOpacity>
-            )}
-            horizontal={true}
-            numColumns={1}
-            style={styles.flatList}
-          />
+          <Image source={{ uri: event.uri }} style={styles.image} />
 
           <View style={styles.infoContainer}>
             <Icons name='calendar' size={20} color="#f5694d" />
             <Text style={styles.infoText}>
-              {event?.startDate.toLocaleDateString()} - {event?.endDate.toLocaleDateString()}
+              {/* {event?.startDate.toLocaleDateString()} - {event?.endDate.toLocaleDateString()} */}
             </Text>
           </View>
 
@@ -92,7 +78,6 @@ export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootS
     </ScrollView>
   );
 };
-
 
 const styles = StyleSheet.create({
   flatList: {
@@ -176,4 +161,4 @@ const styles = StyleSheet.create({
       fontSize: 16,
       marginLeft: 12,
     },
-  });
+});

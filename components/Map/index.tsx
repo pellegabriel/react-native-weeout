@@ -48,12 +48,28 @@ function Map() {
     onMapReady={onMapReady}
   >
     {data && Array.isArray(data) && data.map((event: IEvent) => (
-
-<MapMarker key={event.id} loading={loading} error={error} data={event} />
-))}
+       <MapMarker key={event.id} loading={loading} error={error} data={event} />
+    ))}
   </MapView>
 </View>
   );
 }
 
 export default Map;
+
+
+
+// Lo que falta
+
+// SEARCH: buscador de eventos
+// SEARCH: filtro por categoria
+// INICIO: Agregar audio a las cards de eventos
+// PERFIL: Mostrar los eventos que el usuario haya creado
+// CREATE_EVENT: Unir audio e imagenes al evento.
+// CREATE_EVENT: Una vez que se haya creado el evento, navegar a la pantalla Search Screen, con el titulo del evento buscado en el buscador
+
+// INICIO: ver todos los eventos en el mapa
+// INICIO: Al hacer click en la categoria, navegar al search con la categoria seleccionada
+// PERFIL: Poner la data mas linda
+// PERFIL: Usar las mismas cards de eventos que en Home
+// CREATE_EVENT: Mostrar un toast cuando el evento se haya creado o haya fallado.

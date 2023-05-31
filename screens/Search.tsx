@@ -5,6 +5,7 @@ import { fakeCategories, fakeImages } from '../utils/fakeData';
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootStackParamList } from '..//App';
+import { CategoriesSlider } from '../components/CategoriesSlider/CategoriesSlider';
 
 export const SearchScreen = () => {
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
@@ -40,17 +41,9 @@ export const SearchScreen = () => {
           containerStyle={styles.inputContainer}
           inputContainerStyle={styles.inputInnerContainer}
         />
-        <ScrollView horizontal style={styles.categoriesList}>
-          {data.map((category) => (
-            <SearchCategory
-              key={category.id}
-              title={category.title}
-              id={category.id}
-              isSelected={category.id === selectedCategoryId}
-              onPress={() => handleCategoryClick(category.id)}
-            />
-          ))}
-        </ScrollView>
+        
+       <CategoriesSlider id={0} label={""} icon_name={""} />
+
   
         <View style={styles.listOfImages}>
           {fakeImages.map(({ uri, id }) => (

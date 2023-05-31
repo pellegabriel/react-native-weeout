@@ -65,15 +65,30 @@ const EventForm: React.FC = () => {
     console.log('Imágenes seleccionadas:', images);
   } 
 
-  const handleSubmit = () => {
-    createEvent(formData)
-    console.log({formData})
+  const handleSubmit = async () => {
+    try {
+      setLoading(true)
+      await createEvent(formData)
+      console.log('subido pai', { formData })
+    } catch {
+      console.log(':(')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleAudioRecorded = (audioUri) => {
     console.log('Audio grabado:', audioUri);
     // Puedes guardar la URI en el estado del formulario u realizar otras acciones necesarias
   };
+
+  const handleDateSelected = (date) => {
+    console.log({date})
+    setFormData((prevData) => ({
+      ...prevData,
+      date,
+    }));
+  }
 
   const Label = ({ text }: { text: string}) => (
     <Text style={styles.label}>{text}:</Text>
@@ -115,7 +130,7 @@ const EventForm: React.FC = () => {
           />
 
           <Label text='Fecha del evento' />
-          <DatePicker />
+          <DatePicker handleDateSelected={handleDateSelected} />
 
           <Label text='Elegi la categoria del evento' />
           <Picker

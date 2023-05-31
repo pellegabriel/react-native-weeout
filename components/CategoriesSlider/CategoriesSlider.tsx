@@ -12,6 +12,7 @@ type CategoryCardProps = {
 export const CategoriesSlider: React.FC<CategoryCardProps> = () => {
   const { data, error, loading } = useGetCategories();
   const [categoriesSelected, setCategoriesSelected] = useState([])
+  //mandar en este estado lo seleccionado por props mediante el navigate a otra route
 
   if (loading) {
     return <Text>Loading...</Text>;

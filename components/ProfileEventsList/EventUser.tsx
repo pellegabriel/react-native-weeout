@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { TFakeEvent } from '../../utils/fakeData';
 import { Audio } from 'expo-av';
 import audioSample from '../../assets/audio-sample.mp3'
-import Icons from '@expo/vector-icons/FontAwesome5';
+// import Icons from '@expo/vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -52,7 +52,7 @@ export const EventUser: React.FC<CardProps> = ({ data }) => {
         <Text style={styles.title}>{data.title}</Text>
         <Text numberOfLines={4} style={styles.description}>{data.description}</Text>
       
-        <View style={styles.audioCOntainer}>
+        {/* <View style={styles.audioCOntainer}>
           <TouchableOpacity
             onPress={handleAudio}
             style={styles.button}
@@ -68,7 +68,7 @@ export const EventUser: React.FC<CardProps> = ({ data }) => {
             <Icons style={styles.dataPointIcon} name='map-marker' size={14} color="#f5694d" />
             <Text numberOfLines={2} style={styles.dataPointText}>{data.location}</Text>
           </View>
-        </View>
+        </View> */}
 
       </View>
     </TouchableOpacity>

@@ -33,11 +33,8 @@ export const ProfileScreen = () => {
         {/* <Button title="Sign Out" onPress={() => supabase.auth.signOut()} /> */}
 
         <View style={styles.body}>
-          <View style={styles.profile}>
-            <Image
-              style={styles.profileImage}
-              source={{ uri: 'https://source.unsplash.com/random/300x301' }}
-            />
+          {/* <View style={styles.profile}>
+
 
             <View style={styles.profileInfo}>
               <TouchableOpacity style={styles.editButton}>
@@ -45,7 +42,7 @@ export const ProfileScreen = () => {
 
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
 
           <View style={styles.contact}>
           <Text style={styles.contactLabel1}>Tus Datos</Text>
@@ -54,11 +51,11 @@ export const ProfileScreen = () => {
             <Text style={styles.contactLabel}>Teléfono:</Text>
             <Text style={styles.contactText}>{fakeProfile.phone}</Text>
           </View>
-          <Text style={styles.titleFilter}>Filtra entre tus eventos </Text>
-          <UserCategory/>
+          <Text style={styles.titleFilter}>Tus eventos </Text>
+          <View style={styles.scroll}>
           <ProfileEventsList />
-
-          <TouchableOpacity onPress={handleSignOut}>
+          </View>
+          <TouchableOpacity onPress={handleSignOut}  style={styles.signout}>
             <Text style={styles.signOutText}>
               Logout
             </Text>
@@ -96,6 +93,9 @@ const styles = StyleSheet.create({
     top: 20,
     padding: 5,
     zIndex: 1,
+  },
+  scroll: {
+    height:400
   },
   title: {
     fontSize: 20,
@@ -171,6 +171,13 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   signOutText: {
-    textAlign: 'center'
-  }
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textAlign: 'center',  },
+  signout: {
+    marginTop: 60,
+    backgroundColor:  '#f5694d',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,  }
 });
