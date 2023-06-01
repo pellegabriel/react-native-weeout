@@ -8,14 +8,24 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootStackParamList } from '../App';
 import { useGetEvents } from "../api/events";
 import DetailMap from "../components/Map/DetailMap";
+import { useEffect, useState } from "react";
+import { gecodificateLocation } from "../api/geocodification";
+
 
 export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootStackParamList, 'EventDetails'> }) => {
-  
+  const [address, setAddress] = useState('');
   const { eventId } = route.params;
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
-
   const { data: eventsData, error: eventsError, loading: eventsLoading } = useGetEvents();
+  
+  useEffect(() => {
+    const getAddressData = async () => {
+      const addressData = await gecodificateLocation(event?.location);
+      setAddress(addressData);
+    };
 
+    getAddressData();
+  }, []);
   if (eventsError) {
     return (
       <View>
@@ -51,27 +61,26 @@ export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootS
         </View>
 
         <View style={styles.body}>
-          <Text style={styles.description}>{event?.description}</Text>
-          <Image source={{ uri: event.uri }} style={styles.image} />
-
+          <View style={styles.info}>
+          <Image source={{ uri: event.image }} style={styles.image} />
           <View style={styles.infoContainer}>
-            <Icons name='calendar' size={20} color="#f5694d" />
+          <View style={styles.boxInfo}>
             <Text style={styles.infoText}>
-              {/* {event?.startDate.toLocaleDateString()} - {event?.endDate.toLocaleDateString()} */}
+              {event?.date}
             </Text>
           </View>
+          <Text style={styles.description}>{event?.description}</Text>
 
-          <View style={styles.infoContainer}>
-            <Icons name='map-marker' size={20} color="#f5694d" />
-            <Text style={styles.infoText}>{event?.location}</Text>
+          <View style={styles.boxInfo}>
+          {address}          
           </View>
 
-          <View style={styles.infoContainer}>
-            <Icons name='user' size={20} color="#f5694d" />
-            <Text style={styles.infoText}>Created by {event?.createdBy}</Text>
+          <View style={styles.boxInfo}>
+          {event?.created_by}
+          </View>
           </View>
         </View>
-
+        </View>
         <View style={styles.mapContainer}>
           <DetailMap events={[event]} />
         </View>
@@ -91,8 +100,6 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       marginHorizontal: 16,
       marginVertical: 8,
-      borderWidth: 1,
-      borderColor: '#f5694d',
     },    mapContainer:{
       width:360,
       height:240,
@@ -118,7 +125,6 @@ const styles = StyleSheet.create({
       borderRadius: 5,
     },
     header: {
-      backgroundColor: '#f5694d',
       borderTopLeftRadius: 10,
       borderTopRightRadius: 10,
       padding: 16,
@@ -137,29 +143,45 @@ const styles = StyleSheet.create({
       marginLeft: 16,
     },
     title: {
-      fontSize: 24,
+      fontSize: 40,
+      display: 'flex',
       fontWeight: 'bold',
-      color: '#fff',
-      marginBottom: 4,
+      justifyContent: 'flex-start',
     },
     subtitle: {
       fontSize: 16,
-      color: '#fff',
     },
     body: {
       padding: 16,
     },
     description: {
-      fontSize: 16,
+      width: 100,
+      fontSize: 12,
       marginBottom: 20,
     },
-    infoContainer: {
+    boxInfo: {
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: 20,
+      marginTop: 20,
+
+    },   
+    info: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 20,
+      marginTop: 20,
+
     },
     infoText: {
       fontSize: 16,
       marginLeft: 12,
     },
+    infoContainer: {
+      flexDirection: 'column',
+      padding: 20,
+      marginTop: 10,
+      height: 200
+
+    }
 });

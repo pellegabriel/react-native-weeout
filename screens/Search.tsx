@@ -36,12 +36,6 @@ export const SearchScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Encuentra el evento perfecto para ti</Text>
-      <Input
-        inputStyle={styles.input}
-        placeholder="Correr en el bosque..."
-        containerStyle={styles.inputContainer}
-        inputContainerStyle={styles.inputInnerContainer}
-      />
         <CategoriesSlider
           selectedCategoryId={selectedCategoryId}
           handleCategoryClick={handleCategoryClick}
@@ -79,7 +73,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: 40,
       fontSize: 40,
       display: 'flex',
-      marginBottom: 40,
+      marginBottom: 0,
       fontWeight: 'bold',
       justifyContent:'flex-start',
     },
