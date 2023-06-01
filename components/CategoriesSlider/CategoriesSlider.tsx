@@ -3,16 +3,30 @@ import { StyleSheet, ScrollView, Text, View } from 'react-native';
 import CategoryCard from './CategoryCard';
 import { useGetCategories } from '../../api/useGetCategories';
 
-type CategoryCardProps = {
-  id: number
-  label: string
-  icon_name: string
-}
+type CategoriesSliderProps = {
+  selectedCategoryId: number | null;
+  handleCategoryClick: (categoryId: number) => void;
+};
 
-export const CategoriesSlider: React.FC<CategoryCardProps> = () => {
+
+export const CategoriesSlider: React.FC<CategoriesSliderProps> = ({ handleCategoryClick }) => {
   const { data, error, loading } = useGetCategories();
-  const [categoriesSelected, setCategoriesSelected] = useState([])
-  //mandar en este estado lo seleccionado por props mediante el navigate a otra route
+  const [categoriesSelected, setCategoriesSelected] = useState<number[]>([]);
+
+  const handlePress = (id: number) => {
+    const categoryIndex = categoriesSelected.indexOf(id);
+
+    if (categoryIndex !== -1) {
+      const updatedCategories = [...categoriesSelected];
+      updatedCategories.splice(categoryIndex, 1);
+      setCategoriesSelected(updatedCategories);
+    } else {
+      setCategoriesSelected([...categoriesSelected, id]);
+      handleCategoryClick(id);
+    }
+  };
+
+  const isCategorySelected = (id: number) => categoriesSelected.some(categoryId => categoryId === id);
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -22,37 +36,21 @@ export const CategoriesSlider: React.FC<CategoryCardProps> = () => {
     return <Text>{error}</Text>;
   }
 
-  const handlePress = (id) => {
-    const categoryIndex = categoriesSelected.indexOf(id);
-
-    if (categoryIndex !== -1) {
-      // Si la categoría ya está seleccionada, la eliminamos
-      const updatedCategories = [...categoriesSelected];
-      updatedCategories.splice(categoryIndex, 1);
-      setCategoriesSelected(updatedCategories);
-    } else {
-      // Si la categoría no está seleccionada, la agregamos
-      setCategoriesSelected([...categoriesSelected, id]);
-    }
-  }
-
-  const isCategorySelected = (id) => categoriesSelected.some(categoryId => categoryId === id)
-
   return (
     <View style={styles.wrapper}>
       <Text style={styles.sectionTitle}>
         Elige entre distintas categorías:
       </Text>
       
-      {loading && <Text>loading...</Text>}
-
       <ScrollView
         horizontal
         contentContainerStyle={styles.cardsContainer}
       >
         {data && data.map((item) => (          
           <CategoryCard
-            {...item}
+            id={item.id}
+            label={item.label}
+            icon_name={item.icon_name}
             key={item.id}
             handlePress={() => handlePress(item.id)}
             isSelected={isCategorySelected(item.id)}
@@ -62,6 +60,7 @@ export const CategoriesSlider: React.FC<CategoryCardProps> = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   wrapper: {

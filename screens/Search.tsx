@@ -1,65 +1,67 @@
-import { useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { Input } from "react-native-elements";
-import { fakeCategories, fakeImages } from '../utils/fakeData';
+import React, { useEffect, useState } from 'react';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { RootStackParamList } from '..//App';
+import { RootStackParamList } from '../App';
 import { CategoriesSlider } from '../components/CategoriesSlider/CategoriesSlider';
+import { useGetEvents } from '../api/events';
+
+export interface Event {
+  id: number;
+  title: string;
+  categoryId: number;
+  // Otros campos relevantes para un evento
+}
 
 export const SearchScreen = () => {
-    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-    const [data, setData] = useState(fakeCategories);
-    const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
-  
-    const SearchCategory = ({ title, id, isSelected, onPress }) => {
-      return (
-        <TouchableOpacity style={styles.category} onPress={onPress}>
-          <Text style={isSelected ? styles.categoryTextSelected : styles.categoryText}>
-            {title}
-          </Text>
-        </TouchableOpacity>
-      );
-    };
-  
-    const handleCategoryClick = (categoryId) => {
-      const dataCopy = [...data];
-      const index = dataCopy.findIndex((categoria) => categoria.id === categoryId);
-      const categoriaSeleccionada = dataCopy.splice(index, 1)[0];
-      dataCopy.unshift(categoriaSeleccionada);
-  
-      setData(dataCopy);
-      setSelectedCategoryId(categoryId);
-    };
-  
-    return (
-      <ScrollView style={styles.container}>
-        <Text style={styles.title}>Encuentra el evento perfecto para ti</Text>
-        <Input
-          inputStyle={styles.input}
-          placeholder="Correr en el bosque..."
-          containerStyle={styles.inputContainer}
-          inputContainerStyle={styles.inputInnerContainer}
-        />
-        
-       <CategoriesSlider id={0} label={""} icon_name={""} />
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
+  const { data: allEvents, error, loading } = useGetEvents();
+  const [events, setEvents] = useState<Event[]>([]);
 
-  
-        <View style={styles.listOfImages}>
-          {fakeImages.map(({ uri, id }) => (
-            <TouchableOpacity
-              key={id}
-              style={styles.imageContainer}
-              // onPress={() => navigate('ImageDetails', { imageId: id })}
-            >
-              <Image source={{ uri }} style={styles.image} />
-              <Text style={styles.titleImage}>Encuentra el evento perfecto para ti</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
-    );
+  useEffect(() => {
+    if (selectedCategoryId) {
+      const filteredEvents = allEvents.filter((event: Event) => event.categoryId === selectedCategoryId);
+      setEvents(filteredEvents);
+    } else {
+      setEvents(allEvents);
+    }
+  }, [selectedCategoryId, allEvents]);
+
+  const handleCategoryClick = (categoryId: number) => {
+    setSelectedCategoryId(categoryId);
   };
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Encuentra el evento perfecto para ti</Text>
+      <Input
+        inputStyle={styles.input}
+        placeholder="Correr en el bosque..."
+        containerStyle={styles.inputContainer}
+        inputContainerStyle={styles.inputInnerContainer}
+      />
+        <CategoriesSlider
+          selectedCategoryId={selectedCategoryId}
+          handleCategoryClick={handleCategoryClick}
+        />
+
+      {loading && <Text>Loading...</Text>}
+      {error && <Text>{error}</Text>}
+      {events &&
+        events.map((event: Event) => (
+          <TouchableOpacity
+            key={event.id}
+            style={styles.imageContainer}
+            // onPress={() => navigate('EventDetails', { eventId: event.id })}
+          >
+            <Text style={styles.image}>{event.title}</Text>
+          </TouchableOpacity>
+        ))}
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
     titleImage:{

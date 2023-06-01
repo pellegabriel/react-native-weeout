@@ -48,8 +48,9 @@ function Map() {
     onMapReady={onMapReady}
   >
     {data && Array.isArray(data) && data.map((event: IEvent) => (
-       <MapMarker key={event.id} loading={loading} error={error} data={event} />
+      <MapMarker key={event.id} loading={loading} error={error} data={event} />
     ))}
+
   </MapView>
 </View>
   );
@@ -70,6 +71,6 @@ export default Map;
 
 // INICIO: ver todos los eventos en el mapa
 // INICIO: Al hacer click en la categoria, navegar al search con la categoria seleccionada
-// PERFIL: Poner la data mas linda
-// PERFIL: Usar las mismas cards de eventos que en Home
-// CREATE_EVENT: Mostrar un toast cuando el evento se haya creado o haya fallado.
+//yata PERFIL: Poner la data mas linda
+//yata PERFIL: Usar las mismas cards de eventos que en Home
+//yata CREATE_EVENT: Mostrar un toast cuando el evento se haya creado o haya fallado.

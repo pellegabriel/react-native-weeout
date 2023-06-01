@@ -3,8 +3,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { ProfileEventsList } from '../components/ProfileEventsList';
 import { fakeProfile } from '../utils/fakeData';
-import UserCategory from '../components/profile/UserCategory';
-import { Button } from 'react-native';
+// import UserCategory from '../components/profile/UserCategory';
+// import { Button } from 'react-native';
 import { supabase } from '../supabase';
 import FloatingButton from '../components/profile/FloatingButton';
 
@@ -16,17 +16,14 @@ export const ProfileScreen = () => {
     await supabase.auth.signOut()
   }
 
-  const handleTextChange = (newText: string) => {
-    setText(newText);
-  };
+  // const handleTextChange = (newText: string) => {
+  //   setText(newText);
+  // };
 
   return (
     <View style={styles.container1}>
       <ScrollView style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton}>
-            <Icon name="arrow-left" size={20} color="#fff" />
-          </TouchableOpacity>
           <Text style={styles.title}>Mi Perfil</Text>
 
         </View>
@@ -55,11 +52,13 @@ export const ProfileScreen = () => {
           <View style={styles.scroll}>
           <ProfileEventsList />
           </View>
+          <View style={styles.signOutView}> 
           <TouchableOpacity onPress={handleSignOut}  style={styles.signout}>
             <Text style={styles.signOutText}>
               Logout
             </Text>
           </TouchableOpacity>
+          </View>
         </View>
         
       </ScrollView>
@@ -80,11 +79,11 @@ const styles = StyleSheet.create({
     display: 'flex', justifyContent:'center'
   },
   header: {
-    height: 70,
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: 20,
+    marginTop: 100,
 
   },
   backButton: {
@@ -98,15 +97,19 @@ const styles = StyleSheet.create({
     height:400
   },
   title: {
-    fontSize: 20,
+    paddingHorizontal: 40,
+    fontSize: 40,
+    display: 'flex',
+    marginBottom: 0,
     fontWeight: 'bold',
-    marginRight: 20
-  },  
+    justifyContent:'flex-start',
+  },
   titleFilter: {
-    fontSize: 16,
+    paddingHorizontal: 100,
+    fontSize: 30,
+    display: 'flex',
     fontWeight: 'bold',
-    marginRight: 20,
-    marginBottom: 20
+    justifyContent:'center',
   },
   
   body: {
@@ -158,18 +161,27 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   contactLabel1:{
-    fontSize: 16,
+    paddingHorizontal: 10,
+    fontSize: 30,
+    display: 'flex',
+    marginBottom: 20,
     fontWeight: 'bold',
-    marginBottom: 5,
+    justifyContent:'flex-start',
   },
   contactLabel: {
-    fontSize: 12,
+    paddingHorizontal: 10,
+    fontSize: 20,
+    display: 'flex',
+    marginBottom: 0,
     fontWeight: 'bold',
-    marginBottom: 5,
+    justifyContent:'flex-start',
   },
   contactText: {
-    fontSize: 11,
-  },
+    paddingHorizontal: 10,
+    fontSize: 15,
+    display: 'flex',
+    marginBottom: 15,
+    justifyContent:'flex-start',  },
   signOutText: {
     color: '#FFFFFF',
     fontWeight: 'bold',
@@ -179,5 +191,12 @@ const styles = StyleSheet.create({
     backgroundColor:  '#f5694d',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,  }
+    borderRadius: 5, 
+    width: 150,
+   },
+   signOutView: {
+    display: 'flex',
+    justifyContent:'center',
+    alignItems:'center'
+   }
 });

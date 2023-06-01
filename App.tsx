@@ -16,7 +16,7 @@ export type RootStackParamList = {
   Home: undefined
   Profile: undefined
   EventDetails: { eventId: string }
-  'Search events': undefined;
+  'Search events': { categoryId: number };
   EventCreate: undefined
   Inicio: undefined;
 
@@ -86,6 +86,7 @@ export default function App() {
             options={{
               headerShown: false,
               tabBarIcon: () => <Icons name='search' size={18} color="#f5694d" />
+              
             }}
           />
            <Tab.Screen

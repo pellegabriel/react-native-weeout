@@ -5,35 +5,30 @@ import { View, Text } from 'react-native';
 interface MapMarkerProps {
   loading: boolean;
   error: string;
-  data: any; // Asegúrate de especificar el tipo de dato adecuado para la propiedad 'data'
+  data: any; 
 }
 
 const MapMarker: React.FC<MapMarkerProps> = ({ loading, error, data }) => {
   if (loading) {
-    // Lógica para mostrar un indicador de carga
-    return null; // Otra acción alternativa si se está cargando
+    return null; 
   }
 
   if (error) {
-    // Lógica para mostrar un mensaje de error
-    return null; // Otra acción alternativa si hay un error
+  
+    return null;
   }
 
-  // Obtén los valores de 'position', 'title' y 'description' de 'data' u otras fuentes
-  const position = data?.position || { latitude: -34.91554, longitude: -57.91454 };
-  const title = data?.title || 'Lugar predeterminado';
-  const description = data?.description || 'Descripción del lugar predeterminado';
-
   return (
-    <Marker coordinate={position}>
+    <Marker coordinate={{ latitude: data.location.lat, longitude: data.location.lng }}> 
       <Callout>
         <View>
-          <Text style={{ fontWeight: 'bold' }}>{title}</Text>
-          <Text>{description}</Text>
+          <Text style={{ fontWeight: 'bold' }}>{data.title}</Text>
+          <Text>{data.description}</Text>
         </View>
       </Callout>
     </Marker>
   );
+   
 };
 
 export default MapMarker;

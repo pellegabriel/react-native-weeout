@@ -1,26 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { TFakeEvent } from '../../utils/fakeData';
 import { Audio } from 'expo-av';
-import audioSample from '../../assets/audio-sample.mp3'
+// import audioSample from '../../assets/audio-sample.mp3'
 // import Icons from '@expo/vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import Icons from '@expo/vector-icons/FontAwesome5';
+import { gecodificateLocation } from '../../api/geocodification';
 
 export interface CardProps {
-  data: TFakeEvent;
+  data: any;
 }
 
 export const EventUser: React.FC<CardProps> = ({ data }) => {
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
   const [sound, setSound] = React.useState<Audio.Sound | undefined>();
+  const [address, setAddress] = useState('');
+
+  useEffect(() => {
+    const getAddressData = async () => {
+      const addressData = await gecodificateLocation(data.location);
+      setAddress(addressData);
+    };
+
+    getAddressData();
+  }, []);
 
   async function playSound() {
-    const { sound } = await Audio.Sound.createAsync(audioSample);
-    setSound(sound);
+    // const { sound } = await Audio.Sound.createAsync(audioSample);
+    // setSound(sound);
 
-    await sound.playAsync();
+    // await sound.playAsync();
   }
 
   const handleAudio = async () => {
@@ -52,7 +64,7 @@ export const EventUser: React.FC<CardProps> = ({ data }) => {
         <Text style={styles.title}>{data.title}</Text>
         <Text numberOfLines={4} style={styles.description}>{data.description}</Text>
       
-        {/* <View style={styles.audioCOntainer}>
+        <View style={styles.audioCOntainer}>
           <TouchableOpacity
             onPress={handleAudio}
             style={styles.button}
@@ -65,10 +77,10 @@ export const EventUser: React.FC<CardProps> = ({ data }) => {
           </TouchableOpacity>
 
           <View style={styles.dataPoint}>
-            <Icons style={styles.dataPointIcon} name='map-marker' size={14} color="#f5694d" />
-            <Text numberOfLines={2} style={styles.dataPointText}>{data.location}</Text>
-          </View>
-        </View> */}
+            {/* <Icons style={styles.dataPointIcon} name='map-marker' size={14} color="#f5694d" /> */}
+            <Text numberOfLines={2} style={styles.dataPointText}>{address}</Text>
+           </View>
+        </View>
 
       </View>
     </TouchableOpacity>

@@ -2,8 +2,6 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text } from 'react-native';
 
 import EventForm from '../components/Create/EventForm';
-import FloatingButtonAcept from '../components/Create/FloatingButtonAcept';
-
 
 export const CreateEventScreen = () => {
   return (

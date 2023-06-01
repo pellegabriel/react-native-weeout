@@ -19,7 +19,7 @@ export const HomeScreen = ({ navigation }) => {
         </Text>
       </View>
 
-      <CategoriesSlider id={0} label={""} icon_name={""} />
+      {/* <CategoriesSlider id={0} label={""} icon_name={""} /> */}
       <View style={styles.mapContainer}>
       <Map/>
 

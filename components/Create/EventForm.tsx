@@ -8,6 +8,8 @@ import { useCreateEvent } from '../../api/events';
 import AppImagePicker from '../Camara/ImagePicker';
 import  DatePicker  from '../DatePicker/DatePicker';
 import { AdressInputWithMap } from '../Map/AdressInputWithMap';
+import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 
 export type EventData = {
   categoria: string | null
@@ -67,15 +69,19 @@ const EventForm: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      setLoading(true)
-      await createEvent(formData)
-      console.log('subido pai', { formData })
+      setLoading(true);
+      await createEvent(formData);
+      console.log('subido pai', { formData });
+      toast.success('Success Notification!', {
+        position: toast.POSITION.TOP_RIGHT
+      });
     } catch {
-      console.log(':(')
+      console.log(':(');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
 
   const handleAudioRecorded = (audioUri) => {
     console.log('Audio grabado:', audioUri);
@@ -174,8 +180,10 @@ const EventForm: React.FC = () => {
           style={styles.button}
           onPress={handleSubmit}
         >
-          <Text style={styles.buttonText}>Crear evento</Text>
+        <Text style={styles.buttonText}>Crear evento</Text>
         </TouchableOpacity>
+        <ToastContainer />
+
       </View>
     </>
   );
