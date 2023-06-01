@@ -1,12 +1,30 @@
+import { ImagePickerResult } from "expo-image-picker"
 import { supabase } from "../supabase"
 
-export const uploadImages = async (fileName, file) => {
-    const { data, error } = await supabase.storage.from('images').upload(`${fileName}`, file)
+export const uploadImage = async (eventId, file: ImagePickerResult) => {
+    const { data: { user: { id } } } = await supabase.auth.getUser()    
+
+    const uri = file.assets[0].uri
+    const ext = uri.substring(uri.lastIndexOf('.') + 1)
+    const formData = new FormData()
+
+    formData.append("files", {
+        uri,
+        name: `image-${id}-${eventId}`,
+        type: `image/${ext}`
+    })
+
+    const { data, error } = await supabase.storage.from('images').upload(
+        `image-${id}-${eventId}`,
+        formData
+    )
 
     if (error) {
-        console.log('upload error', data)
+        console.log('upload error', error)
     } else {
         console.log('success upload', data)
+        const { data: { publicUrl } } = await supabase.storage.from('images').getPublicUrl(`image-${id}-${eventId}`)
+        return publicUrl
     }
 }
 

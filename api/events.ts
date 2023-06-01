@@ -44,23 +44,18 @@ export const useCreateEvent = (): TUseCreateEvents => {
     const [loading, setLoading] = useState(false)
   
     const createEvent = async (eventData) => {
-      try {
-          setLoading(true)
-          const response = await supabase.from("events").insert([eventData]);
-          console.log(response)
-          setData(response.data);
+        try {
+            setLoading(true)
+            const response = await supabase.from("events").insert([eventData]);
+            console.log(response)
+            setData(response.data);
         } catch (err){
-        console.log({err})
-          setError(err)
-      } finally {
-          setLoading(false)
-      }
+            console.log({ err })
+            setError(err)
+        }   finally {
+            setLoading(false)
+        }
     }
   
     return { data, createEvent, error, loading }
 }
-
-// 132160732
-// 132161122
-
-// 0800 555 3569

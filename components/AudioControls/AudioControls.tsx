@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Audio } from 'expo-av';
-import uuid from 'react-native-uuid';
-import { Sound } from 'expo-av/build/Audio';
 import Icons from '@expo/vector-icons/FontAwesome5';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+
 import { uploadAudio } from '../../api/audio';
 
-
-export const AudioControls = ({ onAudioRecorded }: { onAudioRecorded: (audioUri: string) => void }) => {
-  const [sound, setSound] = React.useState<Sound>();
-  const [elapsedTime, setElapsedTime] = useState<number>(0);
+type TAudioControlProps = {
+  eventId: string | number[],
+  handleAudioRecorded: (audioUri: string) => void
+}
+export const AudioControls = ({ handleAudioRecorded, eventId }: TAudioControlProps) => {
+  // record audio
   const [audioUri, setAudioUri] = useState<string | null>(null);
-  const [recording, setRecording] = useState<Audio.Recording | null>(null);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
-  
   const [isRecording, setIsRecording] = useState(false);
+  const [recording, setRecording] = useState<Audio.Recording | null>(null);
+  // play audio
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [isSoundPlaying, setIsSoundPlaying] = useState<boolean>(false);
+  // timer
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   
   const formatTime = (timeInSeconds: number): string => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -22,111 +27,106 @@ export const AudioControls = ({ onAudioRecorded }: { onAudioRecorded: (audioUri:
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const startRecording = async () => {
-    if (recording) {
-      console.log('Ya hay una grabación en curso');
-      return;
-    }
+  const startRecordingTimer = () => {
+    setElapsedTime(0);
+    const newIntervalId = setInterval(() => {
+      setElapsedTime((prevTime) => prevTime + 1);
+    }, 1000);
+    setIntervalId(newIntervalId);
+  }
 
-    setIsRecording(true);
-
-    try {
-      console.log('Requesting permissions..');
-      await Audio.requestPermissionsAsync();
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      });
-
-      console.log('Starting recording..');
-      const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
-
-      setRecording(recording);
-      console.log('Recording started');
-
-      // Iniciar el contador de tiempo
+  const handleRecording = async () => {
+    if (audioUri) {
+      setSound(null)
+      setRecording(null)
+      setAudioUri(null)
       setElapsedTime(0);
-      const newIntervalId = setInterval(() => {
-        setElapsedTime((prevTime) => prevTime + 1);
-      }, 1000);
-      setIntervalId(newIntervalId);
-    } catch (err) {
-      console.error('Failed to start recording', err);
     }
-  };
-
-  const stopRecording = async () => {
-    try {
-      console.log('Stopping recording..');
-      setRecording(null);
-      await recording?.stopAndUnloadAsync();
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-      });
-      
-      const uri = recording?.getURI();
-
-      setAudioUri(uri);
-      onAudioRecorded(uri);
-
-      // Detener el contador de tiempo
-      if (intervalId) {
-        clearInterval(intervalId);
-        setIntervalId(null);
+    // stop recording
+    if (isRecording) {
+      try {
+        setRecording(null);
+        await recording.stopAndUnloadAsync();
+        await Audio.setAudioModeAsync({ allowsRecordingIOS: false });
+        const uri = recording.getURI();
+        const publicUrl = await uploadAudio(eventId, recording)
+        
+        setAudioUri(uri)
+        handleAudioRecorded(publicUrl)
+      } catch (error) {
+        console.log('error', error);
+      } finally {
+        setIsRecording(false)
+        // Detener el contador de tiempo
+        if (intervalId) {
+          clearInterval(intervalId);
+          setIntervalId(null);
+        }
       }
-
-      uploadAudio(`audio-${uuid.v4()}`, uri)
-
-    } catch (error) {
-      console.log('error', error);
+    } else {
+    // start recording
+      try {
+        setIsRecording(true)
+        await Audio.requestPermissionsAsync();
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: true,
+          // playsInSilentModeIOS: true,
+        });
+        
+        const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
+        setRecording(recording);
+        startRecordingTimer()
+      } catch (err) {
+        console.error('Failed to start recording', err);
+      }
     }
   };
 
-  const playAudio = async () => {
-    const { sound } = await Audio.Sound.createAsync({ uri: audioUri });
-    setSound(sound);
-    await sound.playAsync();
-  };
+  const handlePlayAudio = async () => {
+    if (isSoundPlaying) {
+      await sound.stopAsync();
+      setIsSoundPlaying(false)
+    } else {
+      setIsSoundPlaying(true)
+      const { sound } = await Audio.Sound.createAsync({ uri: audioUri })
+      setSound(sound);
+      await sound.playAsync();
+    }
+  }
 
   useEffect(() => {
-    return () => {
-      if (sound) {
-        console.log('Unloading Sound');
-        sound.unloadAsync();
-      }
-    };
+    return sound
+      ? () => {
+          sound.unloadAsync();
+          setIsSoundPlaying(false)
+        }
+      : undefined;
   }, [sound]);
     
   return (
     <View style={styles.audioControls}>          
       <Text style={styles.timer}>{formatTime(elapsedTime)}</Text>
 
-      <TouchableOpacity onPress={startRecording} 
-        disabled={isRecording}
+      <TouchableOpacity
+        onPress={handleRecording} 
         style={styles.audioControlButton}
       >
         <Icons
           size={15}
           color="#f5694d"
-          name='microphone'
+          name={audioUri ? 'undo' : isRecording ? 'stop' : 'microphone'}
         />                
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={stopRecording} style={styles.audioControlButton}>
-        <Icons
-          size={15}
-          color="#f5694d"
-          name='stop'
-        />                 
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={playAudio} style={styles.audioControlButton}>
-        <Icons
+      {audioUri && (
+        <TouchableOpacity onPress={handlePlayAudio} style={styles.audioControlButton}>
+          <Icons
             size={15}
             color="#f5694d"
-            name='play'
-        />          
-      </TouchableOpacity>
+            name={isSoundPlaying ? 'pause' : 'play'}
+          />                 
+        </TouchableOpacity>
+      )}
     </View>
   )
 }
@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
   timer: {
     fontSize: 18,
     marginBottom: 10,
+    marginRight: 40,
     fontWeight: 'bold',
     color: '#4b4c4f',
   },

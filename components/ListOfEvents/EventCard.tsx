@@ -6,15 +6,15 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { gecodificateLocation } from '../../api/geocodification';
+import { supabase } from '../../supabase';
 
-export interface CardProps {
-  data: any;
-}
+export type TEventCardProps = { data: any }
 
-export const EventCard: React.FC<CardProps> = ({ data }) => {
-  const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
-  const [sound, setSound] = React.useState<Audio.Sound | undefined>();
+export const EventCard: React.FC<TEventCardProps> = ({ data }) => {
+  const [error, setError] = useState('');
   const [address, setAddress] = useState('');
+  const [soundPlaying, setSoundPlaying] = React.useState<boolean>(false);
+  const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     const getAddressData = async () => {
@@ -25,33 +25,38 @@ export const EventCard: React.FC<CardProps> = ({ data }) => {
     getAddressData();
   }, []);
 
-  async function playSound() {
-    // const { sound } = await Audio.Sound.createAsync(audioSample);
-    // setSound(sound);
-
-    // await sound.playAsync();
-  }
-
   const handleAudio = async () => {
-    if (sound === undefined) {
-      playSound()
-    } else {
-      setSound(null);
+    
+    try {
+      setSoundPlaying(true)
+      const { data: { user: { id } } } = await supabase.auth.getUser()
+      const eventAudioName = `audio-${id}-${data.id}`
+      const { data: { publicUrl } } = await supabase.storage.from('audios').getPublicUrl(eventAudioName)
+
+      console.log(eventAudioName, publicUrl)
+
+      const { sound } = await Audio.Sound.createAsync({ uri: publicUrl });
+      console.log({sound})
+
+      await sound.playAsync();
+
+    } catch (error) {
+      setError(error)
+    } finally {
+      setSoundPlaying(false)
     }
   }
-
-  React.useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
 
   const handleClickOnCard = () => {
     navigate('EventDetails', { eventId: data.id });
   }
 
+  if (error) {
+    return <Text>{error.toString()}</Text>
+  }
+
+  console.log('image', data.image)
+  
   return (
     <TouchableOpacity style={styles.card} onPress={handleClickOnCard}>
       <View style={styles.imageContainer}>
@@ -69,7 +74,7 @@ export const EventCard: React.FC<CardProps> = ({ data }) => {
             <Icons
               size={10}
               color="#f5694d"
-              name={sound ? 'pause' : 'play'}
+              name={soundPlaying ? 'pause' : 'play'}
             />
           </TouchableOpacity>
 

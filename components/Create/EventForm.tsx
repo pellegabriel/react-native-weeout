@@ -13,11 +13,7 @@ export type EventData = {
   categoria: string | null
   created_by: string | null
   description: string | null
-  event_date_end: string | null
-  event_date_start: string | null
-  event_end_time: string | null
-  event_time_end: string | null
-  event_time_start: string | null
+  date: string | null
   id: string | number[]
   image: string | null
   location: {
@@ -36,11 +32,7 @@ const EventForm: React.FC = () => {
     categoria: null,
     created_by: null,
     description: null,
-    event_date_end: null,
-    event_date_start: null,
-    event_end_time: null,
-    event_time_end: null,
-    event_time_start: null,
+    date: null,
     image: null,
     location: {
       lat: null,
@@ -50,49 +42,40 @@ const EventForm: React.FC = () => {
     title: null,
   });
 
-  const handleAddressChange = (location: { lat: number, lng: number }) => {
-    setFormData((prevData) => ({ ...prevData, location}));
+  const handleInputChange = (field: keyof EventData, value: string) => {
+    setFormData((prevData) => ({ ...prevData, [field]: value }));
   };
 
-  const handleInputChange = (field: keyof EventData, value: string) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
+  const handleAddressChange = (location) => {
+    setFormData((prevData) => ({ ...prevData, location }));
   };
   
-  const handleImagesChange = (images: string[]) => {
-    console.log('Imágenes seleccionadas:', images);
+  const handleImageChange = (image) => {
+    setFormData((prevData) => ({ ...prevData, image }));
   } 
 
+  const handleAudioRecorded = (audio) => {
+    setFormData((prevData) => ({ ...prevData, audio }));
+  };
+
+  const handleDateSelected = (date) => {
+    setFormData((prevData) => ({ ...prevData, date }));
+  }
+  
   const handleSubmit = async () => {
     try {
       setLoading(true)
       await createEvent(formData)
       console.log('subido pai', { formData })
-    } catch {
-      console.log(':(')
+    } catch (error) {
+      console.log('error', error)
     } finally {
       setLoading(false)
     }
   }
 
-  const handleAudioRecorded = (audioUri) => {
-    console.log('Audio grabado:', audioUri);
-    // Puedes guardar la URI en el estado del formulario u realizar otras acciones necesarias
-  };
-
-  const handleDateSelected = (date) => {
-    console.log({date})
-    setFormData((prevData) => ({
-      ...prevData,
-      date,
-    }));
-  }
-
-  const Label = ({ text }: { text: string}) => (
-    <Text style={styles.label}>{text}:</Text>
-  )
+  type TLabelProps = { text: string }
+  const Label = ({ text }: TLabelProps) => <Text style={styles.label}>{text}:</Text>
 
   return (
     <>
@@ -157,17 +140,17 @@ const EventForm: React.FC = () => {
           </Picker>
 
           <Label text='Graba un audio contando acerca del evento' />
-          <AudioControls onAudioRecorded={handleAudioRecorded} />
+          <AudioControls eventId={formData.id} handleAudioRecorded={handleAudioRecorded} />
 
           <Label text='Subi una foto del evento' />
-          <AppImagePicker onImagesChange={handleImagesChange} />
-
+          <AppImagePicker eventId={formData.id} handleImageChange={handleImageChange} />
         </View>
       </ScrollView>
 
       <Label text='Ubicacion del evento' />
       <View style={styles.adressContainer}>
         <AdressInputWithMap onChange={handleAddressChange} location={formData.location} map_point="" />
+
         <TouchableOpacity
           disabled={loading}
           activeOpacity={0.5}
