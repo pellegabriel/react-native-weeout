@@ -1,6 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
 import Icons from '@expo/vector-icons/FontAwesome5';
+import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
 
 type CategoryCardProps = {
   id: number
@@ -11,7 +11,6 @@ type CategoryCardProps = {
 }
 
 const CategoryCard: React.FC<CategoryCardProps> = ({ label, icon_name, isSelected, handlePress }) => {
-  console.log(isSelected)
   const containerStyles = {
     ...styles.iconContainer,
     backgroundColor: isSelected ? '#f5694d' : 'white'

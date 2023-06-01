@@ -28,6 +28,7 @@ export interface Database {
       }
       events: {
         Row: {
+          audio: string | null
           categoria: string | null
           created_by: string | null
           description: string | null
@@ -36,13 +37,14 @@ export interface Database {
           event_end_time: string | null
           event_time_end: string | null
           event_time_start: string | null
-          id: number
+          id: string
           image: string | null
           location: Json | null
           subtitle: string | null
-          title: string | null
+          title: string
         }
         Insert: {
+          audio?: string | null
           categoria?: string | null
           created_by?: string | null
           description?: string | null
@@ -51,13 +53,14 @@ export interface Database {
           event_end_time?: string | null
           event_time_end?: string | null
           event_time_start?: string | null
-          id?: number
+          id?: string
           image?: string | null
           location?: Json | null
           subtitle?: string | null
-          title?: string | null
+          title: string
         }
         Update: {
+          audio?: string | null
           categoria?: string | null
           created_by?: string | null
           description?: string | null
@@ -66,11 +69,11 @@ export interface Database {
           event_end_time?: string | null
           event_time_end?: string | null
           event_time_start?: string | null
-          id?: number
+          id?: string
           image?: string | null
           location?: Json | null
           subtitle?: string | null
-          title?: string | null
+          title?: string
         }
       }
       profiles: {

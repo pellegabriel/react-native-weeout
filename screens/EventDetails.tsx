@@ -10,6 +10,7 @@ import { useGetEvents } from "../api/events";
 import DetailMap from "../components/Map/DetailMap";
 
 export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootStackParamList, 'EventDetails'> }) => {
+  
   const { eventId } = route.params;
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
 

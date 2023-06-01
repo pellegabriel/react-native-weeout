@@ -4,12 +4,11 @@ import MapView, { Marker } from 'react-native-maps';
 import { useGetEvents } from '../../api/events';
 import MapMarker from './Market';
 
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-  },
-});
+interface IEvent {
+  id: number;
+  latitude: number;
+  longitude: number;
+}
 
 const defaultRegion = {
   latitude: -34.92317666584001,
@@ -18,15 +17,9 @@ const defaultRegion = {
   longitudeDelta: 0.0421,
 };
 
-interface IEvent {
-  id: number;
-  latitude: number;
-  longitude: number;
-}
-
 function Map() {
-  const { data, loading, error } = useGetEvents(); // Obtener los datos de los eventos usando el hook useGetEvents
   const [map, setMap] = useState(null);
+  const { data, loading, error } = useGetEvents();
 
   const onMapReady = useCallback((map: any) => {
     setMap(map);
@@ -41,24 +34,28 @@ function Map() {
   }
 
   return (
-<View style={styles.container}>
-  <MapView
-    initialRegion={defaultRegion}
-    style={styles.container}
-    onMapReady={onMapReady}
-  >
-    {data && Array.isArray(data) && data.map((event: IEvent) => (
-      <MapMarker key={event.id} loading={loading} error={error} data={event} />
-    ))}
-
-  </MapView>
-</View>
+    <View style={styles.container}>
+      <MapView
+        initialRegion={defaultRegion}
+        style={styles.container}
+        onMapReady={onMapReady}
+      >
+        {data && Array.isArray(data) && data.map((event: IEvent) => (
+          <MapMarker key={event.id} loading={loading} error={error} data={event} />
+        ))}
+      </MapView>
+    </View>
   );
 }
 
 export default Map;
 
-
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: '100%',
+  },
+});
 
 // Lo que falta
 

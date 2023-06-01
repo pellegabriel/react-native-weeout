@@ -2,23 +2,26 @@ import React, { useState } from 'react';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
-import { uploadImages } from '../../api/images';
+import { uploadImage } from '../../api/images';
 
 interface AppImagePickerProps {
-  onImagesChange: (images: string[]) => void;
+  eventId: string | number[],
+  handleImageChange: (image: string) => void;
 }
 
-const AppImagePicker: React.FC<AppImagePickerProps> = ({ onImagesChange }) => {
+const AppImagePicker: React.FC<AppImagePickerProps> = ({ handleImageChange, eventId }) => {
   const [images, setImages] = useState<string[]>([]);
 
   const requestPermissions = async () => {
     const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
+    
     if (cameraStatus !== 'granted') {
       alert('Permisos de cámara no otorgados.');
       return false;
     }
 
     const { status: imagePickerStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
     if (imagePickerStatus !== 'granted') {
       alert('Permisos de galería no otorgados.');
       return false;
@@ -41,10 +44,9 @@ const AppImagePicker: React.FC<AppImagePickerProps> = ({ onImagesChange }) => {
       quality: 1,
     });
 
-    if (!result.canceled && result.assets && result.assets.length > 0 && typeof result.assets[0].uri === 'string') {
+    if (result.assets && result.assets.length > 0 && typeof result.assets[0].uri === 'string') {
       const newImages = [...images, result.assets[0].uri];
       setImages(newImages);
-      onImagesChange(newImages);
     }
   };
 
@@ -62,13 +64,17 @@ const AppImagePicker: React.FC<AppImagePickerProps> = ({ onImagesChange }) => {
       quality: 1,
     });
 
-    if (!result.canceled && result.assets && result.assets.length > 0 && typeof result.assets[0].uri === 'string') {
+    if (
+      result.assets &&
+      result.assets.length > 0 &&
+      typeof result.assets[0].uri === 'string'
+    ) {
       const newImages = [...images, result.assets[0].uri];
       setImages(newImages);
-      onImagesChange(newImages);
-    }
 
-    uploadImages(result.assets[0].fileName, result.assets[0].uri)
+      const imageUrl = await uploadImage(eventId, result)
+      handleImageChange(imageUrl)
+    }
   };
 
   return (

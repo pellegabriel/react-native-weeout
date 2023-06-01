@@ -19,11 +19,11 @@ export type RootStackParamList = {
   'Search events': { categoryId: number };
   EventCreate: undefined
   Inicio: undefined;
-
 };
 
-const Stack = createStackNavigator<RootStackParamList>();
-const Tab = createBottomTabNavigator<RootStackParamList>();
+const HomeStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null)
@@ -38,33 +38,30 @@ export default function App() {
     })
   }, [])
 
-  const HomeStack = () => {
+  const HomeStackScreen = () => {
     return (
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{  headerShown: false }} />
-        <Stack.Screen name="EventCreate" component={CreateEventScreen} options={{
+      <HomeStack.Navigator>
+        <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <HomeStack.Screen name="EventDetails" component={EventDetailsScreen} options={{  headerShown: false }} />
+        <HomeStack.Screen name="EventCreate" component={CreateEventScreen} options={{
           headerTitle: '',
-          headerStyle: {
-            backgroundColor: 'transparent'
-          },
+          headerStyle: { backgroundColor: 'transparent' },
           }}/>
 
-      </Stack.Navigator>
+      </HomeStack.Navigator>
     );
   }
 
-  const UserStack = () => {
+  const ProfileStackScreen = () => {
     return (
-      <Stack.Navigator>
-        <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="EventCreate" component={CreateEventScreen} options={{
+      <ProfileStack.Navigator>
+        <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+        <ProfileStack.Screen name="EventCreate" component={CreateEventScreen} options={{
           headerTitle: '',
-          headerStyle: {
-            backgroundColor: 'transparent'
-          },
-          }}/>
-      </Stack.Navigator>
+          headerStyle: { backgroundColor: 'transparent' },
+          }}
+        />
+      </ProfileStack.Navigator>
     );
   }
 
@@ -72,14 +69,15 @@ export default function App() {
     <NavigationContainer>
       {session && session.user ? (
         <Tab.Navigator>
-       <Tab.Screen
-          name="Inicio"
-          component={HomeStack}
-          options={{
-            headerShown: false,
-            tabBarIcon: () => <Icons name='home' size={18} color="#f5694d" />
-          }}
-        />
+          <Tab.Screen
+            name="Inicio"
+            component={HomeStackScreen}
+            options={{
+              headerShown: false,
+              tabBarIcon: () => <Icons name='home' size={18} color="#f5694d" />
+            }}
+          />
+
           <Tab.Screen
             name="Search events"
             component={SearchScreen}
@@ -89,9 +87,10 @@ export default function App() {
               
             }}
           />
-           <Tab.Screen
+
+          <Tab.Screen
             name="Profile"
-            component={UserStack}
+            component={ProfileStackScreen}
             options={{
               headerShown: false,
               tabBarIcon: () => <Icons name='home' size={18} color="#f5694d" />
