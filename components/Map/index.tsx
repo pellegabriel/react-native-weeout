@@ -61,10 +61,13 @@ const styles = StyleSheet.create({
 
 // SEARCH: buscador de eventos
 // SEARCH: filtro por categoria
-// INICIO: Agregar audio a las cards de eventos
-// PERFIL: Mostrar los eventos que el usuario haya creado
-// CREATE_EVENT: Unir audio e imagenes al evento.
 // CREATE_EVENT: Una vez que se haya creado el evento, navegar a la pantalla Search Screen, con el titulo del evento buscado en el buscador
+// PERFIL: Mostrar los eventos que el usuario haya creado
+
+// INICIO: Agregar audio a las cards de eventos
+// CREATE_EVENT: Unir audio e imagenes al evento.
+
+
 
 // INICIO: ver todos los eventos en el mapa
 // INICIO: Al hacer click en la categoria, navegar al search con la categoria seleccionada

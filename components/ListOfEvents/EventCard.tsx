@@ -15,6 +15,8 @@ export const EventCard: React.FC<TEventCardProps> = ({ data }) => {
   const [address, setAddress] = useState('');
   const [soundPlaying, setSoundPlaying] = React.useState<boolean>(false);
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
+  const [sound, setSound] = React.useState<Audio.Sound>();
+
 
   useEffect(() => {
     const getAddressData = async () => {
@@ -25,23 +27,36 @@ export const EventCard: React.FC<TEventCardProps> = ({ data }) => {
     getAddressData();
   }, []);
 
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          console.log('Unloading Sound');
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
   const handleAudio = async () => {
-    
     try {
       setSoundPlaying(true)
       const { data: { user: { id } } } = await supabase.auth.getUser()
       const eventAudioName = `audio-${id}-${data.id}`
       const { data: { publicUrl } } = await supabase.storage.from('audios').getPublicUrl(eventAudioName)
 
-      console.log(eventAudioName, publicUrl)
+      const createdSound = await Audio.Sound.createAsync(
+        { uri: publicUrl },
+        { shouldPlay: true }
+      );
 
-      const { sound } = await Audio.Sound.createAsync({ uri: publicUrl });
-      console.log({sound})
+      setSound(createdSound.sound);
 
-      await sound.playAsync();
+      console.log('createdSound.sound', createdSound.sound)
+      console.log('playing...')
+      await createdSound.sound.playAsync();
 
     } catch (error) {
       setError(error)
+      console.log(error)
     } finally {
       setSoundPlaying(false)
     }
@@ -55,13 +70,12 @@ export const EventCard: React.FC<TEventCardProps> = ({ data }) => {
     return <Text>{error.toString()}</Text>
   }
 
-  console.log('image', data.image)
-  
   return (
     <TouchableOpacity style={styles.card} onPress={handleClickOnCard}>
       <View style={styles.imageContainer}>
         <Image source={{ uri: data.image }} style={styles.image} />
       </View>
+      
       <View style={styles.content}>
         <Text style={styles.title}>{data.title}</Text>
         <Text numberOfLines={4} style={styles.description}>{data.description}</Text>
@@ -88,8 +102,6 @@ export const EventCard: React.FC<TEventCardProps> = ({ data }) => {
     </TouchableOpacity>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   card: {

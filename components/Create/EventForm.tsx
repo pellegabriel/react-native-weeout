@@ -163,10 +163,10 @@ const EventForm: React.FC = () => {
           style={styles.button}
           onPress={handleSubmit}
         >
-        <Text style={styles.buttonText}>Crear evento</Text>
+          <Text style={styles.buttonText}>Crear evento</Text>
         </TouchableOpacity>
-        <ToastContainer />
 
+        {/* <ToastContainer /> */}
       </View>
     </>
   );

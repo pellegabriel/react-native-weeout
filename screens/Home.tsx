@@ -1,40 +1,33 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native"
-import { MainSlider } from "../components/MainSlider";
-import { CategoriesSlider } from "../components/CategoriesSlider";
 import { ListOfEvents } from "../components/ListOfEvents";
 import Map from '../components/Map/index'
 import FloatingButton from "../components/profile/FloatingButton";
 
 export const HomeScreen = ({ navigation }) => {
+  return (
+    <>
+      <ScrollView style={styles.container}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Bienvenido a Weeout</Text>
+          <Text style={styles.subtitle}>¡La app definitiva para los amantes de los eventos!</Text>
+        </View>
 
-  return (<>
-    <ScrollView style={styles.container}>
-      {/* <MainSlider navigation={navigation} /> */}
+        {/* <CategoriesSlider id={0} label={""} icon_name={""} /> */}
+        <View style={styles.mapContainer}>
+          <Map/>
+        </View>
+        
+        <View style={styles.titleContainer}>
+          <Text style={styles.listOfEventsTitle}>
+            ¡Descubre los eventos más populares!
+          </Text>
+        </View>
 
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>Bienvenido a Weeout</Text>
-
-        <Text style={styles.subtitle}>
-          ¡La app definitiva para los amantes de los eventos!
-        </Text>
-      </View>
-
-      {/* <CategoriesSlider id={0} label={""} icon_name={""} /> */}
-      <View style={styles.mapContainer}>
-      <Map/>
-
-      </View>
-      <View style={styles.titleContainer}>
-        <Text style={styles.listOfEventsTitle}>
-          ¡Descubre los eventos más populares!
-        </Text>
-      </View>
-
-      <ListOfEvents />   
+        <ListOfEvents />   
      
-    </ScrollView>
-          <FloatingButton/></>
-
+      </ScrollView>
+      <FloatingButton/>
+    </>
   );
 }
 
