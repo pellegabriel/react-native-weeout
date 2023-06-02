@@ -27,6 +27,18 @@ export const useGetCategories = (): TUseGetCategories => {
           setLoading(false)
       }
     }
+
+    const filterCategories = async (categoriesIds) => {
+        try {
+            setLoading(true)
+            const { data } = await supabase.from("categories").select('id');
+            setData(data)
+        } catch (err){
+            setError(err)
+        } finally {
+            setLoading(false)
+        }
+    }
   
     useEffect(() => {
       fetchCategories()

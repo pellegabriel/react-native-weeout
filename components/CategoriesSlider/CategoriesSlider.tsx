@@ -8,7 +8,6 @@ type CategoriesSliderProps = {
   handleCategoryClick: (categoryId: number) => void;
 };
 
-
 export const CategoriesSlider: React.FC<CategoriesSliderProps> = ({ handleCategoryClick }) => {
   const { data, error, loading } = useGetCategories();
   const [categoriesSelected, setCategoriesSelected] = useState<number[]>([]);
@@ -60,7 +59,6 @@ export const CategoriesSlider: React.FC<CategoriesSliderProps> = ({ handleCatego
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   wrapper: {
