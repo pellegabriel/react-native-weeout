@@ -1,15 +1,20 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import MapView from 'react-native-maps';
-import DetailMarker from './DetailMarker';
-// import { Event } from '../../src/models';
+import MapView, { Marker } from 'react-native-maps';
 
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-  },
-});
+interface IEvent {
+  id: number;
+  latitude: number;
+  longitude: number;
+  location?: {
+    latitude: number;
+    longitude: number;
+  };
+}
+
+interface IProps {
+  event: IEvent;
+}
 
 const defaultRegion = {
   latitude: -34.92317666584001,
@@ -17,42 +22,29 @@ const defaultRegion = {
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421,
 };
+export const DetailMap: React.FC<IProps> = ({ event }) => {
 
-interface IProps {
-  events: Array<Event>;
-  region?: {
-    latitude: number;
-    longitude: number;
-    latitudeDelta: number;
-    longitudeDelta: number;
-  };
-}
+    return (
+      <View style={styles.container}>
+        <MapView initialRegion={defaultRegion} style={styles.map}>
+          {event?.location && (
+            <Marker
+              key={event.id}
+              coordinate={{ latitude: event.location.latitude, longitude: event.location.longitude }}
+            />
+          )}
+        </MapView>
+      </View>
+    );
+    };
 
-function DetailMap({ events = [], region }: IProps) {
-  const [map, setMap] = useState(null);
 
-  const onMapReady = useCallback((map) => {
-    setMap(map);
-  }, []);
-
-  return (
-    <View style={styles.container}>
-      <MapView
-        initialRegion={region || defaultRegion}
-        style={styles.container}
-        onMapReady={onMapReady}
-      >
-        <DetailMarker />
-
-        {/* {events.map((event) => (
-        //   <Marker
-        //     key={event.id}
-        //     coordinate={{ latitude: event.latitude, longitude: event.longitude }}
-        //   />
-        ))} */}
-      </MapView>
-    </View>
-  );
-}
-
-export default DetailMap;
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: 300,
+  },
+  map: {
+    flex: 1,
+  },
+})

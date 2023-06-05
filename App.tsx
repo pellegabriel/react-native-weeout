@@ -52,18 +52,31 @@ export default function App() {
     );
   }
 
-  const ProfileStackScreen = () => {
-    return (
-      <ProfileStack.Navigator>
-        <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
-        <ProfileStack.Screen name="EventCreate" component={CreateEventScreen} options={{
+const EventCreateStack = createStackNavigator();
+
+const EventCreateStackScreen = () => {
+  return (
+    <EventCreateStack.Navigator>
+      <EventCreateStack.Screen
+        name="EventCreate"
+        component={CreateEventScreen}
+        options={{
           headerTitle: '',
           headerStyle: { backgroundColor: 'transparent' },
-          }}
-        />
-      </ProfileStack.Navigator>
-    );
-  }
+        }}
+      />
+    </EventCreateStack.Navigator>
+  );
+}
+
+const ProfileStackScreen = () => {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+      <ProfileStack.Screen name="EventCreateNested" component={EventCreateStackScreen} />
+    </ProfileStack.Navigator>
+  );
+}
 
   return (
     <NavigationContainer>
@@ -89,7 +102,7 @@ export default function App() {
           />
 
           <Tab.Screen
-            name="Profile"
+            name="ProfileTab"
             component={ProfileStackScreen}
             options={{
               headerShown: false,

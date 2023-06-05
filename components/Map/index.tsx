@@ -8,6 +8,10 @@ interface IEvent {
   id: number;
   latitude: number;
   longitude: number;
+  location?: {
+    latitude: number;
+    longitude: number;
+  };
 }
 
 const defaultRegion = {
@@ -40,13 +44,29 @@ function Map() {
         style={styles.container}
         onMapReady={onMapReady}
       >
-        {data && Array.isArray(data) && data.map((event: IEvent) => (
-          <MapMarker key={event.id} loading={loading} error={error} data={event} />
-        ))}
+        {data &&
+          Array.isArray(data) &&
+          data.map((event: IEvent) => {
+            const { latitude, longitude, location } = event;
+            if (latitude && longitude && location) {
+              const { latitude: locationLatitude, longitude: locationLongitude } = location;
+
+              return (
+                <Marker
+                  key={event.id}
+                  coordinate={{ latitude: locationLatitude, longitude: locationLongitude }}
+                />
+              );
+            }
+
+            return null;
+          })}
       </MapView>
     </View>
   );
 }
+
+
 
 export default Map;
 

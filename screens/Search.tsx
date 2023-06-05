@@ -6,6 +6,7 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootStackParamList } from '../App';
 import { CategoriesSlider } from '../components/CategoriesSlider/CategoriesSlider';
 import { useGetEvents } from '../api/events';
+import { EventSearch } from '../components/profile/EventSearch';
 
 export interface Event {
   id: number;
@@ -40,19 +41,16 @@ export const SearchScreen = () => {
           selectedCategoryId={selectedCategoryId}
           handleCategoryClick={handleCategoryClick}
         />
-
+{/* 
       {loading && <Text>Loading...</Text>}
       {error && <Text>{error}</Text>}
       {events &&
         events.map((event: Event) => (
-          <TouchableOpacity
-            key={event.id}
-            style={styles.imageContainer}
-            // onPress={() => navigate('EventDetails', { eventId: event.id })}
-          >
-            <Text style={styles.image}>{event.title}</Text>
-          </TouchableOpacity>
-        ))}
+          <View 
+          style={styles.cardContainer}>
+            <EventSearch key={event.id}  data={event} />
+          </View>
+        ))} */}
     </ScrollView>
   );
 };
@@ -68,6 +66,13 @@ const styles = StyleSheet.create({
       paddingVertical: 100,
       display: 'flex',
       backgroundColor: '#fff',
+    },
+    cardContainer: {
+      flex: 1,
+      paddingVertical: 100,
+      display: 'flex',
+      backgroundColor: '#fff',
+      padding:20
     },
     title: {
       paddingHorizontal: 40,

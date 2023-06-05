@@ -4,10 +4,9 @@ import Icons from '@expo/vector-icons/FontAwesome5';
 import { ScrollView, StyleSheet, Text, View } from "react-native"
 import { useNavigation, RouteProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-
 import { RootStackParamList } from '../App';
 import { useGetEvents } from "../api/events";
-import DetailMap from "../components/Map/DetailMap";
+import {DetailMap} from "../components/Map/DetailMap";
 import { useEffect, useState } from "react";
 import { gecodificateLocation } from "../api/geocodification";
 
@@ -17,15 +16,21 @@ export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootS
   const { eventId } = route.params;
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
   const { data: eventsData, error: eventsError, loading: eventsLoading } = useGetEvents();
-  
+
+  // Find the event with the matching ID
+  const event = eventsData?.find((event: { id: string; }) => event.id === eventId);
+
   useEffect(() => {
     const getAddressData = async () => {
-      const addressData = await gecodificateLocation(event?.location);
-      setAddress(addressData);
+      if (event?.location) {
+        const addressData = await gecodificateLocation(event.location);
+        setAddress(addressData);
+      }
     };
 
     getAddressData();
-  }, []);
+  }, [event?.location]);
+
   if (eventsError) {
     return (
       <View>
@@ -34,9 +39,6 @@ export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootS
     );
   }
 
-  // Find the event with the matching ID
-  const event = eventsData?.find((event) => event.id === eventId);
-
   if (!event || eventsLoading) {
     return (
       <View>
@@ -44,6 +46,7 @@ export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootS
       </View>
     );
   }
+
 
   return (
     <ScrollView>
@@ -64,25 +67,21 @@ export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootS
           <View style={styles.info}>
           <Image source={{ uri: event.image }} style={styles.image} />
           <View style={styles.infoContainer}>
-          <View style={styles.boxInfo}>
-            <Text style={styles.infoText}>
-              {event?.date}
-            </Text>
-          </View>
-          <Text style={styles.description}>{event?.description}</Text>
-
-          <View style={styles.boxInfo}>
-          {address}          
-          </View>
-
-          <View style={styles.boxInfo}>
-          {event?.created_by}
-          </View>
-          </View>
+  <View style={styles.boxInfo}>
+    <Text style={styles.infoText}>{event?.date}</Text>
+  </View>
+  <Text style={styles.description}>{event?.description}</Text>
+  <View style={styles.boxInfo}>
+    <Text>{address}</Text>
+  </View>
+  <View style={styles.boxInfo}>
+    <Text>{event?.created_by}</Text>
+  </View>
+</View>
         </View>
         </View>
         <View style={styles.mapContainer}>
-          <DetailMap events={[event]} />
+          <DetailMap event={event}/>
         </View>
       </View>
     </ScrollView>

@@ -19,7 +19,7 @@ const MapMarker: React.FC<MapMarkerProps> = ({ loading, error, data }) => {
   }
 
   return (
-    <Marker coordinate={{ latitude: data.location.lat, longitude: data.location.lng }}> 
+    <Marker coordinate={{ latitude: data.lat, longitude: data.lng }}> 
       <Callout>
         <View>
           <Text style={{ fontWeight: 'bold' }}>{data.title}</Text>
