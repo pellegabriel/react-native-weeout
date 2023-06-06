@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
       flex: 1,
-      paddingVertical: 100,
+      paddingVertical: 10,
       display: 'flex',
       backgroundColor: '#fff',
       padding:20

@@ -66,18 +66,16 @@ export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootS
         <View style={styles.body}>
           <View style={styles.info}>
           <Image source={{ uri: event.image }} style={styles.image} />
-          <View style={styles.infoContainer}>
-  <View style={styles.boxInfo}>
-    <Text style={styles.infoText}>{event?.date}</Text>
-  </View>
-  <Text style={styles.description}>{event?.description}</Text>
-  <View style={styles.boxInfo}>
-    <Text>{address}</Text>
-  </View>
-  <View style={styles.boxInfo}>
-    <Text>{event?.created_by}</Text>
-  </View>
-</View>
+            <View style={styles.infoContainer}>
+              <View style={styles.boxInfo}>
+                <Text style={styles.infoText}>{event?.date}</Text>
+              </View>
+              <Text style={styles.description}>{event?.description}</Text>
+              <View style={styles.adress}>
+                <Text style={styles.adress}>{address}</Text>
+              </View>
+
+            </View>
         </View>
         </View>
         <View style={styles.mapContainer}>
@@ -148,39 +146,56 @@ const styles = StyleSheet.create({
       justifyContent: 'flex-start',
     },
     subtitle: {
-      fontSize: 16,
+      fontSize: 26,
     },
     body: {
-      padding: 16,
+      paddingHorizontal: 16,
     },
+
     description: {
-      width: 100,
+      width: 150,
       fontSize: 12,
-      marginBottom: 20,
+      borderBottomWidth: 1,
+      marginTop:5,
+      padding: 5
+
     },
     boxInfo: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 20,
-      marginTop: 20,
+      marginBottom: 0,
+      marginTop: 5,
+      borderBottomWidth: 1,
+      padding: 5
 
     },   
+    adress: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 0,
+      fontSize: 12,
+      marginTop:5
+      
+    },  
     info: {
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: 20,
-      marginTop: 20,
+      marginTop: 0,
+      
 
     },
     infoText: {
-      fontSize: 16,
-      marginLeft: 12,
+      fontSize: 12,
+  
     },
     infoContainer: {
       flexDirection: 'column',
       padding: 20,
       marginTop: 10,
-      height: 200
+      height: 200,
+      marginBottom: 20,
+      width: 190
 
     }
 });

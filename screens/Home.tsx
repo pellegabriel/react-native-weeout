@@ -35,10 +35,11 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       display: 'flex',
-      backgroundColor: '#fff'
+      backgroundColor: '#fff',
+      paddingTop: 50,
     },
     mapContainer:{
-      width:410,
+      width:390,
       height:340,
       padding: 30,
     },

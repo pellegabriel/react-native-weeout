@@ -48,19 +48,19 @@ const EventForm: React.FC = () => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
   };
 
-  const handleAddressChange = (location) => {
+  const handleAddressChange = (location: any) => {
     setFormData((prevData) => ({ ...prevData, location }));
   };
   
-  const handleImageChange = (image) => {
+  const handleImageChange = (image: any) => {
     setFormData((prevData) => ({ ...prevData, image }));
   } 
 
-  const handleAudioRecorded = (audio) => {
+  const handleAudioRecorded = (audio: any) => {
     setFormData((prevData) => ({ ...prevData, audio }));
   };
 
-  const handleDateSelected = (date) => {
+  const handleDateSelected = (date: any) => {
     setFormData((prevData) => ({ ...prevData, date }));
   }
   
