@@ -5,6 +5,8 @@ type TUseGetEvents = {
     data: any
     error: string
     loading: boolean
+    refetchEvents: () => void
+
 }
 
 type TUseCreateEvents = {
@@ -30,12 +32,21 @@ export const useGetEvents = (): TUseGetEvents => {
           setLoading(false)
       }
     }
-  
+
+    const refetchEvents = async () => {
+        try {
+            const { data } = await supabase.from("events").select();
+            setData(data)
+        } catch (err){
+            setError(err)
+        }
+      }
+
     useEffect(() => {
       fetchEvents()
     }, [])
 
-    return { data, error, loading }
+    return { data, error, loading , refetchEvents }
 }
 
 export const useCreateEvent = (): TUseCreateEvents => {

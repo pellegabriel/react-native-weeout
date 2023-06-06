@@ -31,7 +31,7 @@ export const SearchScreen = () => {
   }, [selectedCategoryId, allEvents]);
 
   const handleCategoryClick = (categoryId: number) => {
-    setSelectedCategoryId(categoryId);
+    // setSelectedCategoryId(categoryId);
   };
 
   return (
@@ -41,20 +41,21 @@ export const SearchScreen = () => {
           selectedCategoryId={selectedCategoryId}
           handleCategoryClick={handleCategoryClick}
         />
-{/* 
+
       {loading && <Text>Loading...</Text>}
       {error && <Text>{error}</Text>}
       {events &&
         events.map((event: Event) => (
           <View 
+          key={event.id}
           style={styles.cardContainer}>
             <EventSearch key={event.id}  data={event} />
           </View>
-        ))} */}
+        ))}
     </ScrollView>
   );
 };
-
+// +lindo esto +lindo detalle +lindo perfil
 const styles = StyleSheet.create({
     titleImage:{
         width: 160,

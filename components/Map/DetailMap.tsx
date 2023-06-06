@@ -2,19 +2,6 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-interface IEvent {
-  id: number;
-  latitude: number;
-  longitude: number;
-  location?: {
-    latitude: number;
-    longitude: number;
-  };
-}
-
-interface IProps {
-  event: IEvent;
-}
 
 const defaultRegion = {
   latitude: -34.92317666584001,
@@ -22,7 +9,7 @@ const defaultRegion = {
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421,
 };
-export const DetailMap: React.FC<IProps> = ({ event }) => {
+export const DetailMap: React.FC = ({ event } : any) => {
 
     return (
       <View style={styles.container}>
@@ -30,7 +17,7 @@ export const DetailMap: React.FC<IProps> = ({ event }) => {
           {event?.location && (
             <Marker
               key={event.id}
-              coordinate={{ latitude: event.location.latitude, longitude: event.location.longitude }}
+              coordinate={{ latitude: event.location.lat, longitude: event.location.lng }}
             />
           )}
         </MapView>

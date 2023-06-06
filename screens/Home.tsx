@@ -3,7 +3,7 @@ import { ListOfEvents } from "../components/ListOfEvents";
 import Map from '../components/Map/index'
 import FloatingButton from "../components/profile/FloatingButton";
 
-export const HomeScreen = ({ navigation }) => {
+export const HomeScreen = ({  }) => {
   return (
     <>
       <ScrollView style={styles.container}>
