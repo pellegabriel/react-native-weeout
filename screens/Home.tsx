@@ -1,9 +1,17 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native"
-import { ListOfEvents } from "../components/ListOfEvents";
-import Map from '../components/Map/index'
-import FloatingButton from "../components/profile/FloatingButton";
+import React, { useEffect } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import Map from '../components/Map';
+import { useGetEvents } from '../api/events';
+import { EventCard } from '../components/ListOfEvents/EventCard';
+import FloatingButton from '../components/profile/FloatingButton';
 
-export const HomeScreen = ({  }) => {
+export const HomeScreen = () => {
+  const { data, error, loading, refetchEvents } = useGetEvents();
+
+  useEffect(() => {
+    refetchEvents();
+  }, []);
+
   return (
     <>
       <ScrollView style={styles.container}>
@@ -12,24 +20,33 @@ export const HomeScreen = ({  }) => {
           <Text style={styles.subtitle}>¡La app definitiva para los amantes de los eventos!</Text>
         </View>
 
-        {/* <CategoriesSlider id={0} label={""} icon_name={""} /> */}
+        {/* Renderizar el componente del mapa aquí */}
         <View style={styles.mapContainer}>
-          <Map/>
+          <Map />
         </View>
-        
+
         <View style={styles.titleContainer}>
           <Text style={styles.listOfEventsTitle}>
             ¡Descubre los eventos más populares!
           </Text>
         </View>
+        <View style={styles.containerList}>
+        {loading && <Text>Loading...</Text>}
+        {error && <Text>Error: {error}</Text>}
 
-        <ListOfEvents />   
-     
+        {data &&
+          data.map((event, index) => (
+            <View key={index} style={styles.cardContainer}>
+              <EventCard data={event} />
+            </View>
+          ))}
+          </View> 
       </ScrollView>
-      <FloatingButton/>
+      <FloatingButton />
     </>
   );
-}
+};
+
 
 const styles = StyleSheet.create({
     container: {
@@ -37,11 +54,19 @@ const styles = StyleSheet.create({
       display: 'flex',
       backgroundColor: '#fff',
       paddingTop: 50,
+      width:400
+      
+    },containerList: {
+      padding:30
+      
+    },
+    cardContainer: {
+      marginBottom: 10,
+      width: 300
     },
     mapContainer:{
       width:390,
       height:340,
-      padding: 30,
     },
     titleContainer: {
       marginTop: 14,

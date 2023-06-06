@@ -9,7 +9,7 @@ import AppImagePicker from '../Camara/ImagePicker';
 import  DatePicker  from '../DatePicker/DatePicker';
 import { AdressInputWithMap } from '../Map/AdressInputWithMap';
 import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import { useNavigation } from '@react-navigation/native';
 
 export type EventData = {
   categoria: string | null
@@ -26,7 +26,8 @@ export type EventData = {
   title: string | null
 };
 
-const EventForm: React.FC = () => {
+export const EventForm = ({ onEventCreatedSuccesfully }) => {
+  const navigation = useNavigation();
   const { createEvent } = useCreateEvent()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState<EventData>({
@@ -64,19 +65,12 @@ const EventForm: React.FC = () => {
     setFormData((prevData) => ({ ...prevData, date }));
   }
   
+
   const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      await createEvent(formData);
-      console.log('subido pai', { formData });
-      toast.success('Success Notification!', {
-        position: toast.POSITION.TOP_RIGHT
-      });
-    } catch {
-      console.log(':(');
-    } finally {
-      setLoading(false);
-    }
+    // Lógica para crear el evento
+
+    // Llamada a la función onEventCreatedSuccesfully
+    onEventCreatedSuccesfully();
   };
 
 

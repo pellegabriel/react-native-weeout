@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, Text } from 'react-native';
-
 import { EventCard } from './EventCard';
 import { useGetEvents } from '../../api/events';
 
 export const ListOfEvents: React.FC = () => {
-  const { data, error, loading } = useGetEvents()
+  const { data, error, loading, refetchEvents } = useGetEvents();
 
+  useEffect(() => {
+    refetchEvents();
+  }, []);
   if (error) {
     return (
       <View>
@@ -41,3 +43,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
+function useEffect(arg0: () => void, arg1: undefined[]) {
+  throw new Error('Function not implemented.');
+}

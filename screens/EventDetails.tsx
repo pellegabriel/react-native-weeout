@@ -98,10 +98,8 @@ const styles = StyleSheet.create({
       marginHorizontal: 16,
       marginVertical: 8,
     },    mapContainer:{
-      width:360,
       height:240,
       paddingTop: 0,
-      padding: 20,
       display: "flex",
       justifyContent: "center",
       alignItems: "center"
@@ -153,7 +151,7 @@ const styles = StyleSheet.create({
     },
 
     description: {
-      width: 150,
+      width: 110,
       fontSize: 12,
       borderBottomWidth: 1,
       marginTop:5,
@@ -195,7 +193,8 @@ const styles = StyleSheet.create({
       marginTop: 10,
       height: 200,
       marginBottom: 20,
-      width: 190
+      width: 150
+
 
     }
 });

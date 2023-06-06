@@ -170,7 +170,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   dataPointText: {
-    fontSize: 12
+    fontSize: 12,
+    width: 80,
+    height: 30
   },
   dataPointIcon: {
     marginRight: 10
