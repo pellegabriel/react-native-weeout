@@ -69,7 +69,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-function fetchEvents() {
-  throw new Error('Function not implemented.');
-}
 
