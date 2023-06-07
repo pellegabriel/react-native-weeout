@@ -8,8 +8,7 @@ import { useCreateEvent } from '../../api/events';
 import AppImagePicker from '../Camara/ImagePicker';
 import  DatePicker  from '../DatePicker/DatePicker';
 import { AdressInputWithMap } from '../Map/AdressInputWithMap';
-import { ToastContainer, toast } from 'react-toastify';
-import { useNavigation } from '@react-navigation/native';
+;
 
 export type EventData = {
   categoria: string | null
@@ -27,7 +26,6 @@ export type EventData = {
 };
 
 export const EventForm = ({ onEventCreatedSuccesfully, handledEventCreated }) => {
-  const navigation = useNavigation();
   const { createEvent } = useCreateEvent()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState<EventData>({
@@ -68,7 +66,7 @@ export const EventForm = ({ onEventCreatedSuccesfully, handledEventCreated }) =>
 
   const handleSubmit = async () => {
     // Lógica para crear el evento
-    // await createEvent(formData);
+    await createEvent(formData);
     // Llamada a la función onEventCreatedSuccesfully
     onEventCreatedSuccesfully();
     handledEventCreated()
