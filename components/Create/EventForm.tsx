@@ -26,7 +26,7 @@ export type EventData = {
   title: string | null
 };
 
-export const EventForm = ({ onEventCreatedSuccesfully }) => {
+export const EventForm = ({ onEventCreatedSuccesfully, handledEventCreated }) => {
   const navigation = useNavigation();
   const { createEvent } = useCreateEvent()
   const [loading, setLoading] = useState(false)
@@ -68,10 +68,10 @@ export const EventForm = ({ onEventCreatedSuccesfully }) => {
 
   const handleSubmit = async () => {
     // Lógica para crear el evento
-    await createEvent(formData);
-    console.log('subido pai', { formData });
+    // await createEvent(formData);
     // Llamada a la función onEventCreatedSuccesfully
     onEventCreatedSuccesfully();
+    handledEventCreated()
   };
 
 
@@ -107,8 +107,8 @@ export const EventForm = ({ onEventCreatedSuccesfully }) => {
             multiline
             value={formData.description}
             onChangeText={(text) => handleInputChange('description', text)} 
-            inputStyle={styles.input}
-            placeholder="En este evento vamos a..."
+            inputStyle={styles.input1}
+            placeholder="Te esperamos de 5 a 8 en nuestro local..."
             containerStyle={styles.inputContainer}
             inputContainerStyle={styles.inputInnerContainer}
           />
@@ -130,7 +130,7 @@ export const EventForm = ({ onEventCreatedSuccesfully }) => {
               <Picker.Item label='Arte' value='Arte' />
               <Picker.Item label='Medio ambiente' value='Medio ambiente' />
               <Picker.Item label='Deportes' value='Deportes' />
-              <Picker.Item label='Actividad  fisica' value='Actividad  fisica' />
+              <Picker.Item label='Actividad fisica' value='Actividad fisica' />
               <Picker.Item label='Literatura' value='Literatura' />
               <Picker.Item label='Política' value='Política' />
               <Picker.Item label='Religion' value='Religion' />
@@ -199,15 +199,33 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingHorizontal: 0,
-    marginBottom: 40
+    marginBottom: 0
   },
   inputInnerContainer: {
     borderBottomWidth: 0,
+    backgroundColor: 'white'
+  },
+  inputContainer1: {
+    paddingHorizontal: 0,
+    marginBottom: 0,
+  },
+  inputInnerContainer1: {
+    borderBottomWidth: 0,
+
   },
   input: {
     paddingHorizontal: 8,
     borderWidth: 1,
     borderColor: '#4e4e4e',
+  },
+  input1: {
+      paddingHorizontal: 8,
+      borderWidth: 1,
+      borderColor: '#4e4e4e',
+      height: 100,
+      display: 'flex',
+      textAlignVertical: 'top',
+    
   },
   picker: {
     paddingHorizontal: 8,

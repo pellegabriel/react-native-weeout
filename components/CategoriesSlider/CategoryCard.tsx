@@ -3,7 +3,7 @@ import Icons from '@expo/vector-icons/FontAwesome5';
 import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
 
 type CategoryCardProps = {
-  id: number
+  id: string
   label: string
   icon_name: string
   isSelected:  boolean

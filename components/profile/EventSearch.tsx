@@ -17,7 +17,6 @@ export const EventSearch: React.FC<TEventCardProps> = ({ data }) => {
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
   const [sound, setSound] = React.useState<Audio.Sound>();
 
-
   useEffect(() => {
     const getAddressData = async () => {
       const addressData = await gecodificateLocation(data.location);

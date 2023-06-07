@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Map from '../components/Map';
 import { useGetEvents } from '../api/events';
@@ -7,7 +7,13 @@ import FloatingButton from '../components/profile/FloatingButton';
 
 export const HomeScreen = () => {
   const { data, error, loading, refetchEvents } = useGetEvents();
-
+  const handleEventCreated = useCallback(async () => {
+    try {
+      await refetchEvents();
+    } catch (error) {
+      console.log('Error al obtener eventos actualizados:', error);
+    }
+  }, [refetchEvents]);
   useEffect(() => {
     refetchEvents();
   }, []);
@@ -65,7 +71,7 @@ const styles = StyleSheet.create({
       width: 300
     },
     mapContainer:{
-      width:390,
+      width:'100%',
       height:340,
     },
     titleContainer: {

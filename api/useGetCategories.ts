@@ -3,6 +3,7 @@ import { supabase } from "../supabase"
 
 type TUseGetCategories = {
     data: {
+        categoria: string
         id:number,
         label:string
         icon_name:string

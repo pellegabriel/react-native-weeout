@@ -15,7 +15,7 @@ type TUseCreateEvents = {
     error: string
     loading: boolean
 }
-
+//no se como cambiar aca para el refetch
 export const useGetEvents = (): TUseGetEvents => {
     const [data, setData] = useState(null)
     const [error, setError] = useState('')

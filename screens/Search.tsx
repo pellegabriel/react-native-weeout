@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootStackParamList } from '../App';
@@ -9,21 +8,29 @@ import { useGetEvents } from '../api/events';
 import { EventSearch } from '../components/profile/EventSearch';
 
 export const SearchScreen = () => {
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
   const { data, error, loading } = useGetEvents();
   const [events, setEvents] = useState<any[]>([]); // Agrega el estado events// nose que estoy pasandole mal aca 
 
   useEffect(() => {
+    console.log({selectedCategoryId, data})
     if (data && selectedCategoryId && Array.isArray(data)) {
-      const filteredEvents = data.filter((event) => event.categoria === selectedCategoryId);
+      const filteredEvents = data.filter((event) => {
+        console.log({event, 'algo' : event.categoria && event.categoria.localeCompare(selectedCategoryId), selectedCategoryId}, 'event')
+        return (event.categoria && event.categoria.localeCompare(selectedCategoryId) === 0 )
+    })
+      console.log({filteredEvents}, 'filteredEvents')
       setEvents(filteredEvents);
     } else {
       setEvents(data || []);
+      console.log({data})
+
     }
   }, [selectedCategoryId, data]);
 
-  const handleCategoryClick = (categoryId: number) => {
+  const handleCategoryClick = (categoryId: string) => {
+    console.log({categoryId}, 'Estoy HandleCategoryClick')
     setSelectedCategoryId(categoryId);
   };
 
@@ -50,7 +57,7 @@ export const SearchScreen = () => {
         selectedCategoryId={selectedCategoryId}
         handleCategoryClick={handleCategoryClick}
       />
-      {events.map((event) => ( // Utiliza events en lugar de data
+      {events.map((event) => ( 
         <View key={event.id} style={styles.cardContainer}>
           <EventSearch data={event} />
         </View>

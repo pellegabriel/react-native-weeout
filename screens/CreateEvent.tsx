@@ -21,10 +21,20 @@ export const CreateEventScreen = () => {
     }
   }, [refetchEvents, navigation]);
 
+  const handleEventCreated = useCallback(async () => {
+    try {
+      await refetchEvents();
+    } catch (error) {
+      console.log('Error al obtener eventos actualizados:', error);
+    }
+  }, [refetchEvents]);
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="always">
       <Text style={styles.title}>Crea tu propio evento</Text>
-      <EventForm onEventCreatedSuccesfully={onEventCreatedSuccesfully} />
+      <EventForm 
+      onEventCreatedSuccesfully={onEventCreatedSuccesfully} 
+      handledEventCreated={handleEventCreated}
+      />
     </ScrollView>
   );
 };
