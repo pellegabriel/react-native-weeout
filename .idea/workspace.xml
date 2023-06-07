@@ -7,11 +7,7 @@
     <list default="true" id="3bfcab68-0480-46f7-a2c9-3c7e391e9c91" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/Create/EventForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Create/EventForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ListOfEvents/EventCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ListOfEvents/EventCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ListOfEvents/ListOfEvents.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ListOfEvents/ListOfEvents.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/CreateEvent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/CreateEvent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/EventDetails.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/EventDetails.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/Search.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Search.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,14 +22,9 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;
-  }
-}</component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -55,11 +46,12 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="93" y="93" width="2375" height="1255" key="AVDManager" timestamp="1685655764399">
+    <state x="93" y="93" width="2375" height="1255" key="AVDManager" timestamp="1686096266870">
       <screen x="0" y="0" width="2560" height="1440" />
     </state>
-    <state x="93" y="93" width="2375" height="1255" key="AVDManager/0.0.2560.1440@0.0.2560.1440" timestamp="1685655764399" />
+    <state x="93" y="93" width="2375" height="1255" key="AVDManager/0.0.2560.1440@0.0.2560.1440" timestamp="1686096266870" />
   </component>
 </project>

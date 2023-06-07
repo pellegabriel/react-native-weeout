@@ -8,53 +8,58 @@ import { CategoriesSlider } from '../components/CategoriesSlider/CategoriesSlide
 import { useGetEvents } from '../api/events';
 import { EventSearch } from '../components/profile/EventSearch';
 
-export interface Event {
-  id: number;
-  title: string;
-  categoryId: number;
-  // Otros campos relevantes para un evento
-}
-
 export const SearchScreen = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
-  const { data: allEvents, error, loading } = useGetEvents();
-  const [events, setEvents] = useState<Event[]>([]);
+  const { data, error, loading } = useGetEvents();
+  const [events, setEvents] = useState<any[]>([]); // Agrega el estado events// nose que estoy pasandole mal aca 
 
   useEffect(() => {
-    if (selectedCategoryId) {
-      const filteredEvents = allEvents.filter((event: Event) => event.categoryId === selectedCategoryId);
+    if (data && selectedCategoryId && Array.isArray(data)) {
+      const filteredEvents = data.filter((event) => event.categoria === selectedCategoryId);
       setEvents(filteredEvents);
     } else {
-      setEvents(allEvents);
+      setEvents(data || []);
     }
-  }, [selectedCategoryId, allEvents]);
+  }, [selectedCategoryId, data]);
 
   const handleCategoryClick = (categoryId: number) => {
-    // setSelectedCategoryId(categoryId);
+    setSelectedCategoryId(categoryId);
   };
+
+  if (error) {
+    return (
+      <View>
+        <Text>{error}</Text>
+      </View>
+    );
+  }
+
+  if (loading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Encuentra el evento perfecto para ti</Text>
-        <CategoriesSlider
-          selectedCategoryId={selectedCategoryId}
-          handleCategoryClick={handleCategoryClick}
-        />
-
-      {loading && <Text>Loading...</Text>}
-      {error && <Text>{error}</Text>}
-      {events &&
-        events.map((event: Event) => (
-          <View 
-          key={event.id}
-          style={styles.cardContainer}>
-            <EventSearch key={event.id}  data={event} />
-          </View>
-        ))}
+      <CategoriesSlider
+        selectedCategoryId={selectedCategoryId}
+        handleCategoryClick={handleCategoryClick}
+      />
+      {events.map((event) => ( // Utiliza events en lugar de data
+        <View key={event.id} style={styles.cardContainer}>
+          <EventSearch data={event} />
+        </View>
+      ))}
     </ScrollView>
   );
 };
+
+
 // +lindo esto +lindo detalle +lindo perfil
 const styles = StyleSheet.create({
     titleImage:{

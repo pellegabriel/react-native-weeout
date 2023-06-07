@@ -68,7 +68,8 @@ export const EventForm = ({ onEventCreatedSuccesfully }) => {
 
   const handleSubmit = async () => {
     // Lógica para crear el evento
-
+    await createEvent(formData);
+    console.log('subido pai', { formData });
     // Llamada a la función onEventCreatedSuccesfully
     onEventCreatedSuccesfully();
   };
