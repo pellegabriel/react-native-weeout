@@ -7,7 +7,6 @@ import FloatingButton from '../components/profile/FloatingButton';
 
 export const HomeScreen = ({route}) => {
   const { data, error, loading, refetchEvents } = useGetEvents();
-  console.log ({data},'dataaaaaaaaaaaaa')
 
   useEffect(() => {
    if (route.params?.shouldRefetch) {

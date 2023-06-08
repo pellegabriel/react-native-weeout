@@ -6,7 +6,6 @@ import { useGetUserEvents } from '../../api/events';
 export const ProfileEventsList: React.FC = () => {
   
   const { data, error, loading } = useGetUserEvents()
-  console.log({data}, 'DATAA')
   if (error) {
     return (
       <View>

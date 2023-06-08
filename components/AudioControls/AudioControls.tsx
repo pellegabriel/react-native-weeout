@@ -70,7 +70,7 @@ export const AudioControls = ({ handleAudioRecorded, eventId }: TAudioControlPro
         await Audio.requestPermissionsAsync();
         await Audio.setAudioModeAsync({
           allowsRecordingIOS: true,
-          // playsInSilentModeIOS: true,
+          playsInSilentModeIOS: true,
         });
         
         const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);

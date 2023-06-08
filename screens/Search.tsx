@@ -14,23 +14,17 @@ export const SearchScreen = () => {
   const [events, setEvents] = useState<any[]>([]); // Agrega el estado events// nose que estoy pasandole mal aca 
 
   useEffect(() => {
-    console.log({selectedCategoryId, data})
     if (data && selectedCategoryId && Array.isArray(data)) {
       const filteredEvents = data.filter((event) => {
-        console.log({event, 'algo' : event.categoria && event.categoria.localeCompare(selectedCategoryId), selectedCategoryId}, 'event')
         return (event.categoria && event.categoria.localeCompare(selectedCategoryId) === 0 )
     })
-      console.log({filteredEvents}, 'filteredEvents')
       setEvents(filteredEvents);
     } else {
       setEvents(data || []);
-      console.log({data})
-
     }
   }, [selectedCategoryId, data]);
 
   const handleCategoryClick = (categoryId: string) => {
-    console.log({categoryId}, 'Estoy HandleCategoryClick')
     setSelectedCategoryId(categoryId);
   };
 

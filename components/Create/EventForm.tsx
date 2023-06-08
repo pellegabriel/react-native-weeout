@@ -1,16 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import uuid from 'react-native-uuid';
 import { Input } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { AudioControls } from '../AudioControls';
-import { useCreateEvent, useGetEvents } from '../../api/events';
+import { useCreateEvent } from '../../api/events';
 import AppImagePicker from '../Camara/ImagePicker';
 import  DatePicker  from '../DatePicker/DatePicker';
 import { AdressInputWithMap } from '../Map/AdressInputWithMap';
 import { useNavigation } from '@react-navigation/native';
 import { supabase } from '../../supabase';
-
 
 export type EventData = {
   categoria: string | null
@@ -27,8 +26,8 @@ export type EventData = {
   title: string | null
 };
 
-
 export const EventForm = () => {
+  const navigation = useNavigation();
   const { createEvent } = useCreateEvent();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<EventData>({
@@ -46,15 +45,10 @@ export const EventForm = () => {
     title: null,
   });
 
-
-  useEffect(() => {
-    const setCreatedByData = async () => {
-      const { data: { user : { id }}} = await supabase.auth.getUser();
-      setFormData((prevData) => ({ ...prevData, created_by: id }));
-    }
-    setCreatedByData()
-  }, []);
-  const navigation = useNavigation();
+  const setCreatedByField = async () => {
+    const { data: { user : { id }}} = await supabase.auth.getUser();
+    setFormData((prevData) => ({ ...prevData, created_by: id }));
+  }
 
   const handleInputChange = (field: keyof EventData, value: string) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
@@ -76,18 +70,25 @@ export const EventForm = () => {
     setFormData((prevData) => ({ ...prevData, date }));
   }
   
-
   const handleSubmit = async () => {
-    await createEvent(formData);
-    navigation.navigate('Home', {
-    shouldRefetch: true
-    });
+    try {
+      setLoading(true)
+      await createEvent(formData);
+      navigation.navigate('Home', {
+        shouldRefetch: true
+      });
+    } catch (error) {
+      console.log('form-submit-error', error)
+    } finally {
+      setLoading(false)
+    }
   };
-  
 
+  useEffect(() => {
+    setCreatedByField()
+  }, []);
 
-  type TLabelProps = { text: string }
-  const Label = ({ text }: TLabelProps) => <Text style={styles.label}>{text}:</Text>
+  const Label = ({ text }: { text: string }) => <Text style={styles.label}>{text}:</Text>
 
   return (
     <>

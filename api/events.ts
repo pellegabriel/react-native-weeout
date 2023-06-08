@@ -38,7 +38,7 @@ export const useGetEvents = (): TUseGetEvents => {
             const { data } = await supabase.from("events").select();
             setData(data)
         } catch (err){
-            console.log({err}, 'ERROOOR')
+            console.log({ err })
             setError(err)
         }
       }
@@ -97,7 +97,6 @@ export const useCreateEvent = (): TUseCreateEvents => {
         try {
             setLoading(true)
             const response = await supabase.from("events").insert([eventData]);
-            console.log(response)
             setData(response.data);
         } catch (err){
             console.log({ err })

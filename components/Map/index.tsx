@@ -24,7 +24,6 @@ const defaultRegion = {
 function Map() {
   const [map, setMap] = useState(null);
   const { data, loading, error } = useGetEvents();
-  console.log()
   const onMapReady = useCallback((map: any) => {
     setMap(map);
   }, []);
