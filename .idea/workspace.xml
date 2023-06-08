@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3bfcab68-0480-46f7-a2c9-3c7e391e9c91" name="Changes" comment="" />
+    <list default="true" id="3bfcab68-0480-46f7-a2c9-3c7e391e9c91" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/audio.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/audio.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/events.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/events.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/AudioControls/AudioControls.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/AudioControls/AudioControls.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Create/EventForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Create/EventForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ListOfEvents/EventCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ListOfEvents/EventCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Map/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Map/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ProfileEventsList/ProfileEventsList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProfileEventsList/ProfileEventsList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/Search.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Search.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,9 +56,9 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="93" y="93" width="2375" height="1255" key="AVDManager" timestamp="1686248064540">
+    <state x="93" y="93" width="2375" height="1255" key="AVDManager" timestamp="1686257144057">
       <screen x="0" y="0" width="2560" height="1440" />
     </state>
-    <state x="93" y="93" width="2375" height="1255" key="AVDManager/0.0.2560.1440@0.0.2560.1440" timestamp="1686248064540" />
+    <state x="93" y="93" width="2375" height="1255" key="AVDManager/0.0.2560.1440@0.0.2560.1440" timestamp="1686257144057" />
   </component>
 </project>
