@@ -1,40 +1,13 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import EventForm from '../components/Create/EventForm';
-import { useCallback } from 'react';
-import { useGetEvents } from '../api/events';
 
 export const CreateEventScreen = () => {
-  const navigation = useNavigation();
-  const { refetchEvents } = useGetEvents();
 
-  const onEventCreatedSuccesfully = useCallback(async () => {
-    try {
-      // Realizar el fetch de los eventos aquí
-      await refetchEvents();
-  
-      // Navegar a la pantalla de inicio (HomeScreen)
-      navigation.navigate('Home');
-    } catch (error) {
-      console.log(':(', error);
-    }
-  }, [refetchEvents, navigation]);
-
-  const handleEventCreated = useCallback(async () => {
-    try {
-      await refetchEvents();
-    } catch (error) {
-      console.log('Error al obtener eventos actualizados:', error);
-    }
-  }, [refetchEvents]);
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="always">
       <Text style={styles.title}>Crea tu propio evento</Text>
-      <EventForm 
-      onEventCreatedSuccesfully={onEventCreatedSuccesfully} 
-      handledEventCreated={handleEventCreated}
-      />
+      <EventForm />
     </ScrollView>
   );
 };
@@ -52,12 +25,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     fontWeight: 'bold',
     justifyContent: 'flex-start',
-  },  button: {
+  },  
+  button: {
     backgroundColor:  '#f5694d',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-  },  label: {
+  },  
+  label: {
     fontSize: 16,
     marginBottom: 6,
     fontWeight: 'bold',
@@ -69,4 +44,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-

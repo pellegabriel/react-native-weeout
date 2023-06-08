@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import uuid from 'react-native-uuid';
 import { Input } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { AudioControls } from '../AudioControls';
-import { useCreateEvent } from '../../api/events';
+import { useCreateEvent, useGetEvents } from '../../api/events';
 import AppImagePicker from '../Camara/ImagePicker';
 import  DatePicker  from '../DatePicker/DatePicker';
 import { AdressInputWithMap } from '../Map/AdressInputWithMap';
-;
+import { useNavigation } from '@react-navigation/native';
+import { supabase } from '../../supabase';
+
 
 export type EventData = {
   categoria: string | null
@@ -25,9 +27,10 @@ export type EventData = {
   title: string | null
 };
 
-export const EventForm = ({ onEventCreatedSuccesfully, handledEventCreated }) => {
-  const { createEvent } = useCreateEvent()
-  const [loading, setLoading] = useState(false)
+
+export const EventForm = () => {
+  const { createEvent } = useCreateEvent();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<EventData>({
     id: uuid.v4(),
     categoria: null,
@@ -42,6 +45,16 @@ export const EventForm = ({ onEventCreatedSuccesfully, handledEventCreated }) =>
     subtitle: null,
     title: null,
   });
+
+
+  useEffect(() => {
+    const setCreatedByData = async () => {
+      const { data: { user : { id }}} = await supabase.auth.getUser();
+      setFormData((prevData) => ({ ...prevData, created_by: id }));
+    }
+    setCreatedByData()
+  }, []);
+  const navigation = useNavigation();
 
   const handleInputChange = (field: keyof EventData, value: string) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
@@ -65,12 +78,12 @@ export const EventForm = ({ onEventCreatedSuccesfully, handledEventCreated }) =>
   
 
   const handleSubmit = async () => {
-    // Lógica para crear el evento
     await createEvent(formData);
-    // Llamada a la función onEventCreatedSuccesfully
-    onEventCreatedSuccesfully();
-    handledEventCreated()
+    navigation.navigate('Home', {
+    shouldRefetch: true
+    });
   };
+  
 
 
   type TLabelProps = { text: string }

@@ -38,6 +38,45 @@ export const useGetEvents = (): TUseGetEvents => {
             const { data } = await supabase.from("events").select();
             setData(data)
         } catch (err){
+            console.log({err}, 'ERROOOR')
+            setError(err)
+        }
+      }
+
+    useEffect(() => {
+      fetchEvents()
+    }, [])
+
+    return { data, error, loading , refetchEvents }
+}
+
+export const useGetUserEvents = (): TUseGetEvents => {
+    const [data, setData] = useState(null)
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
+  
+    const fetchEvents = async () => {
+      try {
+          setLoading(true)
+          const { data: { user : { id }}} = await supabase.auth.getUser();
+
+          const { data } = await supabase.from("events").select().eq('created_by', id );
+          setData(data)
+      } catch (err){
+          setError(err)
+      } finally {
+          setLoading(false)
+      }
+    }
+
+    const refetchEvents = async () => {
+        try {
+            const { data: { user : { id }}} = await supabase.auth.getUser();
+
+            const { data } = await supabase.from("events").select().eq('created_by', id );
+              setData(data)
+        } catch (err){
+            console.log({err}, 'ERROOOR')
             setError(err)
         }
       }

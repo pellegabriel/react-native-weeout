@@ -40,13 +40,13 @@ export const ProfileScreen = () => {
               </TouchableOpacity>
             </View>
           </View> */}
-
+{/* 
           <View style={styles.contact}>
             <Text style={styles.contactLabel}>Correo electrónico:</Text>
             <Text style={styles.contactText}>{fakeProfile.email}</Text>
             <Text style={styles.contactLabel}>Teléfono:</Text>
             <Text style={styles.contactText}>{fakeProfile.phone}</Text>
-          </View>
+          </View> */}
           <Text style={styles.titleFilter}>Tus eventos </Text>
           <View style={styles.scroll}>
           <ProfileEventsList />

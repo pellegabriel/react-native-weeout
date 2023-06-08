@@ -1,22 +1,19 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Map from '../components/Map';
 import { useGetEvents } from '../api/events';
 import { EventCard } from '../components/ListOfEvents/EventCard';
 import FloatingButton from '../components/profile/FloatingButton';
 
-export const HomeScreen = () => {
+export const HomeScreen = ({route}) => {
   const { data, error, loading, refetchEvents } = useGetEvents();
-  const handleEventCreated = useCallback(async () => {
-    try {
-      await refetchEvents();
-    } catch (error) {
-      console.log('Error al obtener eventos actualizados:', error);
-    }
-  }, [refetchEvents]);
+  console.log ({data},'dataaaaaaaaaaaaa')
+
   useEffect(() => {
-    refetchEvents();
-  }, []);
+   if (route.params?.shouldRefetch) {
+    refetchEvents()
+    }
+  }, [route.params])
 
   return (
     <>
