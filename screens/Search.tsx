@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootStackParamList } from '../App';
@@ -8,53 +7,61 @@ import { CategoriesSlider } from '../components/CategoriesSlider/CategoriesSlide
 import { useGetEvents } from '../api/events';
 import { EventSearch } from '../components/profile/EventSearch';
 
-export interface Event {
-  id: number;
-  title: string;
-  categoryId: number;
-  // Otros campos relevantes para un evento
-}
-
 export const SearchScreen = () => {
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
-  const { data: allEvents, error, loading } = useGetEvents();
-  const [events, setEvents] = useState<Event[]>([]);
+  const { data, error, loading } = useGetEvents();
+  const [events, setEvents] = useState<any[]>([]); // Agrega el estado events// nose que estoy pasandole mal aca 
 
   useEffect(() => {
-    if (selectedCategoryId) {
-      const filteredEvents = allEvents.filter((event: Event) => event.categoryId === selectedCategoryId);
+    if (data && selectedCategoryId && Array.isArray(data)) {
+      const filteredEvents = data.filter((event) => {
+        return (event.categoria && event.categoria.localeCompare(selectedCategoryId) === 0 )
+    })
       setEvents(filteredEvents);
     } else {
-      setEvents(allEvents);
+      setEvents(data || []);
     }
-  }, [selectedCategoryId, allEvents]);
+  }, [selectedCategoryId, data]);
 
-  const handleCategoryClick = (categoryId: number) => {
+  const handleCategoryClick = (categoryId: string) => {
     setSelectedCategoryId(categoryId);
   };
+
+  if (error) {
+    return (
+      <View>
+        <Text>{error}</Text>
+      </View>
+    );
+  }
+
+  if (loading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Encuentra el evento perfecto para ti</Text>
-        <CategoriesSlider
-          selectedCategoryId={selectedCategoryId}
-          handleCategoryClick={handleCategoryClick}
-        />
-{/* 
-      {loading && <Text>Loading...</Text>}
-      {error && <Text>{error}</Text>}
-      {events &&
-        events.map((event: Event) => (
-          <View 
-          style={styles.cardContainer}>
-            <EventSearch key={event.id}  data={event} />
-          </View>
-        ))} */}
+      <CategoriesSlider
+        selectedCategoryId={selectedCategoryId}
+        handleCategoryClick={handleCategoryClick}
+      />
+      {events.map((event) => ( 
+        <View key={event.id} style={styles.cardContainer}>
+          <EventSearch data={event} />
+        </View>
+      ))}
     </ScrollView>
   );
 };
 
+
+// +lindo esto +lindo detalle +lindo perfil
 const styles = StyleSheet.create({
     titleImage:{
         width: 160,
@@ -69,7 +76,7 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
       flex: 1,
-      paddingVertical: 100,
+      paddingVertical: 10,
       display: 'flex',
       backgroundColor: '#fff',
       padding:20

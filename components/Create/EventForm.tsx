@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import uuid from 'react-native-uuid';
 import { Input } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
@@ -8,8 +8,8 @@ import { useCreateEvent } from '../../api/events';
 import AppImagePicker from '../Camara/ImagePicker';
 import  DatePicker  from '../DatePicker/DatePicker';
 import { AdressInputWithMap } from '../Map/AdressInputWithMap';
-import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import { useNavigation } from '@react-navigation/native';
+import { supabase } from '../../supabase';
 
 export type EventData = {
   categoria: string | null
@@ -26,9 +26,10 @@ export type EventData = {
   title: string | null
 };
 
-const EventForm: React.FC = () => {
-  const { createEvent } = useCreateEvent()
-  const [loading, setLoading] = useState(false)
+export const EventForm = () => {
+  const navigation = useNavigation();
+  const { createEvent } = useCreateEvent();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<EventData>({
     id: uuid.v4(),
     categoria: null,
@@ -44,44 +45,50 @@ const EventForm: React.FC = () => {
     title: null,
   });
 
+  const setCreatedByField = async () => {
+    const { data: { user : { id }}} = await supabase.auth.getUser();
+    setFormData((prevData) => ({ ...prevData, created_by: id }));
+  }
+
   const handleInputChange = (field: keyof EventData, value: string) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
   };
 
-  const handleAddressChange = (location) => {
+  const handleAddressChange = (location: any) => {
     setFormData((prevData) => ({ ...prevData, location }));
   };
   
-  const handleImageChange = (image) => {
+  const handleImageChange = (image: any) => {
     setFormData((prevData) => ({ ...prevData, image }));
   } 
 
-  const handleAudioRecorded = (audio) => {
+  const handleAudioRecorded = (audio: any) => {
     setFormData((prevData) => ({ ...prevData, audio }));
   };
 
-  const handleDateSelected = (date) => {
+  const handleDateSelected = (date: any) => {
     setFormData((prevData) => ({ ...prevData, date }));
   }
   
   const handleSubmit = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       await createEvent(formData);
-      console.log('subido pai', { formData });
-      toast.success('Success Notification!', {
-        position: toast.POSITION.TOP_RIGHT
+      navigation.navigate('Home', {
+        shouldRefetch: true
       });
-    } catch {
-      console.log(':(');
+    } catch (error) {
+      console.log('form-submit-error', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   };
 
+  useEffect(() => {
+    setCreatedByField()
+  }, []);
 
-  type TLabelProps = { text: string }
-  const Label = ({ text }: TLabelProps) => <Text style={styles.label}>{text}:</Text>
+  const Label = ({ text }: { text: string }) => <Text style={styles.label}>{text}:</Text>
 
   return (
     <>
@@ -112,8 +119,8 @@ const EventForm: React.FC = () => {
             multiline
             value={formData.description}
             onChangeText={(text) => handleInputChange('description', text)} 
-            inputStyle={styles.input}
-            placeholder="En este evento vamos a..."
+            inputStyle={styles.input1}
+            placeholder="Te esperamos de 5 a 8 en nuestro local..."
             containerStyle={styles.inputContainer}
             inputContainerStyle={styles.inputInnerContainer}
           />
@@ -135,7 +142,7 @@ const EventForm: React.FC = () => {
               <Picker.Item label='Arte' value='Arte' />
               <Picker.Item label='Medio ambiente' value='Medio ambiente' />
               <Picker.Item label='Deportes' value='Deportes' />
-              <Picker.Item label='Actividad  fisica' value='Actividad  fisica' />
+              <Picker.Item label='Actividad fisica' value='Actividad fisica' />
               <Picker.Item label='Literatura' value='Literatura' />
               <Picker.Item label='Política' value='Política' />
               <Picker.Item label='Religion' value='Religion' />
@@ -204,15 +211,33 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingHorizontal: 0,
-    marginBottom: 40
+    marginBottom: 0
   },
   inputInnerContainer: {
     borderBottomWidth: 0,
+    backgroundColor: 'white'
+  },
+  inputContainer1: {
+    paddingHorizontal: 0,
+    marginBottom: 0,
+  },
+  inputInnerContainer1: {
+    borderBottomWidth: 0,
+
   },
   input: {
     paddingHorizontal: 8,
     borderWidth: 1,
     borderColor: '#4e4e4e',
+  },
+  input1: {
+      paddingHorizontal: 8,
+      borderWidth: 1,
+      borderColor: '#4e4e4e',
+      height: 100,
+      display: 'flex',
+      textAlignVertical: 'top',
+    
   },
   picker: {
     paddingHorizontal: 8,

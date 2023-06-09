@@ -5,6 +5,8 @@ type TUseGetEvents = {
     data: any
     error: string
     loading: boolean
+    refetchEvents: () => void
+
 }
 
 type TUseCreateEvents = {
@@ -13,7 +15,7 @@ type TUseCreateEvents = {
     error: string
     loading: boolean
 }
-
+//no se como cambiar aca para el refetch
 export const useGetEvents = (): TUseGetEvents => {
     const [data, setData] = useState(null)
     const [error, setError] = useState('')
@@ -30,12 +32,60 @@ export const useGetEvents = (): TUseGetEvents => {
           setLoading(false)
       }
     }
-  
+
+    const refetchEvents = async () => {
+        try {
+            const { data } = await supabase.from("events").select();
+            setData(data)
+        } catch (err){
+            console.log({ err })
+            setError(err)
+        }
+      }
+
     useEffect(() => {
       fetchEvents()
     }, [])
 
-    return { data, error, loading }
+    return { data, error, loading , refetchEvents }
+}
+
+export const useGetUserEvents = (): TUseGetEvents => {
+    const [data, setData] = useState(null)
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
+  
+    const fetchEvents = async () => {
+      try {
+          setLoading(true)
+          const { data: { user : { id }}} = await supabase.auth.getUser();
+
+          const { data } = await supabase.from("events").select().eq('created_by', id );
+          setData(data)
+      } catch (err){
+          setError(err)
+      } finally {
+          setLoading(false)
+      }
+    }
+
+    const refetchEvents = async () => {
+        try {
+            const { data: { user : { id }}} = await supabase.auth.getUser();
+
+            const { data } = await supabase.from("events").select().eq('created_by', id );
+              setData(data)
+        } catch (err){
+            console.log({err}, 'ERROOOR')
+            setError(err)
+        }
+      }
+
+    useEffect(() => {
+      fetchEvents()
+    }, [])
+
+    return { data, error, loading , refetchEvents }
 }
 
 export const useCreateEvent = (): TUseCreateEvents => {
@@ -47,7 +97,6 @@ export const useCreateEvent = (): TUseCreateEvents => {
         try {
             setLoading(true)
             const response = await supabase.from("events").insert([eventData]);
-            console.log(response)
             setData(response.data);
         } catch (err){
             console.log({ err })

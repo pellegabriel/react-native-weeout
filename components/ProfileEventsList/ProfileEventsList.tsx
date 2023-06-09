@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import { EventUser } from './EventUser';
-import { useGetEvents } from '../../api/events';
+import { useGetUserEvents } from '../../api/events';
 
 export const ProfileEventsList: React.FC = () => {
-  const { data, error, loading } = useGetEvents()
-
+  
+  const { data, error, loading } = useGetUserEvents()
   if (error) {
     return (
       <View>

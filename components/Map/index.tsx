@@ -24,7 +24,6 @@ const defaultRegion = {
 function Map() {
   const [map, setMap] = useState(null);
   const { data, loading, error } = useGetEvents();
-
   const onMapReady = useCallback((map: any) => {
     setMap(map);
   }, []);
@@ -46,15 +45,13 @@ function Map() {
       >
         {data &&
           Array.isArray(data) &&
-          data.map((event: IEvent) => {
-            const { latitude, longitude, location } = event;
-            if (latitude && longitude && location) {
-              const { latitude: locationLatitude, longitude: locationLongitude } = location;
-
+          data.map((event) => {
+            const { location : {lat, lng} } = event;
+            if (lat && lng ) {
               return (
                 <Marker
                   key={event.id}
-                  coordinate={{ latitude: locationLatitude, longitude: locationLongitude }}
+                  coordinate={{ latitude: lat, longitude: lng }}
                 />
               );
             }

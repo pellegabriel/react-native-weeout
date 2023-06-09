@@ -40,14 +40,13 @@ export const ProfileScreen = () => {
               </TouchableOpacity>
             </View>
           </View> */}
-
+{/* 
           <View style={styles.contact}>
-          <Text style={styles.contactLabel1}>Tus Datos</Text>
             <Text style={styles.contactLabel}>Correo electrónico:</Text>
             <Text style={styles.contactText}>{fakeProfile.email}</Text>
             <Text style={styles.contactLabel}>Teléfono:</Text>
             <Text style={styles.contactText}>{fakeProfile.phone}</Text>
-          </View>
+          </View> */}
           <Text style={styles.titleFilter}>Tus eventos </Text>
           <View style={styles.scroll}>
           <ProfileEventsList />
@@ -72,14 +71,13 @@ export const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height:500
   },
   container1: {
     flex: 1,
     display: 'flex', justifyContent:'center'
   },
   header: {
-    height: 100,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
@@ -105,7 +103,7 @@ const styles = StyleSheet.create({
     justifyContent:'flex-start',
   },
   titleFilter: {
-    paddingHorizontal: 100,
+    paddingHorizontal: 20,
     fontSize: 30,
     display: 'flex',
     fontWeight: 'bold',

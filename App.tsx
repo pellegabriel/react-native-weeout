@@ -92,7 +92,7 @@ const ProfileStackScreen = () => {
           />
 
           <Tab.Screen
-            name="Search events"
+            name="Buscar Eventos"
             component={SearchScreen}
             options={{
               headerShown: false,
@@ -102,11 +102,11 @@ const ProfileStackScreen = () => {
           />
 
           <Tab.Screen
-            name="ProfileTab"
+            name="Perfil"
             component={ProfileStackScreen}
             options={{
               headerShown: false,
-              tabBarIcon: () => <Icons name='home' size={18} color="#f5694d" />
+              tabBarIcon: () => <Icons name='user' size={18} color="#f5694d" />
             }}
           />
         </Tab.Navigator>

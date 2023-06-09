@@ -3,7 +3,7 @@ import Icons from '@expo/vector-icons/FontAwesome5';
 import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
 
 type CategoryCardProps = {
-  id: number
+  id: string
   label: string
   icon_name: string
   isSelected:  boolean
@@ -45,3 +45,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+//cuando sale bien la creacion del evento te navegue a la home y hacer un fetch de vuelta de los eventos ,desde el home le pasas una prop al componente eventForm
+//onEventCreatedSuccesfully y esta funcion va a hacer un fetch de vuelta de los eventos y navegar para atras (Home)
+// funcion goBack para el form 
+//

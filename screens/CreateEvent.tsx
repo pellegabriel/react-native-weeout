@@ -1,15 +1,14 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text } from 'react-native';
-
 import EventForm from '../components/Create/EventForm';
 
 export const CreateEventScreen = () => {
+
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="always">
       <Text style={styles.title}>Crea tu propio evento</Text>
       <EventForm />
     </ScrollView>
-
   );
 };
 
@@ -26,12 +25,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     fontWeight: 'bold',
     justifyContent: 'flex-start',
-  },  button: {
+  },  
+  button: {
     backgroundColor:  '#f5694d',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-  },  label: {
+  },  
+  label: {
     fontSize: 16,
     marginBottom: 6,
     fontWeight: 'bold',

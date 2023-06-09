@@ -4,28 +4,29 @@ import CategoryCard from './CategoryCard';
 import { useGetCategories } from '../../api/useGetCategories';
 
 type CategoriesSliderProps = {
-  selectedCategoryId: number | null;
-  handleCategoryClick: (categoryId: number) => void;
+  selectedCategoryId: string | null;
+  handleCategoryClick: (categoryId: string) => void;
+  
 };
 
 export const CategoriesSlider: React.FC<CategoriesSliderProps> = ({ handleCategoryClick }) => {
   const { data, error, loading } = useGetCategories();
-  const [categoriesSelected, setCategoriesSelected] = useState<number[]>([]);
+  const [categoriesSelected, setCategoriesSelected] = useState<string[]>([]);
+  const handlePress = (categoria: string) => {
 
-  const handlePress = (id: number) => {
-    const categoryIndex = categoriesSelected.indexOf(id);
+    const categoryIndex = categoriesSelected.indexOf(categoria);
 
     if (categoryIndex !== -1) {
       const updatedCategories = [...categoriesSelected];
       updatedCategories.splice(categoryIndex, 1);
       setCategoriesSelected(updatedCategories);
     } else {
-      setCategoriesSelected([...categoriesSelected, id]);
-      handleCategoryClick(id);
+      setCategoriesSelected([...categoriesSelected, categoria]);
+      handleCategoryClick(categoria);
     }
   };
 
-  const isCategorySelected = (id: number) => categoriesSelected.some(categoryId => categoryId === id);
+  const isCategorySelected = (categoria: string) => categoriesSelected.some(categoryId => categoryId === categoria);
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -47,12 +48,15 @@ export const CategoriesSlider: React.FC<CategoriesSliderProps> = ({ handleCatego
       >
         {data && data.map((item) => (          
           <CategoryCard
-            id={item.id}
+            id={item.categoria}
             label={item.label}
             icon_name={item.icon_name}
             key={item.id}
-            handlePress={() => handlePress(item.id)}
-            isSelected={isCategorySelected(item.id)}
+            handlePress={() => {
+              handlePress(item.label)
+              
+            }}
+            isSelected={isCategorySelected(item.label)}
           />
         ))}
       </ScrollView>
