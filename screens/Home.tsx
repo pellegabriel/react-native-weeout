@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Map from '../components/Map';
 import { useGetEvents } from '../api/events';
-import { EventCard } from '../components/ListOfEvents/EventCard';
 import FloatingButton from '../components/profile/FloatingButton';
+import { EventCard } from '../components/ListOfEvents/EventCard';
+// import { ListOfEvents } from '../components/ListOfEvents';
 
 export const HomeScreen = ({route}) => {
   const { data, error, loading, refetchEvents } = useGetEvents();
@@ -37,12 +38,13 @@ export const HomeScreen = ({route}) => {
         {error && <Text>Error: {error}</Text>}
 
         {data &&
-          data.map((event, index) => (
+          data.map((event: any, index: React.Key) => (
             <View key={index} style={styles.cardContainer}>
               <EventCard data={event} />
             </View>
           ))}
           </View> 
+        {/* <ListOfEvents /> */}
       </ScrollView>
       <FloatingButton />
     </>

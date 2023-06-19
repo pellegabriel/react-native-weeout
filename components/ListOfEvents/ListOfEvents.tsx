@@ -22,7 +22,7 @@ export const ListOfEvents: React.FC = () => {
       {loading && <Text>loading...</Text>}
       
       {data && (
-        data.map((event, index) => (
+        data.map((event: any, index: React.Key) => (
           <View key={index} style={styles.cardContainer}>
             <EventCard data={event} />
           </View>

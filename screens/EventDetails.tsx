@@ -9,7 +9,8 @@ import { useGetEvents } from "../api/events";
 import {DetailMap} from "../components/Map/DetailMap";
 import { useEffect, useState } from "react";
 import { gecodificateLocation } from "../api/geocodification";
-
+import { format, parseISO } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootStackParamList, 'EventDetails'> }) => {
   const [address, setAddress] = useState('');
@@ -68,7 +69,8 @@ export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootS
           <Image source={{ uri: event.image }} style={styles.image} />
             <View style={styles.infoContainer}>
               <View style={styles.boxInfo}>
-                <Text style={styles.infoText}>{event?.date}</Text>
+                <Text style={styles.infoText}> {format(parseISO(event?.date), 'dd MMMM yyyy', { locale: es })}
+                </Text>
               </View>
               <Text style={styles.description}>{event?.description}</Text>
               <View style={styles.adress}>
