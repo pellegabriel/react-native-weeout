@@ -2,24 +2,37 @@ import React from 'react';
 import { Marker, Callout } from 'react-native-maps';
 import { View, Text } from 'react-native';
 
-const MapMarker: React.FC = () => {
-  const position = { latitude: -34.91554, longitude: -57.91454 };
-  const title = 'Lugar predeterminado';
-  const description = 'Descripción del lugar predeterminado';
+interface MapMarkerProps {
+  loading: boolean;
+  error: string;
+  data: any; 
+}
+
+const MapMarker: React.FC<MapMarkerProps> = ({ loading, error, data }) => {
+  if (loading) {
+    return null; 
+  }
+
+  if (error) {
+  
+    return null;
+  }
 
   return (
-    <Marker coordinate={position}>
+    <Marker coordinate={{ latitude: data.lat, longitude: data.lng }}> 
       <Callout>
         <View>
-          <Text style={{ fontWeight: 'bold' }}>{title}</Text>
-          <Text>{description}</Text>
+          <Text style={{ fontWeight: 'bold' }}>{data.title}</Text>
+          <Text>{data.description}</Text>
         </View>
       </Callout>
     </Marker>
   );
+   
 };
 
 export default MapMarker;
+
 
 // import React from 'react';
 // // import { Event } from '../../src/models';

@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { TFakeEvent } from '../../utils/fakeData';
 import { Audio } from 'expo-av';
-import Icons from '@expo/vector-icons/FontAwesome5';
+// import audioSample from '../../assets/audio-sample.mp3'
+// import Icons from '@expo/vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import Icons from '@expo/vector-icons/FontAwesome5';
 import { gecodificateLocation } from '../../api/geocodification';
-import { supabase } from '../../supabase';
 
-export type TEventCardProps = { data: any }
+export interface CardProps {
+  data: any;
+}
 
-export const EventCard: React.FC<TEventCardProps> = ({ data }) => {
-  const [error, setError] = useState('');
-  const [address, setAddress] = useState('');
-  const [soundPlaying, setSoundPlaying] = React.useState<boolean>(false);
+export const EventUser: React.FC<CardProps> = ({ data }) => {
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
-  const [sound, setSound] = React.useState<Audio.Sound>();
-
-  // error 400 en create event
+  const [sound, setSound] = React.useState<Audio.Sound | undefined>();
+  const [address, setAddress] = useState('');
 
   useEffect(() => {
     const getAddressData = async () => {
@@ -27,51 +27,39 @@ export const EventCard: React.FC<TEventCardProps> = ({ data }) => {
 
     getAddressData();
   }, []);
-  
-  React.useEffect(() => {
-    return () => {
-      if (sound) {
-        console.log('Unloading Sound', sound);
-        sound.unloadAsync();
-        setSoundPlaying(false);
-      }
-    };
-  }, [sound, data.audio]);
 
-  
-  const handleAudio = async () => {
-    
-    try {
-      setSoundPlaying(true);
+  async function playSound() {
+    // const { sound } = await Audio.Sound.createAsync(audioSample);
+    // setSound(sound);
 
-
-      const createdSound = await Audio.Sound.createAsync({ uri: data.audio });
-      console.log('playing...');
-      await createdSound.sound.playAsync();
-      setSound(createdSound.sound);
-    } catch (error) {
-      setError(error);
-      console.log('audio-error', {error});
-    } finally {
-      setSoundPlaying(false);
-    }
-  };
-  
-
-  const handleClickOnCard = () => {
-    navigate('EventDetails', { eventId: data.id });
+    // await sound.playAsync();
   }
 
-  if (error) {
-    return <Text>{error.toString()}</Text>
+  const handleAudio = async () => {
+    if (sound === undefined) {
+      playSound()
+    } else {
+      setSound(null);
+    }
+  }
+
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
+  const handleClickOnCard = () => {
+    navigate('EventDetails', { eventId: data.id })
   }
 
   return (
     <TouchableOpacity style={styles.card} onPress={handleClickOnCard}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: data.image }} style={styles.image} />
+      <Image source={{ uri: data.image }} style={styles.image} />
       </View>
-      
       <View style={styles.content}>
         <Text style={styles.title}>{data.title}</Text>
         <Text numberOfLines={4} style={styles.description}>{data.description}</Text>
@@ -84,14 +72,14 @@ export const EventCard: React.FC<TEventCardProps> = ({ data }) => {
             <Icons
               size={10}
               color="#f5694d"
-              name={soundPlaying ? 'pause' : 'play'}
-            />
+              name={sound ? 'pause' : 'play'}
+              />
           </TouchableOpacity>
 
           <View style={styles.dataPoint}>
-            <Icons style={styles.dataPointIcon} name='map-marker' size={14} color="#f5694d" />
+            {/* <Icons style={styles.dataPointIcon} name='map-marker' size={14} color="#f5694d" /> */}
             <Text numberOfLines={2} style={styles.dataPointText}>{address}</Text>
-          </View>
+           </View>
         </View>
 
       </View>
@@ -166,9 +154,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   dataPointText: {
-    fontSize: 12,
-    width: 80,
-    height: 30
+    fontSize: 12
   },
   dataPointIcon: {
     marginRight: 10

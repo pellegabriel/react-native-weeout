@@ -10,14 +10,12 @@ import { supabase } from '../../supabase';
 
 export type TEventCardProps = { data: any }
 
-export const EventCard: React.FC<TEventCardProps> = ({ data }) => {
+export const EventSearch: React.FC<TEventCardProps> = ({ data }) => {
   const [error, setError] = useState('');
   const [address, setAddress] = useState('');
   const [soundPlaying, setSoundPlaying] = React.useState<boolean>(false);
   const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
   const [sound, setSound] = React.useState<Audio.Sound>();
-
-  // error 400 en create event
 
   useEffect(() => {
     const getAddressData = async () => {
@@ -27,36 +25,41 @@ export const EventCard: React.FC<TEventCardProps> = ({ data }) => {
 
     getAddressData();
   }, []);
-  
+
   React.useEffect(() => {
-    return () => {
-      if (sound) {
-        console.log('Unloading Sound', sound);
-        sound.unloadAsync();
-        setSoundPlaying(false);
-      }
-    };
-  }, [sound, data.audio]);
+    return sound
+      ? () => {
+          console.log('Unloading Sound');
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
 
-  
   const handleAudio = async () => {
-    
     try {
-      setSoundPlaying(true);
+      setSoundPlaying(true)
+      const { data: { user: { id } } } = await supabase.auth.getUser()
+      const eventAudioName = `audio-${id}-${data.id}`
+      const { data: { publicUrl } } = await supabase.storage.from('audios').getPublicUrl(eventAudioName)
 
+      const createdSound = await Audio.Sound.createAsync(
+        { uri: publicUrl },
+        { shouldPlay: true }
+      );
 
-      const createdSound = await Audio.Sound.createAsync({ uri: data.audio });
-      console.log('playing...');
-      await createdSound.sound.playAsync();
       setSound(createdSound.sound);
+
+      console.log('createdSound.sound', createdSound.sound)
+      console.log('playing...')
+      await createdSound.sound.playAsync();
+
     } catch (error) {
-      setError(error);
-      console.log('audio-error', {error});
+      setError(error)
+      console.log(error)
     } finally {
-      setSoundPlaying(false);
+      setSoundPlaying(false)
     }
-  };
-  
+  }
 
   const handleClickOnCard = () => {
     navigate('EventDetails', { eventId: data.id });
@@ -166,9 +169,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   dataPointText: {
-    fontSize: 12,
-    width: 80,
-    height: 30
+    fontSize: 12
   },
   dataPointIcon: {
     marginRight: 10

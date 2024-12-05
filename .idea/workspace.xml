@@ -4,14 +4,13 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ab0ae86-5d2c-47b2-be80-3043a1c95744" name="Changes" comment="">
+    <list default="true" id="3bfcab68-0480-46f7-a2c9-3c7e391e9c91" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Create/MultipleChoiceForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Create/MultipleChoiceForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Map/Market.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Map/Market.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Map/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Map/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ListOfEvents/ListOfEvents.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ListOfEvents/ListOfEvents.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/EventCreate.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/EventCreate.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/EventDetails.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/EventDetails.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/screens/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Home.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,19 +31,35 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/pelle/github/scroll-animation/weeout-mobile&quot;
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;
   }
 }</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="3ab0ae86-5d2c-47b2-be80-3043a1c95744" name="Changes" comment="" />
+      <changelist id="3bfcab68-0480-46f7-a2c9-3c7e391e9c91" name="Changes" comment="" />
       <created>1681516505006</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1681516505006</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="93" y="93" width="2375" height="1255" key="AVDManager" timestamp="1686257144057">
+      <screen x="0" y="0" width="2560" height="1440" />
+    </state>
+    <state x="93" y="93" width="2375" height="1255" key="AVDManager/0.0.2560.1440@0.0.2560.1440" timestamp="1686257144057" />
   </component>
 </project>

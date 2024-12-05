@@ -1,59 +1,69 @@
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { SearchInput } from '../components/SearchInput';
 import { ProfileEventsList } from '../components/ProfileEventsList';
 import { fakeProfile } from '../utils/fakeData';
+// import UserCategory from '../components/profile/UserCategory';
+// import { Button } from 'react-native';
+import { supabase } from '../supabase';
+import FloatingButton from '../components/profile/FloatingButton';
 
 
 export const ProfileScreen = () => {
   const [text, setText] = useState('');
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+  }
 
-  const handleTextChange = (newText: string) => {
-    setText(newText);
-  };
+  // const handleTextChange = (newText: string) => {
+  //   setText(newText);
+  // };
+
   return (
     <View style={styles.container1}>
       <ScrollView style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton}>
-            <Icon name="arrow-left" size={20} color="#fff" />
-          </TouchableOpacity>
           <Text style={styles.title}>Mi Perfil</Text>
+
         </View>
+        {/* <Button title="Sign Out" onPress={() => supabase.auth.signOut()} /> */}
 
         <View style={styles.body}>
-          <View style={styles.profile}>
-            <Image
-              style={styles.profileImage}
-              source={{ uri: 'https://source.unsplash.com/random/300x301' }}
-            />
+          {/* <View style={styles.profile}>
+
 
             <View style={styles.profileInfo}>
               <TouchableOpacity style={styles.editButton}>
                 <Icon name="pencil" size={20}/>
+
               </TouchableOpacity>
             </View>
-          </View>
-
+          </View> */}
+{/* 
           <View style={styles.contact}>
             <Text style={styles.contactLabel}>Correo electrónico:</Text>
             <Text style={styles.contactText}>{fakeProfile.email}</Text>
             <Text style={styles.contactLabel}>Teléfono:</Text>
             <Text style={styles.contactText}>{fakeProfile.phone}</Text>
-          </View>
-
-          <SearchInput
-            value={text}
-            onChangeText={handleTextChange}
-            placeholder="Escribe algo..."
-          />
-
+          </View> */}
+          <Text style={styles.titleFilter}>Tus eventos </Text>
+          <View style={styles.scroll}>
           <ProfileEventsList />
-
+          </View>
+          <View style={styles.signOutView}> 
+          <TouchableOpacity onPress={handleSignOut}  style={styles.signout}>
+            <Text style={styles.signOutText}>
+              Logout
+            </Text>
+          </TouchableOpacity>
+          </View>
         </View>
+        
       </ScrollView>
+
+      <FloatingButton/>
+
     </View>
   );
 };
@@ -61,18 +71,18 @@ export const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height:500
   },
   container1: {
     flex: 1,
     display: 'flex', justifyContent:'center'
   },
   header: {
-    height: 70,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: 20
+    marginTop: 100,
+
   },
   backButton: {
     position: 'absolute',
@@ -81,10 +91,23 @@ const styles = StyleSheet.create({
     padding: 5,
     zIndex: 1,
   },
+  scroll: {
+    height:400
+  },
   title: {
-    fontSize: 20,
+    paddingHorizontal: 40,
+    fontSize: 40,
+    display: 'flex',
+    marginBottom: 0,
     fontWeight: 'bold',
-    
+    justifyContent:'flex-start',
+  },
+  titleFilter: {
+    paddingHorizontal: 20,
+    fontSize: 30,
+    display: 'flex',
+    fontWeight: 'bold',
+    justifyContent:'center',
   },
   
   body: {
@@ -107,7 +130,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
   },
-  
   profileInfo: {
     flexDirection: 'column',
     justifyContent: 'center',
@@ -127,8 +149,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
+    width:30
   },
-  
   editButtonText: {
     fontSize: 16,
     marginLeft: 5,
@@ -136,12 +158,43 @@ const styles = StyleSheet.create({
   contact: {
     marginBottom: 20,
   },
-  contactLabel: {
-    fontSize: 18,
+  contactLabel1:{
+    paddingHorizontal: 10,
+    fontSize: 30,
+    display: 'flex',
+    marginBottom: 20,
     fontWeight: 'bold',
-    marginBottom: 5,
+    justifyContent:'flex-start',
+  },
+  contactLabel: {
+    paddingHorizontal: 10,
+    fontSize: 20,
+    display: 'flex',
+    marginBottom: 0,
+    fontWeight: 'bold',
+    justifyContent:'flex-start',
   },
   contactText: {
-    fontSize: 16,
-  },
+    paddingHorizontal: 10,
+    fontSize: 15,
+    display: 'flex',
+    marginBottom: 15,
+    justifyContent:'flex-start',  },
+  signOutText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textAlign: 'center',  },
+  signout: {
+    marginTop: 60,
+    backgroundColor:  '#f5694d',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5, 
+    width: 150,
+   },
+   signOutView: {
+    display: 'flex',
+    justifyContent:'center',
+    alignItems:'center'
+   }
 });

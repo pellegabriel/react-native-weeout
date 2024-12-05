@@ -1,37 +1,53 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import Icons from '@expo/vector-icons/FontAwesome5';
-import { ImageGrid } from "../components/ImageGrid/ImageGrid";
 import { StatusBar } from "expo-status-bar";
 import { Image } from "react-native-elements";
-import { fakeImages } from "../utils/fakeData";
-import { useNavigation } from '@react-navigation/native';
+import Icons from '@expo/vector-icons/FontAwesome5';
+import { ScrollView, StyleSheet, Text, View } from "react-native"
+import { useNavigation, RouteProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootStackParamList } from '../App';
+import { useGetEvents } from "../api/events";
+import {DetailMap} from "../components/Map/DetailMap";
+import { useEffect, useState } from "react";
+import { gecodificateLocation } from "../api/geocodification";
+import { format, parseISO } from 'date-fns';
+import { es } from 'date-fns/locale';
 
-interface Props {
-    title: string;
-    subtitle: string;
-    description: string;
-    startDate: Date;
-    endDate: Date;
-    location: string;
-    createdBy: string;
-    images: { id: number; uri: string }[];
-    columns: number;
+export const EventDetailsScreen: React.FC = ({ route }: { route: RouteProp<RootStackParamList, 'EventDetails'> }) => {
+  const [address, setAddress] = useState('');
+  const { eventId } = route.params;
+  const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
+  const { data: eventsData, error: eventsError, loading: eventsLoading } = useGetEvents();
+
+  // Find the event with the matching ID
+  const event = eventsData?.find((event: { id: string; }) => event.id === eventId);
+
+  useEffect(() => {
+    const getAddressData = async () => {
+      if (event?.location) {
+        const addressData = await gecodificateLocation(event.location);
+        setAddress(addressData);
+      }
+    };
+
+    getAddressData();
+  }, [event?.location]);
+
+  if (eventsError) {
+    return (
+      <View>
+        <Text>{eventsError}</Text>
+      </View>
+    );
   }
 
-  const event = {
-    title: 'Mi evento',
-    subtitle: 'Un evento muy interesante',
-    description: 'Un evento para aprender mucho sobre React Native',
-    startDate: new Date('2023-05-01T10:00:00Z'),
-    endDate: new Date('2023-05-01T12:00:00Z'),
-    location: 'Mi casa',
-    createdBy: 'Juan Perez',  
-  };
+  if (!event || eventsLoading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
-export const EventDetailsScreen : React.FC<Props> = ({}) => {
-  const { navigate } = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
 
   return (
     <ScrollView>
@@ -41,58 +57,60 @@ export const EventDetailsScreen : React.FC<Props> = ({}) => {
           <View style={styles.iconContainer}>
             <Icons name='calendar' size={30} color="#f5694d" />
           </View>
+
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>{event.title}</Text>
-            <Text style={styles.subtitle}>{event.subtitle}</Text>
+            <Text style={styles.title}>{event?.title}</Text>
+            <Text style={styles.subtitle}>{event?.subtitle}</Text>
           </View>
         </View>
+
         <View style={styles.body}>
-          <Text style={styles.description}>{event.description}</Text>
-          <View style={styles.infoContainer}>
-            <Icons name='calendar' size={20} color="#f5694d" />
-            <Text style={styles.infoText}>
-              {event.startDate.toLocaleDateString()} - {event.endDate.toLocaleDateString()}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Icons name='map-marker' size={20} color="#f5694d" />
-            <Text style={styles.infoText}>{event.location}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Icons name='user' size={20} color="#f5694d" />
-            <Text style={styles.infoText}>Created by {event.createdBy}</Text>
-          </View>
+          <View style={styles.info}>
+          <Image source={{ uri: event.image }} style={styles.image} />
+            <View style={styles.infoContainer}>
+              <View style={styles.boxInfo}>
+                <Text style={styles.infoText}> {format(parseISO(event?.date), 'dd MMMM yyyy', { locale: es })}
+                </Text>
+              </View>
+              <Text style={styles.description}>{event?.description}</Text>
+              <View style={styles.adress}>
+                <Text style={styles.adress}>{address}</Text>
+              </View>
+
+            </View>
+        </View>
+        </View>
+        <View style={styles.mapContainer}>
+          <DetailMap event={event}/>
         </View>
       </View>
-
-
-        <View style={styles.listOfImages}>
-          {fakeImages.map(({ uri, id }) => (
-            <TouchableOpacity
-            style={styles.imageContainer}
-            // onPress={() => navigate('ImageDetails', { imageId: id })}
-            >
-              <Image source={{ uri }} style={styles.image} />
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView> 
-    )
-}
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
+  flatList: {
+    maxHeight: 300, // Establece la altura máxima deseada
+    flex: 1,
+    marginBottom: 20
+  },
     container: {
       marginTop: 60,
       borderRadius: 10,
       marginHorizontal: 16,
       marginVertical: 8,
-      borderWidth: 1,
-      borderColor: '#f5694d',
+    },    mapContainer:{
+      height:240,
+      paddingTop: 0,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
     },
     listOfImages: {
       flexWrap: 'wrap',
       flexDirection: 'row',
       justifyContent: 'center',
+
     },
     imageContainer: {
       marginVertical: 10,
@@ -104,7 +122,6 @@ const styles = StyleSheet.create({
       borderRadius: 5,
     },
     header: {
-      backgroundColor: '#f5694d',
       borderTopLeftRadius: 10,
       borderTopRightRadius: 10,
       padding: 16,
@@ -123,29 +140,63 @@ const styles = StyleSheet.create({
       marginLeft: 16,
     },
     title: {
-      fontSize: 24,
+      fontSize: 40,
+      display: 'flex',
       fontWeight: 'bold',
-      color: '#fff',
-      marginBottom: 4,
+      justifyContent: 'flex-start',
     },
     subtitle: {
-      fontSize: 16,
-      color: '#fff',
+      fontSize: 26,
     },
     body: {
-      padding: 16,
+      paddingHorizontal: 16,
     },
+
     description: {
-      fontSize: 16,
-      marginBottom: 20,
+      width: 110,
+      fontSize: 12,
+      borderBottomWidth: 1,
+      marginTop:5,
+      padding: 5
+
     },
-    infoContainer: {
+    boxInfo: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 0,
+      marginTop: 5,
+      borderBottomWidth: 1,
+      padding: 5
+
+    },   
+    adress: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 0,
+      fontSize: 12,
+      marginTop:5
+      
+    },  
+    info: {
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: 20,
+      marginTop: 0,
+      
+
     },
     infoText: {
-      fontSize: 16,
-      marginLeft: 12,
+      fontSize: 12,
+  
     },
-  });
+    infoContainer: {
+      flexDirection: 'column',
+      padding: 20,
+      marginTop: 10,
+      height: 200,
+      marginBottom: 20,
+      width: 150
+
+
+    }
+});

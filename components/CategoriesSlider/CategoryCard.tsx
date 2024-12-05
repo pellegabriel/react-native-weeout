@@ -1,18 +1,31 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
-import { TFakeCategory } from '../../utils/fakeData';
 import Icons from '@expo/vector-icons/FontAwesome5';
+import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
 
-export const CategoryCard: React.FC<TFakeCategory> = ({ title, icon, startDate, location }) => {
+type CategoryCardProps = {
+  id: string
+  label: string
+  icon_name: string
+  isSelected:  boolean
+  handlePress: () => void
+}
+
+const CategoryCard: React.FC<CategoryCardProps> = ({ label, icon_name, isSelected, handlePress }) => {
+  const containerStyles = {
+    ...styles.iconContainer,
+    backgroundColor: isSelected ? '#f5694d' : 'white'
+  }
   return (
-    <TouchableOpacity style={styles.wrapper}>
-      <View style={styles.iconContainer}>
-        <Icons name={icon} size={20} color="#f5694d" />
+    <TouchableOpacity style={styles.wrapper} onPress={handlePress}>
+      <View style={containerStyles}>
+        <Icons name={icon_name} size={20} color={isSelected ? 'white' : "#f5694d"} />
       </View>
-      <Text>{title}</Text>
+      <Text>{label}</Text>
     </TouchableOpacity>
   );
 };
+
+export default CategoryCard;
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -32,3 +45,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+//cuando sale bien la creacion del evento te navegue a la home y hacer un fetch de vuelta de los eventos ,desde el home le pasas una prop al componente eventForm
+//onEventCreatedSuccesfully y esta funcion va a hacer un fetch de vuelta de los eventos y navegar para atras (Home)
+// funcion goBack para el form 
+//

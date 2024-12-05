@@ -3,28 +3,27 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from './screens/Home';
 import { EventDetailsScreen } from './screens/EventDetails';
 import { ProfileScreen } from './screens/Profile';
-// import { ImageDetailsScreen } from './screens/ImageDetails';
 import React, { useEffect, useState } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from './supabase';
 import Login from './components/Login/Login';
-import { Button , Image} from 'react-native';
 import Icons from '@expo/vector-icons/FontAwesome5';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SearchScreen } from './screens/Search';
-import EventCreate from './screens/EventCreate';
-
+import { CreateEventScreen } from './screens/CreateEvent';
 
 export type RootStackParamList = {
   Home: undefined
   Profile: undefined
   EventDetails: { eventId: string }
-  'Search events': undefined;
+  'Search events': { categoryId: number };
   EventCreate: undefined
+  Inicio: undefined;
 };
 
-const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator<RootStackParamList>();
+const HomeStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null)
@@ -39,49 +38,75 @@ export default function App() {
     })
   }, [])
 
-  const HomeStack = () => {
+  const HomeStackScreen = () => {
     return (
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{  headerShown: false }} />
-      </Stack.Navigator>
+      <HomeStack.Navigator>
+        <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <HomeStack.Screen name="EventDetails" component={EventDetailsScreen} options={{  headerShown: false }} />
+        <HomeStack.Screen name="EventCreate" component={CreateEventScreen} options={{
+          headerTitle: '',
+          headerStyle: { backgroundColor: 'transparent' },
+          }}/>
+
+      </HomeStack.Navigator>
     );
   }
+
+const EventCreateStack = createStackNavigator();
+
+const EventCreateStackScreen = () => {
+  return (
+    <EventCreateStack.Navigator>
+      <EventCreateStack.Screen
+        name="EventCreate"
+        component={CreateEventScreen}
+        options={{
+          headerTitle: '',
+          headerStyle: { backgroundColor: 'transparent' },
+        }}
+      />
+    </EventCreateStack.Navigator>
+  );
+}
+
+const ProfileStackScreen = () => {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+      <ProfileStack.Screen name="EventCreateNested" component={EventCreateStackScreen} />
+    </ProfileStack.Navigator>
+  );
+}
 
   return (
     <NavigationContainer>
       {session && session.user ? (
         <Tab.Navigator>
           <Tab.Screen
-            name="Home"
-            component={HomeStack}
+            name="Inicio"
+            component={HomeStackScreen}
             options={{
               headerShown: false,
               tabBarIcon: () => <Icons name='home' size={18} color="#f5694d" />
             }}
           />
+
           <Tab.Screen
-            name="Search events"
+            name="Buscar Eventos"
             component={SearchScreen}
             options={{
               headerShown: false,
               tabBarIcon: () => <Icons name='search' size={18} color="#f5694d" />
+              
             }}
           />
-                    <Tab.Screen
-            name="EventCreate"
-            component={EventCreate}
+
+          <Tab.Screen
+            name="Perfil"
+            component={ProfileStackScreen}
             options={{
               headerShown: false,
-              tabBarIcon: () => <Icons name='search' size={18} color="#f5694d" />
-            }}
-          />
-          <Tab.Screen name="Profile" component={ProfileScreen} 
-              options={{
-              headerRight: () => (
-                <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
-              ),
-              tabBarIcon: () => <Icons name='user-alt' size={18} color="#f5694d" />
+              tabBarIcon: () => <Icons name='user' size={18} color="#f5694d" />
             }}
           />
         </Tab.Navigator>

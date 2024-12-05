@@ -1,312 +1,276 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import uuid from 'react-native-uuid';
+import { Input } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
-import { Audio } from 'expo-av';
-
-type EventFormProps = {
-  onSubmit: (eventData: EventData) => void;
-};
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { AudioControls } from '../AudioControls';
+import { useCreateEvent } from '../../api/events';
+import AppImagePicker from '../Camara/ImagePicker';
+import  DatePicker  from '../DatePicker/DatePicker';
+import { AdressInputWithMap } from '../Map/AdressInputWithMap';
+import { useNavigation } from '@react-navigation/native';
+import { supabase } from '../../supabase';
 
 export type EventData = {
-  title: string;
-  subtitle: string;
-  description: string;
-  category: string;
+  categoria: string | null
+  created_by: string | null
+  description: string | null
+  date: string | null
+  id: string | number[]
+  image: string | null
+  location: {
+    lat: number | null 
+    lng: number | null
+  } | null
+  subtitle: string | null
+  title: string | null
 };
 
-const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
-  const [eventData, setEventData] = useState<EventData>({
-    title: '',
-    subtitle: '',
-    description: '',
-    category: '',
+export const EventForm = () => {
+  const navigation = useNavigation();
+  const { createEvent } = useCreateEvent();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<EventData>({
+    id: uuid.v4(),
+    categoria: null,
+    created_by: null,
+    description: null,
+    date: null,
+    image: null,
+    location: {
+      lat: null,
+      lng: null
+    },
+    subtitle: null,
+    title: null,
   });
 
-  const [recording, setRecording] = useState<Audio.Recording | null>(null);
+  const setCreatedByField = async () => {
+    const { data: { user : { id }}} = await supabase.auth.getUser();
+    setFormData((prevData) => ({ ...prevData, created_by: id }));
+  }
 
-  const handleChange = (key: keyof EventData, value: string) => {
-    setEventData((prevData) => ({ ...prevData, [key]: value }));
+  const handleInputChange = (field: keyof EventData, value: string) => {
+    setFormData((prevData) => ({ ...prevData, [field]: value }));
   };
 
-  const handleSubmit = () => {
-    onSubmit(eventData);
+  const handleAddressChange = (location: any) => {
+    setFormData((prevData) => ({ ...prevData, location }));
   };
-
-  const startRecording = async () => {
-    try {
-      await Audio.requestPermissionsAsync();
-      const { granted } = await Audio.getPermissionsAsync();
-      if (!granted) {
-        alert('No se otorgaron permisos para grabar audio');
-        return;
-      }
   
-      const newRecording = new Audio.Recording();
-      await newRecording.prepareToRecordAsync({
-        android: {
-          extension: '.m4a',
-          outputFormat: 2, // Android.Media.MediaRecorder.OutputFormat.MPEG_4
-          audioEncoder: 3, // Android.Media.MediaRecorder.AudioEncoder.AAC
-          sampleRate: 44100,
-          numberOfChannels: 2,
-          bitRate: 128000,
-        },
-        ios: {
-          extension: '.caf',
-          // audioQuality: 'high',
-          audioQuality: 3,
-          sampleRate: 44100,
-          numberOfChannels: 2,
-          bitRate: 128000,
-          linearPCMBitDepth: 16,
-          linearPCMIsBigEndian: false,
-          linearPCMIsFloat: false,
-        },
-        web: {
-          mimeType: 'audio/webm',
-          bitsPerSecond: 128000,
-        },
+  const handleImageChange = (image: any) => {
+    setFormData((prevData) => ({ ...prevData, image }));
+  } 
+
+  const handleAudioRecorded = (audio: any) => {
+    setFormData((prevData) => ({ ...prevData, audio }));
+  };
+
+  const handleDateSelected = (date: any) => {
+    setFormData((prevData) => ({ ...prevData, date }));
+  }
+  
+  const handleSubmit = async () => {
+    try {
+      setLoading(true)
+      await createEvent(formData);
+      navigation.navigate('Home', {
+        shouldRefetch: true
       });
-      
-      await newRecording.startAsync();
-      setRecording(newRecording);
-    } catch (err) {
-      console.error('No se pudo iniciar la grabación', err);
+    } catch (error) {
+      console.log('form-submit-error', error)
+    } finally {
+      setLoading(false)
     }
-    
   };
-  
-  
 
-  const stopRecording = async () => {
-    try {
-      if (recording) {
-        await recording.stopAndUnloadAsync();
-        setRecording(null);
-      }
-    } catch (err) {
-      console.error('No se pudo detener la grabación', err);
-    }
-  };
+  useEffect(() => {
+    setCreatedByField()
+  }, []);
+
+  const Label = ({ text }: { text: string }) => <Text style={styles.label}>{text}:</Text>
 
   return (
-    <View style={styles.container}>
-      <Text>Título</Text>
-      <TextInput
-        style={styles.input}
-        value={eventData.title}
-        onChangeText={(text) => handleChange('title', text)}
-      />
-      <Text>Subtítulo</Text>
-      <TextInput
-        style={styles.input}
-        value={eventData.subtitle}
-        onChangeText={(text) => handleChange('subtitle', text)}
-      />
-      <Text>Descripción</Text>
-      <TextInput
-        style={styles.input}
-        value={eventData.description}
-        onChangeText={(text) => handleChange('description', text)}
-      />
-      <Text>Categoría</Text>
-      <Picker
-        selectedValue={eventData.category}
-        onValueChange={(value) => handleChange('category', value)}
-        style={styles.picker}
-      >
-        <Picker.Item label="Categoría 1" value="categoria1" />
-        <Picker.Item label="Categoría 2" value="categoria2" />
-        <Picker.Item label="Categoría 3" value="categoria3" />
-      </Picker>
-      <View style={styles.audioControls}>
-        <TouchableOpacity onPress={startRecording} style={styles.audioControlButton}>
-          <Text style={styles.audioControlButtonText}>Iniciar grabación</Text>
+    <>
+      <ScrollView style={styles.container}>
+        <View style={styles.container1}>
+          <Label text='Titulo' />
+          <Input
+            value={formData.title}
+            onChangeText={(text) => handleInputChange('title', text)}
+            inputStyle={styles.input}
+            placeholder="Escalada en el cerro Otto"
+            containerStyle={styles.inputContainer}
+            inputContainerStyle={styles.inputInnerContainer}
+          />
+
+          <Label text='Subtitulo' />
+          <Input
+            value={formData.subtitle}
+            onChangeText={(text) => handleInputChange('subtitle', text)} 
+            inputStyle={styles.input}
+            placeholder="Evento para para mayores de 26"
+            containerStyle={styles.inputContainer}
+            inputContainerStyle={styles.inputInnerContainer}
+          />
+
+          <Label text='Description' />
+          <Input
+            multiline
+            value={formData.description}
+            onChangeText={(text) => handleInputChange('description', text)} 
+            inputStyle={styles.input1}
+            placeholder="Te esperamos de 5 a 8 en nuestro local..."
+            containerStyle={styles.inputContainer}
+            inputContainerStyle={styles.inputInnerContainer}
+          />
+
+          <Label text='Fecha del evento' />
+          <DatePicker handleDateSelected={handleDateSelected} />
+
+          <Label text='Elegi la categoria del evento' />
+          <Picker
+            style={styles.picker}
+            selectedValue={formData.categoria}
+            onValueChange={(value) => handleInputChange('categoria', value)}
+          >
+              <Picker.Item label='Teatro' value='Teatro' />
+              <Picker.Item label='Musica' value='Musica' />
+              <Picker.Item label='Actividades sociales' value='sociales' />
+              <Picker.Item label='Baile' value='Baile' />
+              <Picker.Item label='Presentaciones' value='Presentaciones' />
+              <Picker.Item label='Arte' value='Arte' />
+              <Picker.Item label='Medio ambiente' value='Medio ambiente' />
+              <Picker.Item label='Deportes' value='Deportes' />
+              <Picker.Item label='Actividad fisica' value='Actividad fisica' />
+              <Picker.Item label='Literatura' value='Literatura' />
+              <Picker.Item label='Política' value='Política' />
+              <Picker.Item label='Religion' value='Religion' />
+              <Picker.Item label='Espiritualidad' value='Espiritualidad' />
+              <Picker.Item label='Salud y bienestar' value='Salud y bienestar' />
+              <Picker.Item label='Trabajo y negocios' value='Trabajo y negocios' />
+              <Picker.Item label='Vida nocturna' value='Vida nocturna' />
+          </Picker>
+
+          <Label text='Graba un audio contando acerca del evento' />
+          <AudioControls eventId={formData.id} handleAudioRecorded={handleAudioRecorded} />
+
+          <Label text='Subi una foto del evento' />
+          <AppImagePicker eventId={formData.id} handleImageChange={handleImageChange} />
+        </View>
+      </ScrollView>
+
+      <Label text='Ubicacion del evento' />
+      <View style={styles.adressContainer}>
+        <AdressInputWithMap onChange={handleAddressChange} location={formData.location} map_point="" />
+
+        <TouchableOpacity
+          disabled={loading}
+          activeOpacity={0.5}
+          style={styles.button}
+          onPress={handleSubmit}
+        >
+          <Text style={styles.buttonText}>Crear evento</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={stopRecording} style={styles.audioControlButton}>
-          <Text style={styles.audioControlButtonText}>Detener grabación</Text>
-        </TouchableOpacity>
+
+        {/* <ToastContainer /> */}
       </View>
-      <Text onPress={handleSubmit} style={styles.submitButton}>
-        Crear Evento
-      </Text>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    marginTop: 10,
+    paddingTop: 20,
+    paddingBottom: 10,
+  }, 
+  container1: {
+    marginTop: 10,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    paddingVertical: 15,
+    borderRadius: 8,
+  },
+  titleHome:{
+    padding:10,
+    fontSize: 22,
+    fontWeight: '600',
+    color: '#1c1e21',
+  },
+  timer: {
+    fontSize: 18,
+    marginBottom: 10,
+    fontWeight: 'bold',
+    color: '#4b4c4f',
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 6,
+    fontWeight: 'bold',
+    color: '#4b4c4f',
+  },
+  inputContainer: {
+    paddingHorizontal: 0,
+    marginBottom: 0
+  },
+  inputInnerContainer: {
+    borderBottomWidth: 0,
+    backgroundColor: 'white'
+  },
+  inputContainer1: {
+    paddingHorizontal: 0,
+    marginBottom: 0,
+  },
+  inputInnerContainer1: {
+    borderBottomWidth: 0,
+
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
+    paddingHorizontal: 8,
     borderWidth: 1,
-    marginBottom: 10,
+    borderColor: '#4e4e4e',
+  },
+  input1: {
+      paddingHorizontal: 8,
+      borderWidth: 1,
+      borderColor: '#4e4e4e',
+      height: 100,
+      display: 'flex',
+      textAlignVertical: 'top',
+    
   },
   picker: {
-    height: 50,
-    width: '100%',
-    marginBottom: 10,
+    paddingHorizontal: 8,
+    marginBottom: 60,
+    boxSizing: 'border-box',
+    borderWidth: 3,
+    borderRadius: 5,
   },
   submitButton: {
-    backgroundColor: 'blue',
-    color: 'white',
+    backgroundColor: '#1877f2',
+    color: '#fff',
     textAlign: 'center',
     padding: 10,
     fontWeight: 'bold',
-    
-  },
-  audioControls: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  audioControlButton: {
-    backgroundColor: 'purple',
     borderRadius: 5,
-    padding: 10,
+    marginTop: 20
   },
-  audioControlButtonText: {
-    color: 'white',
-    textAlign: 'center',
+  button: {
+    marginTop: 60,
+    backgroundColor:  '#f5694d',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#FFFFFF',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
+  adressContainer: {
+    marginBottom: 160
+  }
 });
 
+
 export default EventForm;
-
-
-// import React, { useState, useRef } from 'react';
-// import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-// import { Picker } from '@react-native-picker/picker';
-// import AudioRecorderPlayer from 'react-native-audio-recorder-player';
-
-// type EventFormProps = {
-//   onSubmit: (eventData: EventData) => void;
-// };
-
-// type EventData = {
-//   title: string;
-//   subtitle: string;
-//   description: string;
-//   category: string;
-// };
-
-// const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
-//   const [eventData, setEventData] = useState<EventData>({
-//     title: '',
-//     subtitle: '',
-//     description: '',
-//     category: '',
-//   });
-
-//   const audioRecorderPlayerRef = useRef(new AudioRecorderPlayer());
-
-//   const handleChange = (key: keyof EventData, value: string) => {
-//     setEventData((prevData) => ({ ...prevData, [key]: value }));
-//   };
-
-//   const handleSubmit = () => {
-//     onSubmit(eventData);
-//   };
-
-//   const startRecording = async () => {
-//     const path = 'sdcard/recorded_audio.mp4'; // Asegúrate de que la ruta de acceso sea válida y tenga permisos de escritura.
-//     await audioRecorderPlayerRef.current.startRecorder(path);
-//   };
-
-//   const stopRecording = async () => {
-//     await audioRecorderPlayerRef.current.stopRecorder();
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <Text>Título</Text>
-//       <TextInput
-//         style={styles.input}
-//         value={eventData.title}
-//         onChangeText={(text) => handleChange('title', text)}
-//       />
-//       <Text>Subtítulo</Text>
-//       <TextInput
-//         style={styles.input}
-//         value={eventData.subtitle}
-//         onChangeText={(text) => handleChange('subtitle', text)}
-//       />
-//       <Text>Descripción</Text>
-//       <TextInput
-//         style={styles.input}
-//         value={eventData.description}
-//         onChangeText={(text) => handleChange('description', text)}
-//       />
-//       <Text>Categoría</Text>
-//       <Picker
-//         selectedValue={eventData.category}
-//         onValueChange={(value) => handleChange('category', value)}
-//         style={styles.picker}
-//       >
-//         <Picker.Item label="Categoría 1" value="categoria1" />
-//         <Picker.Item label="Categoría 2" value="categoria2" />
-//         <Picker.Item label="Categoría 3" value="categoria3" />
-//       </Picker>
-//       <View style={styles.audioControls}>
-//         <TouchableOpacity onPress={startRecording} style={styles.audioControlButton}>
-//           <Text style={styles.audioControlButtonText}>Iniciar grabación</Text>
-//         </TouchableOpacity>
-//         <TouchableOpacity onPress={stopRecording} style={styles.audioControlButton}>
-//           <Text style={styles.audioControlButtonText}>Detener grabación</Text>
-//         </TouchableOpacity>
-//       </View>
-//       <Text onPress={handleSubmit} style={styles.submitButton}>
-//         Crear Evento
-//       </Text>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     paddingHorizontal: 20,
-//   },
-//   input: {
-//     height: 40,
-//     borderColor: 'gray',
-//     borderWidth: 1,
-//     marginBottom: 10,
-//   },
-//   picker: {
-//     height: 50,
-//     width: '100%',
-//     marginBottom: 10,
-//   },
-//   submitButton: {
-//     backgroundColor: 'blue',
-//     color: 'white',
-//     textAlign: 'center',
-//     padding: 10,
-//     fontWeight: 'bold',
-    
-//   },
-//   audioControls: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     marginBottom: 20,
-//   },
-//   audioControlButton: {
-//     backgroundColor: 'purple',
-//     borderRadius: 5,
-//     padding: 10,
-//   },
-//   audioControlButtonText: {
-//     color: 'white',
-//     textAlign: 'center',
-//     fontWeight: 'bold',
-//   },
-// });
-
-// export default EventForm;

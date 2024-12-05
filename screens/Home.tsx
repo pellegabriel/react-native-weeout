@@ -1,79 +1,76 @@
-import { useEffect } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native"
-// import { SearchInput } from "../components/SearchInput/SearchInput";
-import { MainSlider } from "../components/MainSlider";
-import { CategoriesSlider } from "../components/CategoriesSlider";
-import { ListOfEvents } from "../components/ListOfEvents";
-import { supabase } from "../supabase";
-// import { StatusBar } from "expo-status-bar";
-import Map from '../components/Map/index'
+import React, { useEffect } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import Map from '../components/Map';
+import { useGetEvents } from '../api/events';
+import FloatingButton from '../components/profile/FloatingButton';
+import { EventCard } from '../components/ListOfEvents/EventCard';
+// import { ListOfEvents } from '../components/ListOfEvents';
 
-export const HomeScreen = ({ navigation }) => {
-  // const [text, setText] = useState('');
-
-  // const handleTextChange = (newText: string) => {
-  //   setText(newText);
-  // };
-
-
-  const fetchEvents = async () => {
-    const data = await supabase.from('events').select('title')
-
-    console.log({data})
-  }
+export const HomeScreen = ({route}) => {
+  const { data, error, loading, refetchEvents } = useGetEvents();
 
   useEffect(() => {
-    fetchEvents()  
-  }, [])
-  
-  
+   if (route.params?.shouldRefetch) {
+    refetchEvents()
+    }
+  }, [route.params])
+
   return (
-    <ScrollView style={styles.container}>
+    <>
+      <ScrollView style={styles.container}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Bienvenido a Weeout</Text>
+          <Text style={styles.subtitle}>¡La app definitiva para los amantes de los eventos!</Text>
+        </View>
 
-      {/* <View style={styles.search}>      
-        <SearchInput
-          value={text}
-          onChangeText={handleTextChange}
-          placeholder="Escribe algo..."
-        />
-      </View> */}
+        {/* Renderizar el componente del mapa aquí */}
+        <View style={styles.mapContainer}>
+          <Map />
+        </View>
 
-      <MainSlider navigation={navigation} />
+        <View style={styles.titleContainer}>
+          <Text style={styles.listOfEventsTitle}>
+            ¡Descubre los eventos más populares!
+          </Text>
+        </View>
+        <View style={styles.containerList}>
+        {loading && <Text>Loading...</Text>}
+        {error && <Text>Error: {error}</Text>}
 
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>Bienvenido a Weeout</Text>
-
-        <Text style={styles.subtitle}>
-          ¡La app definitiva para los amantes de los eventos!
-        </Text>
-      </View>
-
-      <CategoriesSlider />
-      <View style={styles.mapContainer}>
-      <Map events={[]}  />
-
-      </View>
-      <View style={styles.titleContainer}>
-        <Text style={styles.listOfEventsTitle}>
-          ¡Descubre los eventos más populares!
-        </Text>
-      </View>
-
-      <ListOfEvents />        
-    </ScrollView>
+        {data &&
+          data.map((event: any, index: React.Key) => (
+            <View key={index} style={styles.cardContainer}>
+              <EventCard data={event} />
+            </View>
+          ))}
+          </View> 
+        {/* <ListOfEvents /> */}
+      </ScrollView>
+      <FloatingButton />
+    </>
   );
-}
+};
+
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
       display: 'flex',
-      backgroundColor: '#fff'
+      backgroundColor: '#fff',
+      paddingTop: 50,
+      width:400
+      
+    },containerList: {
+      padding:30
+      
+    },
+    cardContainer: {
+      marginBottom: 10,
+      width: 300
     },
     mapContainer:{
-      width:410,
+      width:'100%',
       height:340,
-      padding: 30,
     },
     titleContainer: {
       marginTop: 14,
